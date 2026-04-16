@@ -27,6 +27,9 @@ export function ChatWidget() {
   }, [messages, isOpen, isLoading]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // 한글 입력 중(조합 중)일 때 엔터키 처리를 무시하여 중복 전송 방지
+    if (e.nativeEvent.isComposing) return;
+    
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e as any);
