@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
+import { ShareButton } from '@/components/ShareButton';
 import CopyButton from '../CopyButton';
 
 interface Author {
@@ -133,8 +134,12 @@ export default async function PromptDetailPage({ params }: { params: Promise<{ i
             </div>
 
             {/* Actions */}
-            <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
+            <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm space-y-3">
               <LikeBookmarkButtons targetType="PROMPT" targetId={prompt.id} initialLikes={prompt.likes} variant="column" />
+              <ShareButton
+                title={prompt.title}
+                className="w-full flex items-center justify-center gap-2 bg-slate-50 text-slate-600 border border-slate-200 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-100 transition-colors"
+              />
             </div>
 
           </div>

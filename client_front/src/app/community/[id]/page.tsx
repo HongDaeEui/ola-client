@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
+import { ShareButton } from '@/components/ShareButton';
 import { ViewTracker } from '@/components/ViewTracker';
 import CommentSection from './CommentSection';
 
@@ -122,10 +123,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
           {/* Actions */}
           <div className="px-8 md:px-12 py-6 border-t border-slate-100 flex items-center gap-3">
             <LikeBookmarkButtons targetType="POST" targetId={post.id} initialLikes={post.likes} />
-            <button className="flex items-center gap-2 bg-slate-50 text-slate-600 border border-slate-200 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-100 transition-colors ml-auto">
-              <span className="material-symbols-outlined text-[18px]">share</span>
-              공유
-            </button>
+            <ShareButton title={post.title} className="flex items-center gap-2 bg-slate-50 text-slate-600 border border-slate-200 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-100 transition-colors ml-auto" />
           </div>
         </article>
 

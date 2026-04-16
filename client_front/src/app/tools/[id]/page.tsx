@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
+import { ShareButton } from '@/components/ShareButton';
 
 interface Tool {
   id: string;
@@ -290,6 +291,10 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
                 targetId={tool.id}
                 initialLikes={tool.likes ?? 0}
                 variant="column"
+              />
+              <ShareButton
+                title={tool.name}
+                className="w-full flex items-center justify-center gap-2 bg-slate-50 text-slate-600 border border-slate-200 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-100 transition-colors"
               />
             </div>
 
