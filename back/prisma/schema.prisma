@@ -21,6 +21,7 @@ model User {
   experiments Experiment[]
   prompts     Prompt[]
   posts       Post[]
+  comments    Comment[]
 }
 
 enum UserRole {
@@ -137,6 +138,18 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments Comment[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  postId    String
+  authorId  String
+  createdAt DateTime @default(now())
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
