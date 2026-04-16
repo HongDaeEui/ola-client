@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
 import { ViewTracker } from '@/components/ViewTracker';
+import CommentSection from './CommentSection';
 
 const API = 'https://ola-backend-psi.vercel.app/api';
 
@@ -128,11 +129,16 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
           </div>
         </article>
 
+        {/* Comments */}
+        <CommentSection postId={post.id} />
+
         {/* Back */}
-        <Link href="/community" className="inline-flex items-center gap-2 text-slate-500 font-bold hover:text-slate-900 transition-colors">
-          <span className="material-symbols-outlined text-[20px]">arrow_back</span>
-          커뮤니티로 돌아가기
-        </Link>
+        <div className="mt-8">
+          <Link href="/community" className="inline-flex items-center gap-2 text-slate-500 font-bold hover:text-slate-900 transition-colors">
+            <span className="material-symbols-outlined text-[20px]">arrow_back</span>
+            커뮤니티로 돌아가기
+          </Link>
+        </div>
 
       </div>
     </div>
