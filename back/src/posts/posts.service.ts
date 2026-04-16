@@ -90,6 +90,21 @@ export class PostsService {
     });
   }
 
+  async getTagStats() {
+    const groups = await this.prisma.post.groupBy({
+      by: ['category'],
+      _count: { id: true },
+      _sum: { likes: true, views: true },
+      orderBy: { _sum: { likes: 'desc' } },
+    });
+    return groups.map(g => ({
+      category: g.category,
+      postCount: g._count.id,
+      totalLikes: g._sum.likes ?? 0,
+      totalViews: g._sum.views ?? 0,
+    }));
+  }
+
   findByUserEmail(userEmail: string) {
     return this.prisma.post.findMany({
       where: { author: { email: userEmail } },

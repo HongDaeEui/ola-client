@@ -29,6 +29,13 @@ interface Meetup {
   _count: { attendees: number };
 }
 
+interface TagStat {
+  category: string;
+  postCount: number;
+  totalLikes: number;
+  totalViews: number;
+}
+
 function relativeTime(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
   const m = Math.floor(diff / 60000);
@@ -73,6 +80,16 @@ async function getUpcomingMeetups(): Promise<Meetup[]> {
   }
 }
 
+async function getTagStats(): Promise<TagStat[]> {
+  try {
+    const res = await fetch(`${API}/posts/tag-stats`, { next: { revalidate: 60 } });
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
+    return [];
+  }
+}
+
 const CATEGORIES = ['전체', '실천형 노하우', '작품 공유', '자유게시판', '전문 리포트'];
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -80,6 +97,13 @@ const CATEGORY_COLORS: Record<string, string> = {
   '작품 공유': 'text-rose-600 bg-rose-50',
   '자유게시판': 'text-slate-600 bg-slate-100',
   '전문 리포트': 'text-indigo-600 bg-indigo-50',
+};
+
+const TAG_ACTIVE_COLORS: Record<string, string> = {
+  '실천형 노하우': 'bg-sky-600 text-white border-sky-600',
+  '작품 공유': 'bg-rose-500 text-white border-rose-500',
+  '자유게시판': 'bg-slate-600 text-white border-slate-600',
+  '전문 리포트': 'bg-indigo-600 text-white border-indigo-600',
 };
 
 export default async function CommunityPage({
@@ -90,9 +114,10 @@ export default async function CommunityPage({
   const { category } = await searchParams;
   const activeCategory = category ?? '전체';
 
-  const [posts, meetups] = await Promise.all([
+  const [posts, meetups, tagStats] = await Promise.all([
     getPosts(activeCategory),
     getUpcomingMeetups(),
+    getTagStats(),
   ]);
 
   return (
@@ -205,6 +230,59 @@ export default async function CommunityPage({
               </Link>
             </div>
 
+            {/* Trending Tags */}
+            <div className="bg-white border border-slate-200 rounded-3xl p-8">
+              <h3 className="text-xl font-extrabold text-slate-900 mb-1 flex items-center gap-2">
+                <span className="material-symbols-outlined text-amber-500 text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>local_fire_department</span>
+                인기 토픽
+              </h3>
+              <p className="text-xs text-slate-400 font-medium mb-6">실제 게시글 기준 · 좋아요순</p>
+              {tagStats.length === 0 ? (
+                <p className="text-sm text-slate-400 text-center py-4">데이터를 불러오는 중...</p>
+              ) : (
+                <div className="space-y-2">
+                  {tagStats.map((stat, i) => {
+                    const isActive = activeCategory === stat.category;
+                    const activeStyle = TAG_ACTIVE_COLORS[stat.category] ?? 'bg-sky-600 text-white border-sky-600';
+                    const inactiveStyle = 'bg-slate-50 text-slate-700 border-slate-100 hover:border-sky-200 hover:bg-sky-50 hover:text-sky-600';
+                    return (
+                      <Link
+                        key={stat.category}
+                        href={`/community?category=${encodeURIComponent(stat.category)}`}
+                        className={`flex items-center justify-between w-full px-4 py-3 rounded-xl border font-bold text-sm transition-all ${isActive ? activeStyle : inactiveStyle}`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <span className={`text-[11px] font-black w-5 text-center ${isActive ? 'text-white/70' : 'text-slate-400'}`}>
+                            {i + 1}
+                          </span>
+                          <span>{stat.category}</span>
+                        </div>
+                        <div className={`flex items-center gap-3 text-[11px] font-bold ${isActive ? 'text-white/80' : 'text-slate-400'}`}>
+                          <span className="flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[13px]">article</span>
+                            {stat.postCount}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <span className="material-symbols-outlined text-[13px]">thumb_up</span>
+                            {stat.totalLikes}
+                          </span>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                  {activeCategory !== '전체' && (
+                    <Link
+                      href="/community"
+                      className="flex items-center justify-center gap-1.5 w-full px-4 py-2.5 rounded-xl text-xs font-bold text-slate-500 hover:text-sky-600 transition-colors mt-1"
+                    >
+                      <span className="material-symbols-outlined text-[14px]">close</span>
+                      필터 해제
+                    </Link>
+                  )}
+                </div>
+              )}
+            </div>
+
             {/* Upcoming Meetups */}
             <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
               <h3 className="text-xl font-extrabold text-slate-900 mb-6 flex items-center gap-2">
@@ -244,18 +322,6 @@ export default async function CommunityPage({
                   모든 모임 탐색
                 </button>
               </Link>
-            </div>
-
-            {/* Trending Tags */}
-            <div className="bg-white border border-slate-200 rounded-3xl p-8">
-              <h3 className="text-xl font-extrabold text-slate-900 mb-6">인기 토픽</h3>
-              <div className="flex flex-wrap gap-2">
-                {['#에이전트실무', '#프롬프트엔지니어링', '#AI로수익화', '#이미지생성', '#개발자동화', '#Suno작곡'].map(tag => (
-                  <span key={tag} className="px-4 py-2 rounded-xl bg-slate-50 text-slate-600 text-xs font-bold hover:bg-sky-50 hover:text-sky-600 transition-all cursor-pointer border border-transparent hover:border-sky-100">
-                    {tag}
-                  </span>
-                ))}
-              </div>
             </div>
 
           </aside>

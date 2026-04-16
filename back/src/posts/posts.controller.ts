@@ -19,6 +19,11 @@ export class PostsController {
     return this.postsService.findTopByViews();
   }
 
+  @Get('tag-stats')
+  getTagStats() {
+    return this.postsService.getTagStats();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.postsService.findOne(id);
