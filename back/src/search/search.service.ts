@@ -62,4 +62,39 @@ export class SearchService {
 
     return { tools, prompts, posts, labs };
   }
+
+  async suggest(q: string) {
+    const query = q.trim();
+    if (!query || query.length < 2) return { tools: [], prompts: [], posts: [], labs: [] };
+
+    const condition = (fields: string[]) => ({
+      OR: fields.map((f) => ({ [f]: { contains: query, mode: 'insensitive' as const } })),
+    });
+
+    const [tools, prompts, posts, labs] = await Promise.all([
+      this.prisma.tool.findMany({
+        where: { ...condition(['name', 'shortDesc', 'category']), status: 'ACTIVE' },
+        select: { id: true, name: true, category: true, iconUrl: true },
+        take: 4,
+      }),
+      this.prisma.prompt.findMany({
+        where: condition(['title', 'toolName', 'category']),
+        select: { id: true, title: true, toolName: true },
+        take: 3,
+      }),
+      this.prisma.post.findMany({
+        where: condition(['title', 'category']),
+        select: { id: true, title: true, category: true },
+        orderBy: { createdAt: 'desc' },
+        take: 3,
+      }),
+      this.prisma.experiment.findMany({
+        where: condition(['title', 'description', 'category']),
+        select: { id: true, title: true, emoji: true },
+        take: 3,
+      }),
+    ]);
+
+    return { tools, prompts, posts, labs };
+  }
 }
