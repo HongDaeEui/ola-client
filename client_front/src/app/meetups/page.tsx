@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { RsvpButton } from '@/components/RsvpButton';
 
 async function getUpcomingMeetups() {
   try {
@@ -20,7 +20,7 @@ export default async function Meetups() {
 
   return (
     <main className="pt-32 pb-24 max-w-[1920px] mx-auto min-h-screen">
-      
+
       {/* Header */}
       <header className="px-6 md:px-12 mb-20 text-center max-w-4xl mx-auto space-y-6">
         <span className="material-symbols-outlined text-5xl text-primary mb-4 block">groups</span>
@@ -38,13 +38,13 @@ export default async function Meetups() {
           <div className="max-w-7xl mx-auto rounded-[3rem] bg-gradient-to-br from-surface-container-low to-white shadow-[0_30px_60px_-15px_rgba(0,101,141,0.1)] p-8 md:p-14 relative overflow-hidden border border-white">
             <div className="absolute top-0 right-0 w-1/2 h-full">
               <div className="absolute inset-0 bg-gradient-to-l from-transparent to-surface-container-low z-10"></div>
-              <img 
-                src={featuredMeetup.coverUrl || "https://images.unsplash.com/photo-1540575861501-7ce0e1d1aa6f?auto=format&fit=crop&w=1200&q=80"} 
-                alt={featuredMeetup.title} 
+              <img
+                src={featuredMeetup.coverUrl || "https://images.unsplash.com/photo-1540575861501-7ce0e1d1aa6f?auto=format&fit=crop&w=1200&q=80"}
+                alt={featuredMeetup.title}
                 className="w-full h-full object-cover mix-blend-multiply opacity-50"
               />
             </div>
-            
+
             <div className="relative z-20 max-w-2xl text-left">
               <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-error text-on-error font-bold text-xs uppercase tracking-widest mb-8 animate-pulse">
                 <span className="w-2 h-2 rounded-full bg-white"></span> Live This Week
@@ -65,17 +65,7 @@ export default async function Meetups() {
               <p className="text-on-surface-variant text-lg mb-12 leading-relaxed">
                 {featuredMeetup.description}
               </p>
-              <div className="flex items-center gap-6 text-sm">
-                 <div className="flex -space-x-3">
-                   <img src="https://i.pravatar.cc/100?img=1" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" alt="Attendee" />
-                   <img src="https://i.pravatar.cc/100?img=2" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" alt="Attendee" />
-                   <img src="https://i.pravatar.cc/100?img=3" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" alt="Attendee" />
-                   <div className="w-10 h-10 rounded-full border-2 border-white bg-surface-container flex items-center justify-center text-xs font-bold text-on-surface-variant">+{featuredMeetup._count?.attendees || 0}</div>
-                 </div>
-                 <button className="bg-primary text-on-primary px-8 py-3 rounded-full font-bold shadow-lg shadow-primary/30 hover:scale-105 active:scale-95 transition-all">
-                   Reserve Seat
-                 </button>
-              </div>
+              <RsvpButton meetupId={featuredMeetup.id} initialCount={featuredMeetup._count?.attendees || 0} variant="featured" />
             </div>
           </div>
         </section>
@@ -89,10 +79,10 @@ export default async function Meetups() {
             <button className="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center hover:bg-surface-container transition-colors"><span className="material-symbols-outlined">filter_list</span></button>
           </div>
         </div>
-        
+
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          
-          {otherMeetups.map((meetup: any) => (
+
+          {otherMeetups.map((meetup: { id: string; title: string; description: string; date: string; _count?: { attendees: number } }) => (
             <div key={meetup.id} className="bg-white rounded-3xl p-8 border border-outline-variant/20 shadow-sm hover:shadow-[0_20px_40px_-10px_rgba(0,101,141,0.08)] transition-all hover:-translate-y-1">
                <div className="flex justify-between items-start mb-8">
                  <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-2xl font-bold font-['Noto_Serif']">
@@ -104,17 +94,17 @@ export default async function Meetups() {
                </div>
                <h3 className="font-['Noto_Serif'] text-2xl font-bold mb-3 text-on-surface">{meetup.title}</h3>
                <p className="text-on-surface-variant text-sm mb-8 leading-relaxed">{meetup.description}</p>
-               <button className="w-full py-3 rounded-full border border-primary/30 text-primary font-bold hover:bg-primary hover:text-white transition-colors text-sm">Join Waitlist</button>
+               <RsvpButton meetupId={meetup.id} initialCount={meetup._count?.attendees || 0} />
             </div>
           ))}
-          
+
           <div className="bg-surface-container-low rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-inner border border-outline-variant/10">
              <span className="material-symbols-outlined text-4xl text-outline mb-4">edit_calendar</span>
              <h3 className="font-['Noto_Serif'] text-xl font-bold mb-2 text-on-surface">Suggest a Topic</h3>
              <p className="text-on-surface-variant text-sm mb-6 leading-relaxed">Have a technique you want to share with the community?</p>
              <button className="text-primary font-bold hover:underline underline-offset-4 text-sm">Submit Proposal</button>
           </div>
-          
+
         </div>
       </section>
 
