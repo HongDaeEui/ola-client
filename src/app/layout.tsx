@@ -3,6 +3,7 @@ import './globals.css';
 import { TopNavBar } from '../components/layout/TopNavBar';
 import { Footer } from '../components/layout/Footer';
 import { AuthProvider } from '../context/AuthContext';
+import { ChatWidget } from '../components/ChatWidget';
 
 export const metadata: Metadata = {
   title: 'Ola AI Community - The Luminous Horizon',
@@ -36,6 +37,7 @@ export default function RootLayout({
             {children}
           </div>
           <Footer />
+          <ChatWidget />
         </AuthProvider>
       </body>
     </html>
