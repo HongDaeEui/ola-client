@@ -1,4 +1,4 @@
-import { anthropic } from '@ai-sdk/anthropic';
+import { google } from '@ai-sdk/google';
 import { streamText } from 'ai';
 
 // Next.js Edge Runtime (선택적 최적화)
@@ -15,9 +15,9 @@ export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
 
-    // Vercel AI SDK를 이용해 Anthropic(Claude 3.5 Sonnet)과 스트림 연결
+    // Vercel AI SDK를 이용해 Google(Gemini 1.5 Flash)과 스트림 연결
     const result = streamText({
-      model: anthropic('claude-3-5-sonnet-20241022'),
+      model: google('gemini-1.5-flash'),
       messages,
       system: SYSTEM_PROMPT,
     });
