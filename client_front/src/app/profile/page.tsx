@@ -7,12 +7,22 @@ import Link from 'next/link';
 
 const API = 'https://ola-backend-psi.vercel.app/api';
 
-type Tab = 'overview' | 'posts' | 'bookmarks';
+type Tab = 'overview' | 'posts' | 'prompts' | 'bookmarks';
 
 interface MyPost {
   id: string;
   title: string;
   category: string;
+  likes: number;
+  views: number;
+  createdAt: string;
+}
+
+interface MyPrompt {
+  id: string;
+  title: string;
+  category: string;
+  toolName: string;
   likes: number;
   views: number;
   createdAt: string;
@@ -63,6 +73,7 @@ export default function ProfilePage() {
   const router = useRouter();
   const [tab, setTab] = useState<Tab>('overview');
   const [posts, setPosts] = useState<MyPost[]>([]);
+  const [prompts, setPrompts] = useState<MyPrompt[]>([]);
   const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
 
@@ -77,6 +88,14 @@ export default function ProfilePage() {
       fetch(`${API}/posts?userEmail=${encodeURIComponent(user.email!)}`)
         .then(r => r.json())
         .then(d => setPosts(d))
+        .catch(() => {})
+        .finally(() => setDataLoading(false));
+    }
+    if (tab === 'prompts' && prompts.length === 0) {
+      setDataLoading(true);
+      fetch(`${API}/prompts?userEmail=${encodeURIComponent(user.email!)}`)
+        .then(r => r.json())
+        .then(d => setPrompts(d))
         .catch(() => {})
         .finally(() => setDataLoading(false));
     }
@@ -104,9 +123,10 @@ export default function ProfilePage() {
   const initial = displayName.charAt(0).toUpperCase();
 
   const TABS: { key: Tab; label: string; icon: string }[] = [
-    { key: 'overview',   label: '프로필',   icon: 'person' },
-    { key: 'posts',      label: '내 글',    icon: 'edit_note' },
-    { key: 'bookmarks',  label: '북마크',   icon: 'bookmark' },
+    { key: 'overview',   label: '프로필',     icon: 'person' },
+    { key: 'posts',      label: '내 글',      icon: 'edit_note' },
+    { key: 'prompts',    label: '내 프롬프트', icon: 'auto_awesome' },
+    { key: 'bookmarks',  label: '북마크',     icon: 'bookmark' },
   ];
 
   return (
@@ -248,6 +268,55 @@ export default function ProfilePage() {
                 </Link>
               );
             })}
+          </div>
+        )}
+
+        {/* ── 내 프롬프트 ── */}
+        {tab === 'prompts' && (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm font-bold text-slate-500">내 프롬프트 {prompts.length > 0 ? `· ${prompts.length}개` : ''}</p>
+              <Link href="/prompts/write"
+                className="flex items-center gap-1 text-xs font-bold text-amber-600 hover:text-amber-700">
+                <span className="material-symbols-outlined text-[14px]">add</span>
+                프롬프트 공유하기
+              </Link>
+            </div>
+
+            {dataLoading ? (
+              <div className="py-16 flex justify-center">
+                <div className="w-6 h-6 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
+              </div>
+            ) : prompts.length === 0 ? (
+              <div className="text-center py-16 bg-white rounded-2xl border border-slate-100">
+                <span className="material-symbols-outlined text-[40px] text-slate-200 block mb-3">auto_awesome</span>
+                <p className="text-slate-400 font-bold mb-4">아직 공유한 프롬프트가 없어요.</p>
+                <Link href="/prompts/write"
+                  className="inline-flex items-center gap-2 bg-amber-500 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-amber-600 transition-all">
+                  첫 프롬프트 공유하기
+                </Link>
+              </div>
+            ) : prompts.map(prompt => (
+              <Link key={prompt.id} href={`/prompts/${prompt.id}`}
+                className="block bg-white border border-slate-100 rounded-2xl p-5 hover:shadow-md hover:border-amber-200 transition-all group">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-[10px] font-black px-2 py-0.5 rounded-lg bg-amber-50 text-amber-600">{prompt.category}</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-500">{prompt.toolName}</span>
+                  <span className="text-xs text-slate-400 ml-auto">{relativeTime(prompt.createdAt)}</span>
+                </div>
+                <h3 className="font-extrabold text-slate-900 group-hover:text-amber-600 transition-colors leading-snug mb-3">
+                  {prompt.title}
+                </h3>
+                <div className="flex items-center gap-4 text-xs text-slate-400 font-bold">
+                  <span className="flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[14px]">thumb_up</span>{prompt.likes}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[14px]">visibility</span>{prompt.views}
+                  </span>
+                </div>
+              </Link>
+            ))}
           </div>
         )}
 

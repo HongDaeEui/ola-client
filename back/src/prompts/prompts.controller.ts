@@ -6,8 +6,11 @@ export class PromptsController {
   constructor(private readonly promptsService: PromptsService) {}
 
   @Get()
-  getPrompts(@Query('category') category?: string) {
-    return this.promptsService.findAll({ category });
+  getPrompts(
+    @Query('category') category?: string,
+    @Query('userEmail') userEmail?: string,
+  ) {
+    return this.promptsService.findAll({ category, userEmail });
   }
 
   @Get(':id')
