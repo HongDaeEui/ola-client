@@ -1,0 +1,161 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id          String           @id @default(uuid())
+  email       String           @unique
+  username    String           @unique
+  name        String?
+  avatarUrl   String?
+  role        UserRole         @default(USER)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  resources   Resource[]
+  meetups     MeetupAttendee[]
+  experiments Experiment[]
+  prompts     Prompt[]
+  posts       Post[]
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  CREATOR
+}
+
+model Tool {
+  id           String   @id @default(uuid())
+  name         String
+  description  String
+  shortDesc    String
+  category     String // "Generative Art", "LLMs", "Audio AI", etc.
+  developer    String?
+  pricingModel String? // "Freemium", "Free", "Paid"
+  rating       Float    @default(0.0)
+  iconUrl      String?
+  coverUrl     String?
+  isFeatured   Boolean  @default(false)
+  launchUrl    String?
+  status       String   @default("ACTIVE") // "ACTIVE", "COMING_SOON"
+  tags         String[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Meetup {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  date        DateTime
+  location    String
+  isVirtual   Boolean  @default(true)
+  status      String   @default("UPCOMING") // "UPCOMING", "LIVE", "COMPLETED"
+  coverUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  attendees MeetupAttendee[]
+}
+
+model MeetupAttendee {
+  id       String   @id @default(uuid())
+  meetupId String
+  userId   String
+  joinedAt DateTime @default(now())
+
+  meetup Meetup @relation(fields: [meetupId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([meetupId, userId])
+}
+
+model Resource {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  type        String // "Script", "Essay", "Deck", "Case Study"
+  difficulty  String // "Beginner", "Intermediate", "Advanced"
+  contentUrl  String?
+  authorId    String
+  reads       Int      @default(0)
+  isFeatured  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Experiment {
+  id           String   @id @default(uuid())
+  title        String
+  description  String
+  content      String?  // 본문 (단계별 가이드)
+  difficulty   String?  // "입문" | "중급" | "고급"
+  emoji        String?  // 카드 타이틀 앞 이모지
+  thumbnailUrl String?  // 커버 이미지 URL
+  metric       String
+  authorId     String
+  likes        Int      @default(0)
+  category     String // "자동화", "크리에이티브", "개발", etc.
+  stack        String[] // e.g., ["CrewAI", "Claude 3.5"]
+  color        String? // for UI consistency (optional)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Prompt {
+  id        String   @id @default(uuid())
+  title     String
+  toolName  String // e.g., "Midjourney v6.5"
+  category  String // "이미지 생성", "코딩"
+  content   String
+  authorId  String
+  likes     Int      @default(0)
+  views     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  category  String // "실천형 노하우", "자유게시판", "전문 리포트", "작품 공유"
+  authorId  String
+  likes     Int      @default(0)
+  views     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Like {
+  id         String   @id @default(uuid())
+  userId     String   // Supabase user ID
+  targetType String   // "TOOL" | "PROMPT" | "POST" | "LAB"
+  targetId   String
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, targetType, targetId])
+}
+
+model Bookmark {
+  id         String   @id @default(uuid())
+  userId     String   // Supabase user ID
+  targetType String   // "TOOL" | "PROMPT" | "POST" | "LAB"
+  targetId   String
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, targetType, targetId])
+}

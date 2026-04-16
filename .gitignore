@@ -1,0 +1,13 @@
+# OS
+.DS_Store
+
+# Env files (each subdir has its own .gitignore for these)
+.env
+.env.local
+.env*.local
+
+# Vercel
+.vercel
+
+# node_modules (each subdir has its own)
+node_modules/

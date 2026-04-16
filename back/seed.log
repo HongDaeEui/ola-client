@@ -1,0 +1,35 @@
+🌱 Seed starting...
+❌ Seeding failed: PrismaClientKnownRequestError: 
+Invalid `prisma.meetupAttendee.deleteMany()` invocation in
+/Users/dobedub/Documents/source/ola/back/prisma/seed.ts:15:31
+
+  12 console.log('🌱 Seed starting...');
+  13 
+  14 // 1. Clean existing data
+→ 15 await prisma.meetupAttendee.deleteMany(
+Database `dobedub` does not exist on the database server
+    at Gr.handleRequestError (/Users/dobedub/Documents/source/ola/back/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)
+    at Gr.handleAndLogRequestError (/Users/dobedub/Documents/source/ola/back/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)
+    at Gr.request (/Users/dobedub/Documents/source/ola/back/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async a (/Users/dobedub/Documents/source/ola/back/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:938:24)
+    at async main (/Users/dobedub/Documents/source/ola/back/prisma/seed.ts:15:3) {
+  code: 'P1003',
+  meta: {
+    modelName: 'MeetupAttendee',
+    driverAdapterError: DriverAdapterError: DatabaseDoesNotExist
+        at PrismaPgAdapter.onError (/Users/dobedub/Documents/source/ola/back/node_modules/@prisma/adapter-pg/dist/index.js:678:11)
+        at PrismaPgAdapter.performIO (/Users/dobedub/Documents/source/ola/back/node_modules/@prisma/adapter-pg/dist/index.js:673:12)
+        at processTicksAndRejections (node:internal/process/task_queues:105:5)
+        at async PrismaPgAdapter.executeRaw (/Users/dobedub/Documents/source/ola/back/node_modules/@prisma/adapter-pg/dist/index.js:643:13)
+        at async e.interpretNode (/Users/dobedub/Documents/source/ola/back/node_modules/@prisma/client-engine-runtime/src/interpreter/query-interpreter.ts:168:18)
+        at async e.interpretNode (/Users/dobedub/Documents/source/ola/back/node_modules/@prisma/client-engine-runtime/src/interpreter/query-interpreter.ts:272:41)
+        at async e.run (/Users/dobedub/Documents/source/ola/back/node_modules/@prisma/client-engine-runtime/src/interpreter/query-interpreter.ts:94:23)
+        at async execute (/Users/dobedub/Documents/source/ola/back/node_modules/@prisma/client/src/runtime/core/engines/client/LocalExecutor.ts:81:12)
+        at async jt.request (/Users/dobedub/Documents/source/ola/back/node_modules/@prisma/client/src/runtime/core/engines/client/ClientEngine.ts:503:22)
+        at async Object.singleLoader (/Users/dobedub/Documents/source/ola/back/node_modules/@prisma/client/src/runtime/RequestHandler.ts:112:26) {
+      cause: [Object]
+    }
+  },
+  clientVersion: '7.7.0'
+}
