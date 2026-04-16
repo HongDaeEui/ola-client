@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
+import CopyButton from '../CopyButton';
 
 interface Author {
   username: string;
@@ -90,13 +91,11 @@ export default async function PromptDetailPage({ params }: { params: Promise<{ i
                   <span className="material-symbols-outlined text-sky-500">code</span>
                   프롬프트 내용
                 </h2>
-                <button
+                <CopyButton
+                  text={prompt.content}
                   className="flex items-center gap-1.5 bg-slate-900 text-white text-xs font-black px-4 py-2 rounded-xl hover:bg-slate-700 transition-colors"
-                  onClick={() => navigator.clipboard.writeText(prompt.content)}
-                >
-                  <span className="material-symbols-outlined text-[16px]">content_copy</span>
-                  복사
-                </button>
+                  label="복사"
+                />
               </div>
               <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 relative">
                 <p className="text-sm text-slate-700 font-mono leading-relaxed whitespace-pre-wrap">
