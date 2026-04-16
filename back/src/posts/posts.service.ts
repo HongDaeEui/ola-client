@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
 export class PostsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private notificationsService: NotificationsService,
+  ) {}
 
   findAll(category?: string) {
     return this.prisma.post.findMany({
@@ -52,7 +56,7 @@ export class PostsService {
         name: data.userName,
       },
     });
-    return this.prisma.post.create({
+    const newPost = await this.prisma.post.create({
       data: {
         title: data.title,
         content: data.content,
@@ -65,6 +69,13 @@ export class PostsService {
         },
       },
     });
+
+    // 비동기로 디스코드 알림 발송
+    this.notificationsService.sendPostNotification(newPost).catch((err) => {
+      console.error('Failed to send notification via PostsService', err);
+    });
+
+    return newPost;
   }
 
   findTopByViews(limit = 10) {
