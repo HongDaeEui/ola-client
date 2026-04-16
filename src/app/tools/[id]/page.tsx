@@ -18,6 +18,7 @@ interface Tool {
   isFeatured?: boolean;
   status?: string;
   createdAt?: string;
+  likes: number;
 }
 
 const API_BASE = 'https://ola-backend-psi.vercel.app/api';
@@ -287,7 +288,7 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
               <LikeBookmarkButtons
                 targetType="TOOL"
                 targetId={tool.id}
-                initialLikes={0}
+                initialLikes={tool.likes ?? 0}
                 variant="column"
               />
             </div>

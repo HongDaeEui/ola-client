@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 
-const API = 'https://ola-backend-psi.vercel.app/api';
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-psi.vercel.app/api';
 
 interface Props {
   targetType: 'POST' | 'PROMPT' | 'LAB' | 'TOOL';
@@ -13,11 +13,12 @@ interface Props {
 }
 
 export function LikeBookmarkButtons({ targetType, targetId, initialLikes, variant = 'row' }: Props) {
-  const { user } = useAuth();
+  const { user, signInWithGoogle } = useAuth();
   const [liked, setLiked] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
   const [likes, setLikes] = useState(initialLikes);
   const [loading, setLoading] = useState(false);
+  const [showLoginHint, setShowLoginHint] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -31,8 +32,13 @@ export function LikeBookmarkButtons({ targetType, targetId, initialLikes, varian
     }).catch(() => {});
   }, [user, targetType, targetId]);
 
+  function requireLogin() {
+    setShowLoginHint(true);
+    setTimeout(() => setShowLoginHint(false), 3000);
+  }
+
   async function toggleLike() {
-    if (!user) { alert('로그인이 필요합니다.'); return; }
+    if (!user) { requireLogin(); return; }
     if (loading) return;
     setLoading(true);
     try {
@@ -50,7 +56,7 @@ export function LikeBookmarkButtons({ targetType, targetId, initialLikes, varian
   }
 
   async function toggleBookmark() {
-    if (!user) { alert('로그인이 필요합니다.'); return; }
+    if (!user) { requireLogin(); return; }
     if (loading) return;
     setLoading(true);
     try {
@@ -98,6 +104,19 @@ export function LikeBookmarkButtons({ targetType, targetId, initialLikes, varian
         </span>
         {bookmarked ? '저장됨' : '북마크'}
       </button>
+
+      {/* Login hint toast */}
+      {showLoginHint && (
+        <div className={`${isColumn ? 'w-full' : ''} bg-slate-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center justify-between gap-3 animate-in fade-in slide-in-from-bottom-2`}>
+          <span>로그인이 필요해요</span>
+          <button
+            onClick={signInWithGoogle}
+            className="bg-white text-slate-900 px-2.5 py-1 rounded-lg text-xs font-black hover:bg-slate-100 transition-colors flex-shrink-0"
+          >
+            로그인
+          </button>
+        </div>
+      )}
     </div>
   );
 }

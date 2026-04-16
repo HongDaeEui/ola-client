@@ -2,7 +2,14 @@
 
 import { useState } from 'react';
 
-export default function CopyButton({ text }: { text: string }) {
+interface Props {
+  text: string;
+  /** inline 버튼 스타일 (label 있는 모드) */
+  className?: string;
+  label?: string;
+}
+
+export default function CopyButton({ text, className, label }: Props) {
   const [copied, setCopied] = useState(false);
 
   async function handleCopy(e: React.MouseEvent) {
@@ -13,6 +20,22 @@ export default function CopyButton({ text }: { text: string }) {
     setTimeout(() => setCopied(false), 2000);
   }
 
+  // inline labeled variant
+  if (label !== undefined) {
+    return (
+      <button
+        onClick={handleCopy}
+        className={className ?? 'flex items-center gap-1.5 text-sm font-bold'}
+      >
+        <span className="material-symbols-outlined text-[16px]">
+          {copied ? 'check' : 'content_copy'}
+        </span>
+        {copied ? '복사됨!' : label}
+      </button>
+    );
+  }
+
+  // default: absolute small icon button (for card overlay use)
   return (
     <button
       onClick={handleCopy}
