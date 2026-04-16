@@ -36,7 +36,7 @@ export function TopNavBar() {
                <img
                  src="/logo.png"
                  alt="Ola All-round AI club"
-                 className="h-10 md:h-12 w-auto object-contain bg-transparent group-hover:scale-105 transition-transform"
+                 className="h-14 md:h-16 w-auto object-contain bg-transparent group-hover:scale-105 transition-transform"
                />
             </Link>
           </div>
