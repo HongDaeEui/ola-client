@@ -1,21 +1,129 @@
 "use client";
 
 import Link from 'next/link';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+
+const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-psi.vercel.app/api';
+
+interface Suggestions {
+  tools: { id: string; name: string; category: string; iconUrl: string | null }[];
+  prompts: { id: string; title: string; toolName: string }[];
+  posts: { id: string; title: string; category: string }[];
+  labs: { id: string; title: string; emoji: string }[];
+}
+
+function SearchDropdown({ suggestions, onClose }: { suggestions: Suggestions; onClose: () => void }) {
+  const total = suggestions.tools.length + suggestions.prompts.length + suggestions.posts.length + suggestions.labs.length;
+  if (total === 0) return null;
+
+  return (
+    <div className="absolute top-full left-0 mt-1.5 w-72 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50">
+      {suggestions.tools.length > 0 && (
+        <div>
+          <p className="px-3 pt-3 pb-1 text-[10px] font-black text-slate-400 uppercase tracking-wider">도구</p>
+          {suggestions.tools.map(t => (
+            <Link key={t.id} href={`/tools/${t.id}`} onClick={onClose}
+              className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 transition-colors">
+              {t.iconUrl
+                ? <img src={t.iconUrl} alt={t.name} className="w-6 h-6 rounded-lg object-cover flex-shrink-0" />
+                : <span className="material-symbols-outlined text-[18px] text-slate-400 flex-shrink-0">extension</span>}
+              <div className="min-w-0">
+                <p className="text-sm font-bold text-slate-800 truncate">{t.name}</p>
+                <p className="text-[11px] text-slate-400 truncate">{t.category}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+      {suggestions.prompts.length > 0 && (
+        <div>
+          <p className="px-3 pt-2 pb-1 text-[10px] font-black text-slate-400 uppercase tracking-wider">프롬프트</p>
+          {suggestions.prompts.map(p => (
+            <Link key={p.id} href={`/prompts/${p.id}`} onClick={onClose}
+              className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 transition-colors">
+              <span className="material-symbols-outlined text-[18px] text-violet-400 flex-shrink-0">psychology</span>
+              <p className="text-sm font-medium text-slate-800 truncate">{p.title}</p>
+            </Link>
+          ))}
+        </div>
+      )}
+      {suggestions.posts.length > 0 && (
+        <div>
+          <p className="px-3 pt-2 pb-1 text-[10px] font-black text-slate-400 uppercase tracking-wider">커뮤니티</p>
+          {suggestions.posts.map(p => (
+            <Link key={p.id} href={`/community/${p.id}`} onClick={onClose}
+              className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 transition-colors">
+              <span className="material-symbols-outlined text-[18px] text-emerald-400 flex-shrink-0">forum</span>
+              <p className="text-sm font-medium text-slate-800 truncate">{p.title}</p>
+            </Link>
+          ))}
+        </div>
+      )}
+      {suggestions.labs.length > 0 && (
+        <div>
+          <p className="px-3 pt-2 pb-1 text-[10px] font-black text-slate-400 uppercase tracking-wider">AI 실험실</p>
+          {suggestions.labs.map(l => (
+            <Link key={l.id} href={`/labs/${l.id}`} onClick={onClose}
+              className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 transition-colors">
+              <span className="text-lg flex-shrink-0">{l.emoji}</span>
+              <p className="text-sm font-medium text-slate-800 truncate">{l.title}</p>
+            </Link>
+          ))}
+        </div>
+      )}
+      <div className="border-t border-slate-100 px-3 py-2 mt-1">
+        <p className="text-[11px] text-slate-400 text-center">Enter를 눌러 전체 검색</p>
+      </div>
+    </div>
+  );
+}
 
 export function TopNavBar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [suggestions, setSuggestions] = useState<Suggestions>({ tools: [], prompts: [], posts: [], labs: [] });
+  const [showDropdown, setShowDropdown] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { user, loading, signInWithGoogle, signOut } = useAuth();
+
+  const fetchSuggestions = useCallback((q: string) => {
+    clearTimeout(debounceRef.current);
+    if (q.trim().length < 2) { setSuggestions({ tools: [], prompts: [], posts: [], labs: [] }); setShowDropdown(false); return; }
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`${API}/search/suggest?q=${encodeURIComponent(q.trim())}`);
+        const data: Suggestions = await res.json();
+        setSuggestions(data);
+        const hasAny = data.tools.length + data.prompts.length + data.posts.length + data.labs.length > 0;
+        setShowDropdown(hasAny);
+      } catch { /* ignore */ }
+    }, 300);
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const openSearch = () => {
     setSearchOpen(true);
     setTimeout(() => searchInputRef.current?.focus(), 50);
+  };
+
+  const handleSearchChange = (val: string) => {
+    setSearchQuery(val);
+    fetchSuggestions(val);
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -23,7 +131,16 @@ export function TopNavBar() {
     if (!searchQuery.trim()) return;
     router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
     setSearchOpen(false);
+    setShowDropdown(false);
     setSearchQuery('');
+  };
+
+  const closeDropdown = () => {
+    setShowDropdown(false);
+    setSearchOpen(false);
+    setSearchQuery('');
+    setSuggestions({ tools: [], prompts: [], posts: [], labs: [] });
+    setIsMobileMenuOpen(false);
   };
 
   return (
@@ -67,19 +184,24 @@ export function TopNavBar() {
           <div className="flex items-center gap-3 md:gap-5">
             {/* Search bar (desktop) */}
             {searchOpen ? (
-              <form onSubmit={handleSearchSubmit} className="hidden lg:flex items-center relative">
-                <input
-                  ref={searchInputRef}
-                  value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
-                  onKeyDown={e => e.key === 'Escape' && setSearchOpen(false)}
-                  placeholder="검색..."
-                  className="w-56 pl-4 pr-10 py-2 rounded-xl border-2 border-sky-400 outline-none text-sm font-medium text-slate-800 transition-all"
-                />
-                <button type="submit" className="absolute right-2.5 text-sky-500 hover:text-sky-700">
-                  <span className="material-symbols-outlined text-xl">search</span>
-                </button>
-              </form>
+              <div ref={searchContainerRef} className="hidden lg:block relative">
+                <form onSubmit={handleSearchSubmit} className="flex items-center relative">
+                  <input
+                    ref={searchInputRef}
+                    value={searchQuery}
+                    onChange={e => handleSearchChange(e.target.value)}
+                    onKeyDown={e => e.key === 'Escape' && (setSearchOpen(false), setShowDropdown(false))}
+                    placeholder="검색..."
+                    className="w-64 pl-4 pr-10 py-2 rounded-xl border-2 border-sky-400 outline-none text-sm font-medium text-slate-800 transition-all"
+                  />
+                  <button type="submit" className="absolute right-2.5 text-sky-500 hover:text-sky-700">
+                    <span className="material-symbols-outlined text-xl">search</span>
+                  </button>
+                </form>
+                {showDropdown && (
+                  <SearchDropdown suggestions={suggestions} onClose={closeDropdown} />
+                )}
+              </div>
             ) : (
               <button
                 onClick={openSearch}
@@ -143,17 +265,24 @@ export function TopNavBar() {
       <div className={`fixed inset-0 bg-white z-40 transition-transform duration-300 ease-in-out lg:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="flex flex-col h-full pt-28 px-6 pb-6 overflow-y-auto">
           {/* Mobile search */}
-          <form onSubmit={(e) => { handleSearchSubmit(e); setIsMobileMenuOpen(false); }} className="mb-6">
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
-              <input
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                placeholder="검색..."
-                className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:border-sky-400 outline-none text-base font-medium text-slate-800"
-              />
-            </div>
-          </form>
+          <div className="mb-6 relative">
+            <form onSubmit={(e) => { handleSearchSubmit(e); setIsMobileMenuOpen(false); }}>
+              <div className="relative">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
+                <input
+                  value={searchQuery}
+                  onChange={e => handleSearchChange(e.target.value)}
+                  placeholder="검색..."
+                  className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:border-sky-400 outline-none text-base font-medium text-slate-800"
+                />
+              </div>
+            </form>
+            {showDropdown && (
+              <div className="mt-1">
+                <SearchDropdown suggestions={suggestions} onClose={closeDropdown} />
+              </div>
+            )}
+          </div>
           <div className="flex flex-col gap-6 text-xl font-bold text-slate-800 font-['Noto_Sans_KR']">
             <Link href="/tools" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-slate-100 pb-4">도구 탐색</Link>
             <Link href="/labs" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-slate-100 pb-4 flex items-center gap-2">
