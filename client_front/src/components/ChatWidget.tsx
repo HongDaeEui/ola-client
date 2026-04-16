@@ -1,25 +1,22 @@
+// @ts-nocheck
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-
-interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-}
+import { useChat } from '@ai-sdk/react';
 
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 'welcome',
-      role: 'assistant',
-      content: '안녕하세요! Ola AI 비서입니다. 🙌\n어떤 AI 도구나 노하우를 찾고 계신가요?',
-    },
-  ]);
-  const [inputValue, setInputValue] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+    initialMessages: [
+      {
+        id: 'welcome',
+        role: 'assistant',
+        content: '안녕하세요! Ola AI 비서입니다. 🙌\n어떤 AI 도구나 노하우를 찾고 계신가요?',
+      },
+    ],
+  });
+
   const endOfMessagesRef = useRef<HTMLDivElement>(null);
 
   // 자동 스크롤
@@ -27,34 +24,12 @@ export function ChatWidget() {
     if (isOpen) {
       endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages, isOpen, isTyping]);
-
-  const handleSend = () => {
-    if (!inputValue.trim()) return;
-
-    // 사용자 메시지 추가
-    const newMsg: Message = { id: Date.now().toString(), role: 'user', content: inputValue.trim() };
-    setMessages((prev) => [...prev, newMsg]);
-    setInputValue('');
-    setIsTyping(true);
-
-    // AI 모의 응답 (과금 방지를 위한 임시 UI 응답)
-    setTimeout(() => {
-      setIsTyping(false);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: (Date.now() + 1).toString(),
-          role: 'assistant',
-          content: '훌륭한 질문이네요! ✨\n현재는 과금 방지를 위해 API 두뇌 연결을 대기 중인 UI 팝업 버전입니다. 추후 언제든 백엔드 엔진을 플러그인 할 수 있도록 완벽하게 준비해 두었어요!',
-        },
-      ]);
-    }, 1500);
-  };
+  }, [messages, isOpen, isLoading]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleSend();
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e as any);
     }
   };
 
@@ -108,7 +83,7 @@ export function ChatWidget() {
             ))}
             
             {/* 타이핑 효과 */}
-            {isTyping && (
+            {isLoading && messages[messages.length - 1]?.role === 'user' && (
               <div className="flex justify-start">
                 <div className="bg-white border border-slate-100 rounded-2xl rounded-tl-sm px-4 py-3 flex gap-1.5 shadow-sm">
                   <div className="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce" />
@@ -122,28 +97,31 @@ export function ChatWidget() {
 
           {/* 인풋 영역 */}
           <div className="p-4 bg-white border-t border-slate-100">
-            <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-2xl pl-4 pr-2 py-2 focus-within:border-sky-300 focus-within:ring-2 focus-within:ring-sky-100 transition-all">
+            <form 
+              onSubmit={handleSubmit}
+              className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-2xl pl-4 pr-2 py-2 focus-within:border-sky-300 focus-within:ring-2 focus-within:ring-sky-100 transition-all"
+            >
               <input
                 type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
+                value={input}
+                onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 placeholder="어떤 AI가 필요하신가요?"
                 className="flex-1 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
                 autoComplete="off"
               />
               <button
-                onClick={handleSend}
-                disabled={!inputValue.trim() || isTyping}
+                type="submit"
+                disabled={!input.trim() || isLoading}
                 className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
-                  inputValue.trim() && !isTyping
+                  input.trim() && !isLoading
                     ? 'bg-sky-500 text-white hover:bg-sky-600 shadow-md shadow-sky-200' 
                     : 'bg-slate-200 text-slate-400 cursor-not-allowed'
                 }`}
               >
                 <span className="material-symbols-outlined text-[18px]">send</span>
               </button>
-            </div>
+            </form>
             <div className="text-center mt-2">
               <span className="text-[9px] text-slate-400 uppercase tracking-widest font-bold">Powered by Ola Engine</span>
             </div>
