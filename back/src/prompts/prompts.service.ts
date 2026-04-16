@@ -5,9 +5,10 @@ import { PrismaService } from '../prisma/prisma.service';
 export class PromptsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(filters?: { category?: string }) {
+  async findAll(filters?: { category?: string; userEmail?: string }) {
     const where: Record<string, unknown> = {};
     if (filters?.category) where.category = filters.category;
+    if (filters?.userEmail) where.author = { email: filters.userEmail };
     return this.prisma.prompt.findMany({
       where,
       include: {
