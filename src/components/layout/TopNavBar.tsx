@@ -5,6 +5,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { NotificationBell } from '@/components/NotificationBell';
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-psi.vercel.app/api';
 
@@ -216,6 +217,9 @@ export function TopNavBar() {
             <Link href="/submit" className="hidden lg:flex text-sm text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-bold mr-2">
               + 도구 제출
             </Link>
+
+            {/* Notification Bell */}
+            <NotificationBell />
 
             {/* Theme Toggle */}
             <ThemeToggle />
