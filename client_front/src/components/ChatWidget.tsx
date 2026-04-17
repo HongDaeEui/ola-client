@@ -161,7 +161,7 @@ export function ChatWidget() {
               </button>
             </form>
             <p className="text-center mt-2 text-[9px] text-slate-400 uppercase tracking-widest font-bold">
-              Powered by Claude AI
+              Powered by Ola Engine
             </p>
           </div>
         </div>
