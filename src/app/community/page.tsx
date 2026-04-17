@@ -1,23 +1,9 @@
 import Link from 'next/link';
 import { WriteFAB } from '@/components/WriteFAB';
+import { PostFeed, type Post } from '@/components/PostFeed';
 
 const API = 'https://ola-backend-psi.vercel.app/api';
-
-interface Author {
-  username: string;
-  avatarUrl: string | null;
-}
-
-interface Post {
-  id: string;
-  title: string;
-  content: string;
-  category: string;
-  likes: number;
-  views: number;
-  createdAt: string;
-  author: Author;
-}
+const LIMIT = 10;
 
 interface Meetup {
   id: string;
@@ -36,17 +22,6 @@ interface TagStat {
   totalViews: number;
 }
 
-function relativeTime(dateStr: string): string {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const m = Math.floor(diff / 60000);
-  if (m < 60) return `${m}분 전`;
-  const h = Math.floor(m / 60);
-  if (h < 24) return `${h}시간 전`;
-  const d = Math.floor(h / 24);
-  if (d < 7) return `${d}일 전`;
-  return new Date(dateStr).toLocaleDateString('ko-KR');
-}
-
 function meetupType(meetup: Meetup): string {
   return meetup.isVirtual ? '온라인' : `오프라인 · ${meetup.location}`;
 }
@@ -59,10 +34,9 @@ function meetupStatusLabel(status: string): string {
 
 async function getPosts(category?: string): Promise<Post[]> {
   try {
-    const url = category && category !== '전체'
-      ? `${API}/posts?category=${encodeURIComponent(category)}`
-      : `${API}/posts`;
-    const res = await fetch(url, { next: { revalidate: 30 } });
+    const qs = new URLSearchParams({ page: '1', limit: String(LIMIT) });
+    if (category && category !== '전체') qs.set('category', category);
+    const res = await fetch(`${API}/posts?${qs}`, { next: { revalidate: 30 } });
     if (!res.ok) return [];
     return res.json();
   } catch {
@@ -91,13 +65,6 @@ async function getTagStats(): Promise<TagStat[]> {
 }
 
 const CATEGORIES = ['전체', '실천형 노하우', '작품 공유', '자유게시판', '전문 리포트'];
-
-const CATEGORY_COLORS: Record<string, string> = {
-  '실천형 노하우': 'text-sky-600 bg-sky-50',
-  '작품 공유': 'text-rose-600 bg-rose-50',
-  '자유게시판': 'text-slate-600 bg-slate-100',
-  '전문 리포트': 'text-indigo-600 bg-indigo-50',
-};
 
 const TAG_ACTIVE_COLORS: Record<string, string> = {
   '실천형 노하우': 'bg-sky-600 text-white border-sky-600',
@@ -153,64 +120,8 @@ export default async function CommunityPage({
               ))}
             </div>
 
-            {/* Post List */}
-            {posts.length === 0 ? (
-              <div className="text-center py-20">
-                <span className="material-symbols-outlined text-[48px] text-slate-200 mb-4 block">article</span>
-                <p className="text-slate-400 font-bold mb-6">아직 게시글이 없습니다.</p>
-                <Link href="/community/write"
-                  className="inline-flex items-center gap-2 bg-sky-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-sky-700 transition-all">
-                  <span className="material-symbols-outlined text-[18px]">edit</span>
-                  첫 번째 글 쓰기
-                </Link>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {posts.map((post) => {
-                  const tagClass = CATEGORY_COLORS[post.category] ?? 'text-slate-600 bg-slate-100';
-                  return (
-                    <Link
-                      key={post.id}
-                      href={`/community/${post.id}`}
-                      className="block bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-lg hover:border-sky-200 transition-all group"
-                    >
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className={`text-[10px] font-black px-2.5 py-1 rounded-lg uppercase tracking-wider ${tagClass}`}>
-                          {post.category}
-                        </span>
-                        <span className="text-xs text-slate-400 font-medium">
-                          {relativeTime(post.createdAt)}
-                        </span>
-                      </div>
-                      <h3 className="text-xl font-extrabold text-slate-900 group-hover:text-sky-600 transition-colors mb-2 tracking-tight leading-snug">
-                        {post.title}
-                      </h3>
-                      <p className="text-sm text-slate-500 line-clamp-2 mb-4 leading-relaxed">
-                        {post.content}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-[10px] font-bold text-white uppercase">
-                            {post.author?.username?.charAt(0) || '?'}
-                          </div>
-                          <span className="text-sm font-bold text-slate-600">@{post.author?.username}</span>
-                        </div>
-                        <div className="flex items-center gap-4 text-slate-400">
-                          <div className="flex items-center gap-1">
-                            <span className="material-symbols-outlined text-[16px]">thumb_up</span>
-                            <span className="text-xs font-bold">{post.likes}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <span className="material-symbols-outlined text-[16px]">visibility</span>
-                            <span className="text-xs font-bold">{post.views}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
+            {/* Post Feed with infinite scroll */}
+            <PostFeed key={activeCategory} initialPosts={posts} category={activeCategory} />
           </main>
 
           {/* Sidebar */}
