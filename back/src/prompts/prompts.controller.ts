@@ -9,8 +9,12 @@ export class PromptsController {
   getPrompts(
     @Query('category') category?: string,
     @Query('userEmail') userEmail?: string,
+    @Query('page') page = '1',
+    @Query('limit') limit?: string,
   ) {
-    return this.promptsService.findAll({ category, userEmail });
+    const take = limit ? parseInt(limit, 10) : undefined;
+    const skip = take ? (parseInt(page, 10) - 1) * take : 0;
+    return this.promptsService.findAll({ category, userEmail }, skip, take);
   }
 
   @Get(':id')

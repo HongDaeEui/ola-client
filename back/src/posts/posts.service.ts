@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 export class PostsService {
   constructor(private prisma: PrismaService) {}
 
-  findAll(category?: string) {
+  findAll(category?: string, skip = 0, take?: number) {
     return this.prisma.post.findMany({
       where: category ? { category } : undefined,
       include: {
@@ -17,6 +17,8 @@ export class PostsService {
         },
       },
       orderBy: { createdAt: 'desc' },
+      skip,
+      ...(take !== undefined ? { take } : {}),
     });
   }
 
