@@ -1,4 +1,4 @@
-import { anthropic } from '@ai-sdk/anthropic';
+import { google } from '@ai-sdk/google';
 import { streamText } from 'ai';
 
 export const runtime = 'edge';
@@ -15,10 +15,9 @@ export async function POST(req: Request) {
     const { messages } = await req.json();
 
     const result = streamText({
-      model: anthropic('claude-haiku-4-5-20251001'),
+      model: google('gemini-1.5-flash'),
       messages,
       system: SYSTEM_PROMPT,
-      maxTokens: 1024,
     });
 
     return result.toTextStreamResponse();
