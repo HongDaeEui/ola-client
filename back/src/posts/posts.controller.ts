@@ -40,6 +40,7 @@ export class PostsController {
       title: string;
       content: string;
       category: string;
+      imageUrl?: string;
       userEmail: string;
       userName: string;
     },

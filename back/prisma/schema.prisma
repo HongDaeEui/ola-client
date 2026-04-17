@@ -134,6 +134,7 @@ model Post {
   title     String
   content   String
   category  String // "실천형 노하우", "자유게시판", "전문 리포트", "작품 공유"
+  imageUrl  String?
   authorId  String
   likes     Int      @default(0)
   views     Int      @default(0)
