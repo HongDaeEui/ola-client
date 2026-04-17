@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-psi.vercel.app/api';
 
@@ -19,18 +20,18 @@ function SearchDropdown({ suggestions, onClose }: { suggestions: Suggestions; on
   if (total === 0) return null;
 
   return (
-    <div className="absolute top-full left-0 mt-1.5 w-72 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50">
+    <div className="absolute top-full left-0 mt-1.5 w-72 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden z-50">
       {suggestions.tools.length > 0 && (
         <div>
           <p className="px-3 pt-3 pb-1 text-[10px] font-black text-slate-400 uppercase tracking-wider">도구</p>
           {suggestions.tools.map(t => (
             <Link key={t.id} href={`/tools/${t.id}`} onClick={onClose}
-              className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 transition-colors">
+              className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 dark:hover:bg-slate-700 transition-colors">
               {t.iconUrl
                 ? <img src={t.iconUrl} alt={t.name} className="w-6 h-6 rounded-lg object-cover flex-shrink-0" />
                 : <span className="material-symbols-outlined text-[18px] text-slate-400 flex-shrink-0">extension</span>}
               <div className="min-w-0">
-                <p className="text-sm font-bold text-slate-800 truncate">{t.name}</p>
+                <p className="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">{t.name}</p>
                 <p className="text-[11px] text-slate-400 truncate">{t.category}</p>
               </div>
             </Link>
@@ -42,9 +43,9 @@ function SearchDropdown({ suggestions, onClose }: { suggestions: Suggestions; on
           <p className="px-3 pt-2 pb-1 text-[10px] font-black text-slate-400 uppercase tracking-wider">프롬프트</p>
           {suggestions.prompts.map(p => (
             <Link key={p.id} href={`/prompts/${p.id}`} onClick={onClose}
-              className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 transition-colors">
+              className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 dark:hover:bg-slate-700 transition-colors">
               <span className="material-symbols-outlined text-[18px] text-violet-400 flex-shrink-0">psychology</span>
-              <p className="text-sm font-medium text-slate-800 truncate">{p.title}</p>
+              <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{p.title}</p>
             </Link>
           ))}
         </div>
@@ -54,9 +55,9 @@ function SearchDropdown({ suggestions, onClose }: { suggestions: Suggestions; on
           <p className="px-3 pt-2 pb-1 text-[10px] font-black text-slate-400 uppercase tracking-wider">커뮤니티</p>
           {suggestions.posts.map(p => (
             <Link key={p.id} href={`/community/${p.id}`} onClick={onClose}
-              className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 transition-colors">
+              className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 dark:hover:bg-slate-700 transition-colors">
               <span className="material-symbols-outlined text-[18px] text-emerald-400 flex-shrink-0">forum</span>
-              <p className="text-sm font-medium text-slate-800 truncate">{p.title}</p>
+              <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{p.title}</p>
             </Link>
           ))}
         </div>
@@ -66,14 +67,14 @@ function SearchDropdown({ suggestions, onClose }: { suggestions: Suggestions; on
           <p className="px-3 pt-2 pb-1 text-[10px] font-black text-slate-400 uppercase tracking-wider">AI 실험실</p>
           {suggestions.labs.map(l => (
             <Link key={l.id} href={`/labs/${l.id}`} onClick={onClose}
-              className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 transition-colors">
+              className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 dark:hover:bg-slate-700 transition-colors">
               <span className="text-lg flex-shrink-0">{l.emoji}</span>
-              <p className="text-sm font-medium text-slate-800 truncate">{l.title}</p>
+              <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{l.title}</p>
             </Link>
           ))}
         </div>
       )}
-      <div className="border-t border-slate-100 px-3 py-2 mt-1">
+      <div className="border-t border-slate-100 dark:border-slate-700 px-3 py-2 mt-1">
         <p className="text-[11px] text-slate-400 text-center">Enter를 눌러 전체 검색</p>
       </div>
     </div>
@@ -145,7 +146,7 @@ export function TopNavBar() {
 
   return (
     <>
-      <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-sm">
+      <nav className="fixed top-0 w-full z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 shadow-sm">
         <div className="flex justify-between items-center px-4 md:px-8 py-4 max-w-[1920px] mx-auto">
 
           <div className="flex items-center">
@@ -159,24 +160,24 @@ export function TopNavBar() {
           </div>
 
           <div className="hidden lg:flex items-center gap-10 font-['Noto_Sans_KR'] font-bold text-[15px] tracking-wide ml-8">
-            <Link href="/tools" className="text-slate-600 hover:text-sky-600 hover:-translate-y-0.5 transition-all duration-300">
+            <Link href="/tools" className="text-slate-600 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-400 hover:-translate-y-0.5 transition-all duration-300">
               도구 탐색
             </Link>
-            <Link href="/labs" className="text-slate-600 flex items-center gap-1.5 hover:text-sky-600 hover:-translate-y-0.5 transition-all duration-300">
+            <Link href="/labs" className="text-slate-600 dark:text-slate-300 flex items-center gap-1.5 hover:text-sky-600 dark:hover:text-sky-400 hover:-translate-y-0.5 transition-all duration-300">
               <span className="material-symbols-outlined text-[18px] text-sky-500">science</span>
               AI 실험실
             </Link>
-            <Link href="/categories" className="text-slate-600 hover:text-sky-600 hover:-translate-y-0.5 transition-all duration-300">
+            <Link href="/categories" className="text-slate-600 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-400 hover:-translate-y-0.5 transition-all duration-300">
               카테고리
             </Link>
-            <Link href="/ranking" className="text-slate-600 flex items-center gap-1.5 hover:text-sky-600 hover:-translate-y-0.5 transition-all duration-300">
+            <Link href="/ranking" className="text-slate-600 dark:text-slate-300 flex items-center gap-1.5 hover:text-sky-600 dark:hover:text-sky-400 hover:-translate-y-0.5 transition-all duration-300">
               <span className="material-symbols-outlined text-[18px] text-amber-500">local_fire_department</span>
               인기 랭킹
             </Link>
-            <Link href="/prompts" className="text-slate-600 hover:text-sky-600 hover:-translate-y-0.5 transition-all duration-300">
+            <Link href="/prompts" className="text-slate-600 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-400 hover:-translate-y-0.5 transition-all duration-300">
               프롬프트
             </Link>
-            <Link href="/community" className="text-slate-600 hover:text-sky-600 hover:-translate-y-0.5 transition-all duration-300">
+            <Link href="/community" className="text-slate-600 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-400 hover:-translate-y-0.5 transition-all duration-300">
               커뮤니티
             </Link>
           </div>
@@ -192,7 +193,7 @@ export function TopNavBar() {
                     onChange={e => handleSearchChange(e.target.value)}
                     onKeyDown={e => e.key === 'Escape' && (setSearchOpen(false), setShowDropdown(false))}
                     placeholder="검색..."
-                    className="w-64 pl-4 pr-10 py-2 rounded-xl border-2 border-sky-400 outline-none text-sm font-medium text-slate-800 transition-all"
+                    className="w-64 pl-4 pr-10 py-2 rounded-xl border-2 border-sky-400 outline-none text-sm font-medium text-slate-800 dark:text-slate-100 dark:bg-slate-800 transition-all"
                   />
                   <button type="submit" className="absolute right-2.5 text-sky-500 hover:text-sky-700">
                     <span className="material-symbols-outlined text-xl">search</span>
@@ -205,16 +206,19 @@ export function TopNavBar() {
             ) : (
               <button
                 onClick={openSearch}
-                className="hidden lg:flex w-9 h-9 items-center justify-center text-slate-500 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition-colors"
+                className="hidden lg:flex w-9 h-9 items-center justify-center text-slate-500 dark:text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 rounded-lg transition-colors"
                 aria-label="검색"
               >
                 <span className="material-symbols-outlined text-[22px]">search</span>
               </button>
             )}
 
-            <Link href="/submit" className="hidden lg:flex text-sm text-slate-500 hover:text-slate-800 font-bold mr-2">
+            <Link href="/submit" className="hidden lg:flex text-sm text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-bold mr-2">
               + 도구 제출
             </Link>
+
+            {/* Theme Toggle */}
+            <ThemeToggle />
 
             {/* Auth Buttons */}
             {!loading && (
@@ -227,7 +231,7 @@ export function TopNavBar() {
                   </Link>
                   <button
                     onClick={signOut}
-                    className="rounded-xl border-2 border-slate-200 bg-white text-slate-700 px-4 py-2 text-sm font-bold hover:bg-slate-50 transition-all"
+                    className="rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-4 py-2 text-sm font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
                   >
                     로그아웃
                   </button>
@@ -250,7 +254,7 @@ export function TopNavBar() {
 
             {/* Mobile Menu Toggle */}
             <button
-              className="lg:hidden w-10 h-10 flex items-center justify-center text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+              className="lg:hidden w-10 h-10 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               <span className="material-symbols-outlined text-2xl">
@@ -262,7 +266,7 @@ export function TopNavBar() {
       </nav>
 
       {/* Mobile Drawer */}
-      <div className={`fixed inset-0 bg-white z-40 transition-transform duration-300 ease-in-out lg:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+      <div className={`fixed inset-0 bg-white dark:bg-slate-900 z-40 transition-transform duration-300 ease-in-out lg:hidden ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="flex flex-col h-full pt-28 px-6 pb-6 overflow-y-auto">
           {/* Mobile search */}
           <div className="mb-6 relative">
@@ -273,7 +277,7 @@ export function TopNavBar() {
                   value={searchQuery}
                   onChange={e => handleSearchChange(e.target.value)}
                   placeholder="검색..."
-                  className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-slate-200 focus:border-sky-400 outline-none text-base font-medium text-slate-800"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 dark:bg-slate-800 focus:border-sky-400 outline-none text-base font-medium text-slate-800 dark:text-slate-100"
                 />
               </div>
             </form>
@@ -283,34 +287,34 @@ export function TopNavBar() {
               </div>
             )}
           </div>
-          <div className="flex flex-col gap-6 text-xl font-bold text-slate-800 font-['Noto_Sans_KR']">
-            <Link href="/tools" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-slate-100 pb-4">도구 탐색</Link>
-            <Link href="/labs" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-slate-100 pb-4 flex items-center gap-2">
+          <div className="flex flex-col gap-6 text-xl font-bold text-slate-800 dark:text-slate-200 font-['Noto_Sans_KR']">
+            <Link href="/tools" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-slate-100 dark:border-slate-800 pb-4">도구 탐색</Link>
+            <Link href="/labs" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-slate-100 dark:border-slate-800 pb-4 flex items-center gap-2">
               <span className="material-symbols-outlined text-sky-500">science</span> AI 실험실
             </Link>
-            <Link href="/categories" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-slate-100 pb-4">카테고리</Link>
-            <Link href="/ranking" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-slate-100 pb-4 flex items-center gap-2">
+            <Link href="/categories" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-slate-100 dark:border-slate-800 pb-4">카테고리</Link>
+            <Link href="/ranking" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-slate-100 dark:border-slate-800 pb-4 flex items-center gap-2">
               인기 랭킹 <span className="material-symbols-outlined text-amber-500">local_fire_department</span>
             </Link>
-            <Link href="/prompts" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-slate-100 pb-4">프롬프트</Link>
-            <Link href="/community" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-slate-100 pb-4">커뮤니티</Link>
+            <Link href="/prompts" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-slate-100 dark:border-slate-800 pb-4">프롬프트</Link>
+            <Link href="/community" onClick={() => setIsMobileMenuOpen(false)} className="border-b border-slate-100 dark:border-slate-800 pb-4">커뮤니티</Link>
             <Link href="/submit" onClick={() => setIsMobileMenuOpen(false)} className="text-sky-600 pb-4">+ 도구 제안하기</Link>
           </div>
           <div className="mt-auto pt-8">
             {user ? (
               <div className="flex flex-col gap-3">
                 <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)}>
-                  <div className="flex items-center gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                  <div className="flex items-center gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold uppercase">
                       {user.user_metadata?.name?.charAt(0) ?? user.email?.charAt(0) ?? 'U'}
                     </div>
                     <div>
-                      <p className="font-bold text-slate-900 text-sm">{user.user_metadata?.name ?? '사용자'}</p>
+                      <p className="font-bold text-slate-900 dark:text-slate-100 text-sm">{user.user_metadata?.name ?? '사용자'}</p>
                       <p className="text-xs text-slate-500">{user.email}</p>
                     </div>
                   </div>
                 </Link>
-                <button onClick={signOut} className="w-full py-4 rounded-xl border-2 border-slate-200 text-slate-700 font-bold">
+                <button onClick={signOut} className="w-full py-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold">
                   로그아웃
                 </button>
               </div>
