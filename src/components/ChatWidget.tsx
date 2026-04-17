@@ -1,26 +1,7 @@
-// @ts-nocheck
 "use client";
 
-import React, { useState, useRef, useEffect, Component, ErrorInfo, ReactNode } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useChat } from '@ai-sdk/react';
-
-class ChatErrorBoundary extends Component<{children: ReactNode}, {hasError: boolean, error: Error | null}> {
-  constructor(props: {children: ReactNode}) {
-    super(props);
-    this.state = { hasError: false, error: null };
-  }
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error };
-  }
-  render() {
-    if (this.state.hasError) {
-      return <div className="fixed bottom-6 right-6 w-[340px] p-4 bg-red-100 text-red-900 rounded-xl z-50 overflow-auto max-h-[500px]">
-        <b>챗봇 렌더링 에러:</b> {this.state.error?.message}
-      </div>;
-    }
-    return this.props.children;
-  }
-}
 
 const INITIAL_MESSAGES = [
   {
@@ -30,54 +11,64 @@ const INITIAL_MESSAGES = [
   },
 ];
 
+const QUICK_QUESTIONS = [
+  '요즘 핫한 AI 도구 추천해줘',
+  '프롬프트 잘 쓰는 법',
+  'AI로 이미지 만들기',
+];
+
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const { messages, input, setInput, handleInputChange, handleSubmit, isLoading } = useChat({
-    id: 'ola-ai-chatbot-v1',
+  const { messages, input, setInput, handleSubmit, isLoading, append } = useChat({
+    id: 'ola-ai-chatbot',
     initialMessages: INITIAL_MESSAGES,
   });
 
-  const endOfMessagesRef = useRef<HTMLDivElement>(null);
+  const endRef = useRef<HTMLDivElement>(null);
 
-  // 자동 스크롤
   useEffect(() => {
-    if (isOpen) {
-      endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (isOpen) endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isOpen, isLoading]);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    // 한글 입력 중(조합 중)일 때 엔터키 처리를 무시하여 중복 전송 방지
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.nativeEvent.isComposing) return;
-    
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       handleSubmit(e as any);
     }
-  };
+  }
+
+  function handleQuickQuestion(q: string) {
+    append({ role: 'user', content: q });
+  }
+
+  const showQuickQuestions = messages.length === 1 && !isLoading;
 
   return (
-    <ChatErrorBoundary>
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-        {/* 챗봇 팝업 창 */}
-        {isOpen && (
-        <div 
-          className="mb-4 w-[340px] h-[500px] max-h-[80vh] flex flex-col bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 transition-all duration-300 ease-out origin-bottom-right"
-          style={{ animation: 'chatPopup 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+      {/* Chat panel */}
+      {isOpen && (
+        <div
+          className="mb-4 w-[340px] h-[520px] max-h-[80vh] flex flex-col bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-100 dark:border-slate-700"
+          style={{ animation: 'chatPopup 0.25s cubic-bezier(0.16, 1, 0.3, 1)' }}
         >
-          {/* 헤더 */}
-          <div className="flex items-center justify-between bg-gradient-to-r from-sky-500 to-indigo-600 px-5 py-4 text-white">
+          {/* Header */}
+          <div className="flex items-center justify-between bg-gradient-to-r from-sky-500 to-indigo-600 px-5 py-4 text-white flex-shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold">
+              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
                 <span className="material-symbols-outlined text-[18px]">smart_toy</span>
               </div>
               <div>
                 <h3 className="font-extrabold text-sm tracking-tight">Ola AI 비서</h3>
-                <p className="text-[10px] text-sky-100 font-medium">대기중 • UI 디자인 버전</p>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />
+                  <p className="text-[10px] text-sky-100 font-medium">온라인</p>
+                </div>
               </div>
             </div>
-            <button 
+            <button
               onClick={() => setIsOpen(false)}
               className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/20 transition-colors"
             >
@@ -85,132 +76,141 @@ export function ChatWidget() {
             </button>
           </div>
 
-          {/* 대화 영역 (스크롤) */}
-          <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-slate-50/50">
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/50 dark:bg-slate-900/30">
             {messages.map((msg) => (
               <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div 
-                  className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed shadow-sm
-                    ${msg.role === 'user' 
-                      ? 'bg-sky-500 text-white rounded-tr-sm' 
-                      : 'bg-white border border-slate-100 text-slate-700 rounded-tl-sm'
-                    }
-                  `}
+                {msg.role === 'assistant' && (
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center flex-shrink-0 mt-1 mr-2">
+                    <span className="material-symbols-outlined text-[12px] text-white">smart_toy</span>
+                  </div>
+                )}
+                <div
+                  className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm ${
+                    msg.role === 'user'
+                      ? 'bg-sky-500 text-white rounded-tr-sm'
+                      : 'bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-600 text-slate-700 dark:text-slate-200 rounded-tl-sm'
+                  }`}
                 >
-                  {(msg.content || '').split('\n').map((line, i) => (
+                  {(msg.content || '').split('\n').map((line, i, arr) => (
                     <React.Fragment key={i}>
                       {line}
-                      {i < (msg.content || '').split('\n').length - 1 && <br />}
+                      {i < arr.length - 1 && <br />}
                     </React.Fragment>
                   ))}
                 </div>
               </div>
             ))}
-            
-            {/* 타이핑 효과 */}
+
+            {/* Quick questions */}
+            {showQuickQuestions && (
+              <div className="flex flex-col gap-1.5 mt-2">
+                {QUICK_QUESTIONS.map(q => (
+                  <button
+                    key={q}
+                    onClick={() => handleQuickQuestion(q)}
+                    className="text-left text-xs text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-900/30 border border-sky-100 dark:border-sky-800 rounded-xl px-3 py-2 hover:bg-sky-100 dark:hover:bg-sky-900/50 transition-colors"
+                  >
+                    💬 {q}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Typing indicator */}
             {isLoading && messages[messages.length - 1]?.role === 'user' && (
               <div className="flex justify-start">
-                <div className="bg-white border border-slate-100 rounded-2xl rounded-tl-sm px-4 py-3 flex gap-1.5 shadow-sm">
-                  <div className="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce" />
-                  <div className="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <div className="w-1.5 h-1.5 bg-slate-300 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center flex-shrink-0 mt-1 mr-2">
+                  <span className="material-symbols-outlined text-[12px] text-white">smart_toy</span>
+                </div>
+                <div className="bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-600 rounded-2xl rounded-tl-sm px-4 py-3 flex gap-1.5 shadow-sm">
+                  {[0, 150, 300].map(delay => (
+                    <div key={delay} className="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-500 rounded-full animate-bounce" style={{ animationDelay: `${delay}ms` }} />
+                  ))}
                 </div>
               </div>
             )}
-            <div ref={endOfMessagesRef} />
+            <div ref={endRef} />
           </div>
 
-          {/* 인풋 영역 */}
-          <div className="p-4 bg-white border-t border-slate-100">
-            <form 
+          {/* Input */}
+          <div className="p-4 bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700 flex-shrink-0">
+            <form
               onSubmit={handleSubmit}
-              className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-2xl pl-4 pr-2 py-2 focus-within:border-sky-300 focus-within:ring-2 focus-within:ring-sky-100 transition-all"
+              className="flex items-center gap-2 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-2xl pl-4 pr-2 py-2 focus-within:border-sky-400 focus-within:ring-2 focus-within:ring-sky-100 dark:focus-within:ring-sky-900 transition-all"
             >
               <input
                 type="text"
-                value={input || ''}
-                onChange={(e) => {
-                  setInput(e.target.value);
-                  if (handleInputChange) handleInputChange(e);
-                }}
+                value={input}
+                onChange={e => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="어떤 AI가 필요하신가요?"
-                className="flex-1 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"
+                className="flex-1 bg-transparent text-sm text-slate-700 dark:text-slate-200 outline-none placeholder:text-slate-400"
                 autoComplete="off"
               />
               <button
                 type="submit"
-                disabled={!(input || '').trim() || isLoading}
+                disabled={!input.trim() || isLoading}
                 className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
-                  (input || '').trim() && !isLoading
-                    ? 'bg-sky-500 text-white hover:bg-sky-600 shadow-md shadow-sky-200' 
-                    : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                  input.trim() && !isLoading
+                    ? 'bg-sky-500 text-white hover:bg-sky-600 shadow-md shadow-sky-200'
+                    : 'bg-slate-200 dark:bg-slate-600 text-slate-400 cursor-not-allowed'
                 }`}
               >
                 <span className="material-symbols-outlined text-[18px]">send</span>
               </button>
             </form>
-            <div className="text-center mt-2">
-              <span className="text-[9px] text-slate-400 uppercase tracking-widest font-bold">Powered by Ola Engine</span>
-            </div>
+            <p className="text-center mt-2 text-[9px] text-slate-400 uppercase tracking-widest font-bold">
+              Powered by Claude AI
+            </p>
           </div>
         </div>
       )}
 
-      {/* 플로팅 버튼 */}
+      {/* FAB */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        aria-label="AI 비서"
         className={`w-14 h-14 rounded-full flex items-center justify-center text-white shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 ${
           isOpen ? 'bg-slate-800' : 'bg-gradient-to-tr from-sky-500 to-indigo-600'
         }`}
         style={{
-          boxShadow: isOpen 
-            ? '0 10px 25px -5px rgba(15, 23, 42, 0.3)' 
-            : '0 10px 25px -5px rgba(14, 165, 233, 0.5)'
+          boxShadow: isOpen
+            ? '0 10px 25px -5px rgba(15,23,42,0.3)'
+            : '0 10px 25px -5px rgba(14,165,233,0.5)',
         }}
       >
-        <span 
-          className={`material-symbols-outlined text-[28px] transition-all duration-300 ${
-            isOpen ? 'rotate-90 scale-0 opacity-0' : 'rotate-0 scale-100 opacity-100'
+        <span
+          className={`material-symbols-outlined text-[28px] transition-all duration-300 absolute ${
+            isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
           }`}
-          style={{ position: 'absolute' }}
-        >
-          forum
-        </span>
-        <span 
-          className={`material-symbols-outlined text-[28px] transition-all duration-300 ${
-            isOpen ? 'rotate-0 scale-100 opacity-100' : '-rotate-90 scale-0 opacity-0'
-          }`}
-          style={{ position: 'absolute' }}
         >
           close
         </span>
-        
-        {/* 호버 시 툴팁 느낌의 미니 뱃지 */}
+        <span
+          className={`material-symbols-outlined text-[28px] transition-all duration-300 absolute ${
+            isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'
+          }`}
+        >
+          forum
+        </span>
+
         {!isOpen && isHovered && (
-          <div className="absolute -top-10 bg-slate-800 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg whitespace-nowrap animate-fade-in-up">
+          <div className="absolute -top-10 bg-slate-800 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg whitespace-nowrap">
             AI 비서에게 물어보기
             <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-800 rotate-45" />
           </div>
         )}
       </button>
 
-      <style dangerouslySetInnerHTML={{__html: `
+      <style dangerouslySetInnerHTML={{ __html: `
         @keyframes chatPopup {
-          from { opacity: 0; transform: scale(0.9) translateY(20px); }
-          to { opacity: 1; transform: scale(1) translateY(0); }
+          from { opacity: 0; transform: scale(0.9) translateY(16px); }
+          to   { opacity: 1; transform: scale(1) translateY(0); }
         }
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(5px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in-up {
-          animation: fadeInUp 0.2s ease-out forwards;
-        }
-      `}} />
-      </div>
-    </ChatErrorBoundary>
+      ` }} />
+    </div>
   );
 }
