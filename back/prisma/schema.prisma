@@ -21,7 +21,8 @@ model User {
   experiments Experiment[]
   prompts     Prompt[]
   posts       Post[]
-  comments    Comment[]
+  comments      Comment[]
+  notifications Notification[]
 }
 
 enum UserRole {
@@ -172,4 +173,18 @@ model Bookmark {
   createdAt  DateTime @default(now())
 
   @@unique([userId, targetType, targetId])
+}
+
+model Notification {
+  id          String   @id @default(uuid())
+  recipientId String
+  type        String   // 'LIKE' | 'COMMENT'
+  message     String
+  targetType  String   // 'POST' | 'PROMPT' | 'LAB' | 'TOOL'
+  targetId    String
+  targetTitle String?
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  recipient User @relation(fields: [recipientId], references: [id], onDelete: Cascade)
 }

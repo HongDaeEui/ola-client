@@ -13,6 +13,7 @@ import { LikesModule } from './likes/likes.module';
 import { BookmarksModule } from './bookmarks/bookmarks.module';
 import { SearchModule } from './search/search.module';
 import { CommentsModule } from './comments/comments.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { CommentsModule } from './comments/comments.module';
     BookmarksModule,
     SearchModule,
     CommentsModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
