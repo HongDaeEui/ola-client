@@ -1,9 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { NotificationsGateway } from './notifications.gateway';
 
 @Injectable()
 export class NotificationsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @Optional() private gateway?: NotificationsGateway,
+  ) {}
 
   async getByUserEmail(email: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
@@ -46,6 +50,19 @@ export class NotificationsService {
     targetId: string;
     targetTitle?: string;
   }) {
-    return this.prisma.notification.create({ data });
+    const notification = await this.prisma.notification.create({ data });
+
+    // Real-time push via WebSocket
+    if (this.gateway) {
+      const recipient = await this.prisma.user.findUnique({
+        where: { id: data.recipientId },
+        select: { email: true },
+      });
+      if (recipient) {
+        this.gateway.notifyUser(recipient.email, notification);
+      }
+    }
+
+    return notification;
   }
 }
