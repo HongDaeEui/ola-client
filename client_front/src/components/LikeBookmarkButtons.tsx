@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-psi.vercel.app/api';
@@ -76,34 +77,54 @@ export function LikeBookmarkButtons({ targetType, targetId, initialLikes, varian
 
   return (
     <div className={`flex ${isColumn ? 'flex-col' : 'items-center'} gap-3`}>
-      <button
+      <motion.button
         onClick={toggleLike}
         disabled={loading}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.92 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 17 }}
         className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${
           liked
             ? 'bg-rose-500 text-white hover:bg-rose-600'
             : 'bg-slate-900 text-white hover:bg-slate-700'
         } ${isColumn ? 'justify-center w-full' : ''}`}
       >
-        <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: liked ? "'FILL' 1" : "'FILL' 0" }}>
+        <motion.span
+          key={liked ? 'liked' : 'not-liked'}
+          initial={{ scale: 1.6, rotate: -15 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ type: 'spring', stiffness: 500, damping: 15 }}
+          className="material-symbols-outlined text-[18px]"
+          style={{ fontVariationSettings: liked ? "'FILL' 1" : "'FILL' 0" }}
+        >
           thumb_up
-        </span>
+        </motion.span>
         좋아요 {likes}
-      </button>
-      <button
+      </motion.button>
+      <motion.button
         onClick={toggleBookmark}
         disabled={loading}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.92 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 17 }}
         className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${
           bookmarked
             ? 'bg-sky-500 text-white hover:bg-sky-600'
             : 'bg-sky-50 text-sky-700 border border-sky-100 hover:bg-sky-100'
         } ${isColumn ? 'justify-center w-full' : ''}`}
       >
-        <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: bookmarked ? "'FILL' 1" : "'FILL' 0" }}>
+        <motion.span
+          key={bookmarked ? 'saved' : 'not-saved'}
+          initial={{ scale: 1.6, y: -4 }}
+          animate={{ scale: 1, y: 0 }}
+          transition={{ type: 'spring', stiffness: 500, damping: 15 }}
+          className="material-symbols-outlined text-[18px]"
+          style={{ fontVariationSettings: bookmarked ? "'FILL' 1" : "'FILL' 0" }}
+        >
           bookmark
-        </span>
+        </motion.span>
         {bookmarked ? '저장됨' : '북마크'}
-      </button>
+      </motion.button>
 
       {/* Login hint toast */}
       {showLoginHint && (
