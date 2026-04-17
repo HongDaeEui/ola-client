@@ -13,7 +13,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PromptsController = void 0;
-const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const prompts_service_1 = require("./prompts.service");
 let PromptsController = class PromptsController {
@@ -39,7 +38,6 @@ let PromptsController = class PromptsController {
 exports.PromptsController = PromptsController;
 __decorate([
     (0, common_1.Get)(),
-    openapi.ApiResponse({ type: [Object] }),
     __param(0, (0, common_1.Query)('category')),
     __param(1, (0, common_1.Query)('userEmail')),
     __param(2, (0, common_1.Query)('page')),
@@ -50,7 +48,6 @@ __decorate([
 ], PromptsController.prototype, "getPrompts", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    openapi.ApiResponse({}),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -58,7 +55,6 @@ __decorate([
 ], PromptsController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id/view'),
-    openapi.ApiResponse({}),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -66,7 +62,6 @@ __decorate([
 ], PromptsController.prototype, "incrementViews", null);
 __decorate([
     (0, common_1.Post)(),
-    openapi.ApiResponse({}),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

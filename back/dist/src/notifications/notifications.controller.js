@@ -13,7 +13,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NotificationsController = void 0;
-const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const notifications_service_1 = require("./notifications.service");
 let NotificationsController = class NotificationsController {
@@ -37,7 +36,6 @@ let NotificationsController = class NotificationsController {
 exports.NotificationsController = NotificationsController;
 __decorate([
     (0, common_1.Get)(),
-    openapi.ApiResponse({ type: Object }),
     __param(0, (0, common_1.Query)('userEmail')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -45,7 +43,6 @@ __decorate([
 ], NotificationsController.prototype, "getByUserEmail", null);
 __decorate([
     (0, common_1.Get)('unread-count'),
-    openapi.ApiResponse({ type: Object }),
     __param(0, (0, common_1.Query)('userEmail')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -53,7 +50,6 @@ __decorate([
 ], NotificationsController.prototype, "getUnreadCount", null);
 __decorate([
     (0, common_1.Patch)('read-all'),
-    openapi.ApiResponse({ type: Object }),
     __param(0, (0, common_1.Query)('userEmail')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -61,7 +57,6 @@ __decorate([
 ], NotificationsController.prototype, "markAllRead", null);
 __decorate([
     (0, common_1.Patch)(':id/read'),
-    openapi.ApiResponse({ type: Object }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

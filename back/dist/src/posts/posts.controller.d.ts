@@ -36,8 +36,8 @@ export declare class PostsController {
     } & {
         id: string;
         title: string;
-        category: string;
         content: string;
+        category: string;
         authorId: string;
         likes: number;
         views: number;
@@ -48,6 +48,7 @@ export declare class PostsController {
         title: string;
         content: string;
         category: string;
+        imageUrl?: string;
         userEmail: string;
         userName: string;
     }): Promise<{
@@ -58,8 +59,8 @@ export declare class PostsController {
     } & {
         id: string;
         title: string;
-        category: string;
         content: string;
+        category: string;
         authorId: string;
         likes: number;
         views: number;
@@ -69,8 +70,8 @@ export declare class PostsController {
     incrementViews(id: string): import("@prisma/client").Prisma.Prisma__PostClient<{
         id: string;
         title: string;
-        category: string;
         content: string;
+        category: string;
         authorId: string;
         likes: number;
         views: number;

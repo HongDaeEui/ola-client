@@ -13,7 +13,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ToolsController = void 0;
-const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const tools_service_1 = require("./tools.service");
 let ToolsController = class ToolsController {
@@ -52,7 +51,6 @@ let ToolsController = class ToolsController {
 exports.ToolsController = ToolsController;
 __decorate([
     (0, common_1.Get)(),
-    openapi.ApiResponse({}),
     __param(0, (0, common_1.Query)('category')),
     __param(1, (0, common_1.Query)('pricing')),
     __param(2, (0, common_1.Query)('sort')),
@@ -62,35 +60,30 @@ __decorate([
 ], ToolsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('featured'),
-    openapi.ApiResponse({}),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], ToolsController.prototype, "findFeatured", null);
 __decorate([
     (0, common_1.Get)('ranking'),
-    openapi.ApiResponse({}),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], ToolsController.prototype, "findTopByRating", null);
 __decorate([
     (0, common_1.Get)('categories'),
-    openapi.ApiResponse({}),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], ToolsController.prototype, "getCategoryCounts", null);
 __decorate([
     (0, common_1.Get)('pending'),
-    openapi.ApiResponse({}),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], ToolsController.prototype, "findPending", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    openapi.ApiResponse({ type: Object }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -98,7 +91,6 @@ __decorate([
 ], ToolsController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id/approve'),
-    openapi.ApiResponse({}),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -106,7 +98,6 @@ __decorate([
 ], ToolsController.prototype, "approve", null);
 __decorate([
     (0, common_1.Patch)(':id/reject'),
-    openapi.ApiResponse({}),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -114,7 +105,6 @@ __decorate([
 ], ToolsController.prototype, "reject", null);
 __decorate([
     (0, common_1.Post)(),
-    openapi.ApiResponse({}),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

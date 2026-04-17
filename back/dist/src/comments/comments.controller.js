@@ -13,7 +13,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommentsController = void 0;
-const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const comments_service_1 = require("./comments.service");
 let CommentsController = class CommentsController {
@@ -34,7 +33,6 @@ let CommentsController = class CommentsController {
 exports.CommentsController = CommentsController;
 __decorate([
     (0, common_1.Get)(),
-    openapi.ApiResponse({ type: Object }),
     __param(0, (0, common_1.Query)('postId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -42,7 +40,6 @@ __decorate([
 ], CommentsController.prototype, "findByPost", null);
 __decorate([
     (0, common_1.Post)(),
-    openapi.ApiResponse({ type: Object }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -50,7 +47,6 @@ __decorate([
 ], CommentsController.prototype, "create", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    openapi.ApiResponse({ type: Object }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Query)('userEmail')),
     __metadata("design:type", Function),

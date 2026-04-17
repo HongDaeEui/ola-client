@@ -4,56 +4,56 @@ export declare class ResourcesController {
     constructor(resourcesService: ResourcesService);
     findAll(type?: string, difficulty?: string): Promise<({
         author: {
-            username: string;
             name: string | null;
+            username: string;
             avatarUrl: string | null;
         };
     } & {
+        createdAt: Date;
+        isFeatured: boolean;
         id: string;
-        title: string;
         description: string;
+        updatedAt: Date;
+        title: string;
         type: string;
         difficulty: string;
         contentUrl: string | null;
         authorId: string;
         reads: number;
-        isFeatured: boolean;
-        createdAt: Date;
-        updatedAt: Date;
     })[]>;
     findFeatured(): Promise<({
         author: {
-            username: string;
             name: string | null;
+            username: string;
         };
     } & {
+        createdAt: Date;
+        isFeatured: boolean;
         id: string;
-        title: string;
         description: string;
+        updatedAt: Date;
+        title: string;
         type: string;
         difficulty: string;
         contentUrl: string | null;
         authorId: string;
         reads: number;
-        isFeatured: boolean;
-        createdAt: Date;
-        updatedAt: Date;
     })[]>;
     getTypeCounts(): Promise<{
         type: string;
         count: number;
     }[]>;
     incrementReads(id: string): Promise<{
+        createdAt: Date;
+        isFeatured: boolean;
         id: string;
-        title: string;
         description: string;
+        updatedAt: Date;
+        title: string;
         type: string;
         difficulty: string;
         contentUrl: string | null;
         authorId: string;
         reads: number;
-        isFeatured: boolean;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
 }

@@ -66,6 +66,7 @@ let PostsService = class PostsService {
                 title: data.title,
                 content: data.content,
                 category: data.category,
+                ...(data.imageUrl ? { imageUrl: data.imageUrl } : {}),
                 authorId: author.id,
             },
             include: {

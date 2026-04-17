@@ -14,8 +14,8 @@ export declare class BookmarksController {
     }>;
     getUserBookmarks(userId: string): Promise<({
         item: Record<string, unknown>;
-        id: string;
         createdAt: Date;
+        id: string;
         userId: string;
         targetType: string;
         targetId: string;

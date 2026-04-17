@@ -13,7 +13,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SearchController = void 0;
-const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const search_service_1 = require("./search.service");
 let SearchController = class SearchController {
@@ -31,7 +30,6 @@ let SearchController = class SearchController {
 exports.SearchController = SearchController;
 __decorate([
     (0, common_1.Get)(),
-    openapi.ApiResponse({}),
     __param(0, (0, common_1.Query)('q')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -39,7 +37,6 @@ __decorate([
 ], SearchController.prototype, "search", null);
 __decorate([
     (0, common_1.Get)('suggest'),
-    openapi.ApiResponse({}),
     __param(0, (0, common_1.Query)('q')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

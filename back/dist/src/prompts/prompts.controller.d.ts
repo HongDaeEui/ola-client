@@ -8,16 +8,16 @@ export declare class PromptsController {
             avatarUrl: string | null;
         };
     } & {
-        id: string;
-        title: string;
-        toolName: string;
         category: string;
-        content: string;
-        authorId: string;
-        likes: number;
-        views: number;
         createdAt: Date;
+        id: string;
         updatedAt: Date;
+        title: string;
+        authorId: string;
+        content: string;
+        likes: number;
+        toolName: string;
+        views: number;
     })[]>;
     findOne(id: string): import("@prisma/client").Prisma.Prisma__PromptClient<({
         author: {
@@ -25,28 +25,28 @@ export declare class PromptsController {
             avatarUrl: string | null;
         };
     } & {
-        id: string;
-        title: string;
-        toolName: string;
         category: string;
-        content: string;
-        authorId: string;
-        likes: number;
-        views: number;
         createdAt: Date;
+        id: string;
         updatedAt: Date;
+        title: string;
+        authorId: string;
+        content: string;
+        likes: number;
+        toolName: string;
+        views: number;
     }) | null, null, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     incrementViews(id: string): import("@prisma/client").Prisma.Prisma__PromptClient<{
-        id: string;
-        title: string;
-        toolName: string;
         category: string;
-        content: string;
-        authorId: string;
-        likes: number;
-        views: number;
         createdAt: Date;
+        id: string;
         updatedAt: Date;
+        title: string;
+        authorId: string;
+        content: string;
+        likes: number;
+        toolName: string;
+        views: number;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     create(body: {
         title: string;
@@ -56,15 +56,15 @@ export declare class PromptsController {
         userEmail: string;
         userName: string;
     }): Promise<{
-        id: string;
-        title: string;
-        toolName: string;
         category: string;
-        content: string;
-        authorId: string;
-        likes: number;
-        views: number;
         createdAt: Date;
+        id: string;
         updatedAt: Date;
+        title: string;
+        authorId: string;
+        content: string;
+        likes: number;
+        toolName: string;
+        views: number;
     }>;
 }

@@ -7,32 +7,32 @@ export declare class MeetupsController {
             attendees: number;
         };
     } & {
+        status: string;
+        createdAt: Date;
         id: string;
-        title: string;
         description: string;
+        coverUrl: string | null;
+        updatedAt: Date;
+        title: string;
         date: Date;
         location: string;
         isVirtual: boolean;
-        status: string;
-        coverUrl: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     })[]>;
     findUpcoming(): Promise<({
         _count: {
             attendees: number;
         };
     } & {
+        status: string;
+        createdAt: Date;
         id: string;
-        title: string;
         description: string;
+        coverUrl: string | null;
+        updatedAt: Date;
+        title: string;
         date: Date;
         location: string;
         isVirtual: boolean;
-        status: string;
-        coverUrl: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     })[]>;
     rsvp(id: string, body: {
         userEmail: string;

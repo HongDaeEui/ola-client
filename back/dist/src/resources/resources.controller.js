@@ -13,7 +13,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ResourcesController = void 0;
-const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const resources_service_1 = require("./resources.service");
 let ResourcesController = class ResourcesController {
@@ -37,7 +36,6 @@ let ResourcesController = class ResourcesController {
 exports.ResourcesController = ResourcesController;
 __decorate([
     (0, common_1.Get)(),
-    openapi.ApiResponse({ type: [Object] }),
     __param(0, (0, common_1.Query)('type')),
     __param(1, (0, common_1.Query)('difficulty')),
     __metadata("design:type", Function),
@@ -46,21 +44,18 @@ __decorate([
 ], ResourcesController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('featured'),
-    openapi.ApiResponse({ type: [Object] }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], ResourcesController.prototype, "findFeatured", null);
 __decorate([
     (0, common_1.Get)('type-counts'),
-    openapi.ApiResponse({ type: Object }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], ResourcesController.prototype, "getTypeCounts", null);
 __decorate([
     (0, common_1.Patch)(':id/read'),
-    openapi.ApiResponse({ type: Object }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

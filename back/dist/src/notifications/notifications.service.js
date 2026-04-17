@@ -8,80 +8,72 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var NotificationsService_1;
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NotificationsService = void 0;
 const common_1 = require("@nestjs/common");
-let NotificationsService = NotificationsService_1 = class NotificationsService {
-    logger = new common_1.Logger(NotificationsService_1.name);
-    webhookUrl;
-    constructor() {
-        this.webhookUrl = process.env.DISCORD_WEBHOOK_URL || '';
-        if (!this.webhookUrl) {
-            this.logger.warn('DISCORD_WEBHOOK_URL is not configured in environment variables.');
-        }
+const prisma_service_1 = require("../prisma/prisma.service");
+const notifications_gateway_1 = require("./notifications.gateway");
+let NotificationsService = class NotificationsService {
+    prisma;
+    gateway;
+    constructor(prisma, gateway) {
+        this.prisma = prisma;
+        this.gateway = gateway;
     }
-    async sendPostNotification(post) {
-        if (!this.webhookUrl)
+    async getByUserEmail(email) {
+        const user = await this.prisma.user.findUnique({ where: { email } });
+        if (!user)
+            return [];
+        return this.prisma.notification.findMany({
+            where: { recipientId: user.id },
+            orderBy: { createdAt: 'desc' },
+            take: 30,
+        });
+    }
+    async getUnreadCount(email) {
+        const user = await this.prisma.user.findUnique({ where: { email } });
+        if (!user)
+            return { count: 0 };
+        const count = await this.prisma.notification.count({
+            where: { recipientId: user.id, read: false },
+        });
+        return { count };
+    }
+    async markRead(id) {
+        return this.prisma.notification.update({ where: { id }, data: { read: true } });
+    }
+    async markAllRead(email) {
+        const user = await this.prisma.user.findUnique({ where: { email } });
+        if (!user)
             return;
-        const categoryColors = {
-            '실천형 노하우': 1474148,
-            '전문 리포트': 8490488,
-            '자유게시판': 9739416,
-            '작품 공유': 16478597,
-        };
-        const color = categoryColors[post.category] || 9739416;
-        const shortContent = post.content.length > 150
-            ? post.content.substring(0, 150) + '...'
-            : post.content;
-        const payload = {
-            username: 'Ola 알리미 봇',
-            avatar_url: 'https://olalab.kr/favicon.ico',
-            embeds: [
-                {
-                    author: {
-                        name: `${post.author.username} 님의 새로운 글`,
-                        icon_url: 'https://olalab.kr/favicon.ico',
-                    },
-                    title: post.title,
-                    url: `https://ola-client-psi.vercel.app/community/${post.id}`,
-                    description: shortContent,
-                    color: color,
-                    fields: [
-                        {
-                            name: '카테고리',
-                            value: post.category,
-                            inline: true,
-                        },
-                    ],
-                    footer: {
-                        text: 'Ola AI Community',
-                        icon_url: 'https://olalab.kr/favicon.ico',
-                    },
-                    timestamp: new Date().toISOString(),
-                },
-            ],
-        };
-        try {
-            const res = await fetch(this.webhookUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload),
+        await this.prisma.notification.updateMany({
+            where: { recipientId: user.id, read: false },
+            data: { read: true },
+        });
+        return { success: true };
+    }
+    async create(data) {
+        const notification = await this.prisma.notification.create({ data });
+        if (this.gateway) {
+            const recipient = await this.prisma.user.findUnique({
+                where: { id: data.recipientId },
+                select: { email: true },
             });
-            if (!res.ok) {
-                this.logger.error(`Discord Webhook 발송 실패: ${res.statusText}`);
+            if (recipient) {
+                this.gateway.notifyUser(recipient.email, notification);
             }
         }
-        catch (err) {
-            this.logger.error(`Discord Webhook 오류: ${err.message}`);
-        }
+        return notification;
     }
 };
 exports.NotificationsService = NotificationsService;
-exports.NotificationsService = NotificationsService = NotificationsService_1 = __decorate([
+exports.NotificationsService = NotificationsService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [])
+    __param(1, (0, common_1.Optional)()),
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        notifications_gateway_1.NotificationsGateway])
 ], NotificationsService);
 //# sourceMappingURL=notifications.service.js.map

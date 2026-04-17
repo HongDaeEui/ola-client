@@ -8,10 +8,10 @@ export declare class LabsController {
             avatarUrl: string | null;
         };
     } & {
-        id: string;
-        description: string;
         category: string;
         createdAt: Date;
+        id: string;
+        description: string;
         updatedAt: Date;
         title: string;
         difficulty: string | null;
@@ -30,10 +30,10 @@ export declare class LabsController {
             avatarUrl: string | null;
         };
     } & {
-        id: string;
-        description: string;
         category: string;
         createdAt: Date;
+        id: string;
+        description: string;
         updatedAt: Date;
         title: string;
         difficulty: string | null;
