@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
 import { ShareButton } from '@/components/ShareButton';
+import { ViewTracker } from '@/components/ViewTracker';
 import CopyButton from '../CopyButton';
 
 interface Author {
@@ -37,6 +38,7 @@ export default async function PromptDetailPage({ params }: { params: Promise<{ i
 
   return (
     <div className="min-h-screen bg-slate-50 pt-28 lg:pt-32 pb-20 font-['Noto_Sans_KR']">
+      <ViewTracker type="prompts" id={prompt.id} />
       <div className="max-w-4xl mx-auto px-6">
 
         {/* Breadcrumb */}
