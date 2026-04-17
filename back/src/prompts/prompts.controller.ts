@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Body, Param, Query } from '@nestjs/common';
 import { PromptsService } from './prompts.service';
 
 @Controller('prompts')
@@ -16,6 +16,11 @@ export class PromptsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.promptsService.findOne(id);
+  }
+
+  @Patch(':id/view')
+  incrementViews(@Param('id') id: string) {
+    return this.promptsService.incrementViews(id);
   }
 
   @Post()

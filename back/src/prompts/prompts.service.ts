@@ -23,6 +23,13 @@ export class PromptsService {
     });
   }
 
+  incrementViews(id: string) {
+    return this.prisma.prompt.update({
+      where: { id },
+      data: { views: { increment: 1 } },
+    });
+  }
+
   findOne(id: string) {
     return this.prisma.prompt.findUnique({
       where: { id },
