@@ -12,10 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommentsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const notifications_service_1 = require("../notifications/notifications.service");
 let CommentsService = class CommentsService {
     prisma;
-    constructor(prisma) {
+    notifications;
+    constructor(prisma, notifications) {
         this.prisma = prisma;
+        this.notifications = notifications;
     }
     findByPost(postId) {
         return this.prisma.comment.findMany({
@@ -38,12 +41,27 @@ let CommentsService = class CommentsService {
                 name: data.userName,
             },
         });
-        return this.prisma.comment.create({
+        const comment = await this.prisma.comment.create({
             data: { content: data.content, postId: data.postId, authorId: author.id },
             include: {
                 author: { select: { username: true, avatarUrl: true, email: true } },
             },
         });
+        const post = await this.prisma.post.findUnique({
+            where: { id: data.postId },
+            select: { authorId: true, title: true },
+        });
+        if (post && post.authorId !== author.id) {
+            await this.notifications.create({
+                recipientId: post.authorId,
+                type: 'COMMENT',
+                message: `${data.userName}님이 회원님의 게시글에 댓글을 남겼어요`,
+                targetType: 'POST',
+                targetId: data.postId,
+                targetTitle: post.title,
+            }).catch(() => { });
+        }
+        return comment;
     }
     async remove(id, userEmail) {
         const comment = await this.prisma.comment.findUnique({
@@ -58,6 +76,7 @@ let CommentsService = class CommentsService {
 exports.CommentsService = CommentsService;
 exports.CommentsService = CommentsService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        notifications_service_1.NotificationsService])
 ], CommentsService);
 //# sourceMappingURL=comments.service.js.map

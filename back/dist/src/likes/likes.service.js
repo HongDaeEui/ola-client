@@ -12,10 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LikesService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const notifications_service_1 = require("../notifications/notifications.service");
 let LikesService = class LikesService {
     prisma;
-    constructor(prisma) {
+    notifications;
+    constructor(prisma, notifications) {
         this.prisma = prisma;
+        this.notifications = notifications;
     }
     async toggle(userId, targetType, targetId) {
         const existing = await this.prisma.like.findUnique({
@@ -29,6 +32,7 @@ let LikesService = class LikesService {
         else {
             await this.prisma.like.create({ data: { userId, targetType, targetId } });
             await this.incrementLikes(targetType, targetId);
+            await this.createLikeNotification(targetType, targetId).catch(() => { });
             return { liked: true };
         }
     }
@@ -37,6 +41,31 @@ let LikesService = class LikesService {
             where: { userId_targetType_targetId: { userId, targetType, targetId } },
         });
         return { liked: !!existing };
+    }
+    async createLikeNotification(targetType, targetId) {
+        let authorId = null;
+        let title = null;
+        if (targetType === 'POST') {
+            const post = await this.prisma.post.findUnique({ where: { id: targetId }, select: { authorId: true, title: true } });
+            authorId = post?.authorId ?? null;
+            title = post?.title ?? null;
+        }
+        else if (targetType === 'PROMPT') {
+            const prompt = await this.prisma.prompt.findUnique({ where: { id: targetId }, select: { authorId: true, title: true } });
+            authorId = prompt?.authorId ?? null;
+            title = prompt?.title ?? null;
+        }
+        if (!authorId)
+            return;
+        const label = targetType === 'POST' ? '게시글' : '프롬프트';
+        await this.notifications.create({
+            recipientId: authorId,
+            type: 'LIKE',
+            message: `누군가 회원님의 ${label}에 좋아요를 눌렀어요`,
+            targetType,
+            targetId,
+            targetTitle: title ?? undefined,
+        });
     }
     async incrementLikes(targetType, targetId) {
         if (targetType === 'POST') {
@@ -70,6 +99,7 @@ let LikesService = class LikesService {
 exports.LikesService = LikesService;
 exports.LikesService = LikesService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        notifications_service_1.NotificationsService])
 ], LikesService);
 //# sourceMappingURL=likes.service.js.map
