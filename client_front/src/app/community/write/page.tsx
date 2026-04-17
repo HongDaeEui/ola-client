@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { ImageUpload } from '@/components/ImageUpload';
 
 const API = 'https://ola-backend-psi.vercel.app/api';
 const DRAFT_KEY = 'ola_post_draft';
@@ -23,10 +24,10 @@ export default function WritePage() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // 초안 불러오기
   useEffect(() => {
     const saved = localStorage.getItem(DRAFT_KEY);
     if (saved) {
@@ -39,7 +40,6 @@ export default function WritePage() {
     }
   }, []);
 
-  // 자동 저장
   useEffect(() => {
     localStorage.setItem(DRAFT_KEY, JSON.stringify({ title, content, category }));
   }, [title, content, category]);
@@ -65,6 +65,7 @@ export default function WritePage() {
           title: title.trim(),
           content: content.trim(),
           category,
+          ...(imageUrl ? { imageUrl } : {}),
           userEmail: user!.email,
           userName: user!.user_metadata?.name ?? user!.user_metadata?.full_name ?? user!.email,
         }),
@@ -79,7 +80,6 @@ export default function WritePage() {
     }
   }
 
-  // 로그인 게이트
   if (!user) {
     return (
       <div className="min-h-screen bg-slate-50 pt-28 pb-20 font-['Noto_Sans_KR'] flex items-center justify-center">
@@ -104,7 +104,6 @@ export default function WritePage() {
     <div className="min-h-screen bg-slate-50 pt-24 pb-20 font-['Noto_Sans_KR']">
       <div className="max-w-3xl mx-auto px-4">
 
-        {/* Top bar */}
         <div className="flex items-center justify-between mb-8">
           <Link href="/community" className="flex items-center gap-2 text-slate-500 font-bold hover:text-slate-900 transition-colors text-sm">
             <span className="material-symbols-outlined text-[18px]">arrow_back</span>
@@ -127,7 +126,6 @@ export default function WritePage() {
         <form id="post-form" onSubmit={handleSubmit}>
           <div className="bg-white rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50 overflow-hidden">
 
-            {/* 작성자 */}
             <div className="flex items-center gap-3 px-8 pt-8 pb-6 border-b border-slate-100">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold">
                 {(user.user_metadata?.name ?? user.email ?? 'U').charAt(0).toUpperCase()}
@@ -138,7 +136,6 @@ export default function WritePage() {
               </div>
             </div>
 
-            {/* 카테고리 */}
             <div className="px-8 pt-6">
               <div className="flex flex-wrap gap-2">
                 {CATEGORIES.map(cat => (
@@ -164,7 +161,6 @@ export default function WritePage() {
               )}
             </div>
 
-            {/* 제목 */}
             <div className="px-8 pt-6">
               <input
                 value={title}
@@ -178,10 +174,16 @@ export default function WritePage() {
               )}
             </div>
 
-            {/* 구분선 */}
             <div className="mx-8 my-5 border-b border-slate-100" />
 
-            {/* 본문 */}
+            <div className="px-8 pb-4">
+              <ImageUpload
+                imageUrl={imageUrl}
+                onUpload={url => setImageUrl(url)}
+                onRemove={() => setImageUrl(null)}
+              />
+            </div>
+
             <div className="px-8 pb-8">
               <textarea
                 value={content}
