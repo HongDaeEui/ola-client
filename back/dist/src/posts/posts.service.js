@@ -12,12 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const notifications_service_1 = require("../notifications/notifications.service");
 let PostsService = class PostsService {
     prisma;
-    constructor(prisma) {
+    notificationsService;
+    constructor(prisma, notificationsService) {
         this.prisma = prisma;
+        this.notificationsService = notificationsService;
     }
-    findAll(category) {
+    findAll(category, skip = 0, take) {
         return this.prisma.post.findMany({
             where: category ? { category } : undefined,
             include: {
@@ -29,6 +32,8 @@ let PostsService = class PostsService {
                 },
             },
             orderBy: { createdAt: 'desc' },
+            skip,
+            ...(take !== undefined ? { take } : {}),
         });
     }
     findOne(id) {
@@ -56,7 +61,7 @@ let PostsService = class PostsService {
                 name: data.userName,
             },
         });
-        return this.prisma.post.create({
+        const newPost = await this.prisma.post.create({
             data: {
                 title: data.title,
                 content: data.content,
@@ -69,6 +74,10 @@ let PostsService = class PostsService {
                 },
             },
         });
+        this.notificationsService.sendPostNotification(newPost).catch((err) => {
+            console.error('Failed to send notification via PostsService', err);
+        });
+        return newPost;
     }
     findTopByViews(limit = 10) {
         return this.prisma.post.findMany({
@@ -91,6 +100,20 @@ let PostsService = class PostsService {
             data: { views: { increment: 1 } },
         });
     }
+    async getTagStats() {
+        const groups = await this.prisma.post.groupBy({
+            by: ['category'],
+            _count: { id: true },
+            _sum: { likes: true, views: true },
+            orderBy: { _sum: { likes: 'desc' } },
+        });
+        return groups.map(g => ({
+            category: g.category,
+            postCount: g._count.id,
+            totalLikes: g._sum.likes ?? 0,
+            totalViews: g._sum.views ?? 0,
+        }));
+    }
     findByUserEmail(userEmail) {
         return this.prisma.post.findMany({
             where: { author: { email: userEmail } },
@@ -109,6 +132,7 @@ let PostsService = class PostsService {
 exports.PostsService = PostsService;
 exports.PostsService = PostsService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        notifications_service_1.NotificationsService])
 ], PostsService);
 //# sourceMappingURL=posts.service.js.map

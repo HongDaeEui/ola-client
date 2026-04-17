@@ -17,26 +17,40 @@ let ResourcesService = class ResourcesService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async findAll() {
+    async findAll(type, difficulty) {
         return this.prisma.resource.findMany({
-            include: {
-                author: {
-                    select: { username: true, name: true, avatarUrl: true },
-                },
+            where: {
+                ...(type ? { type } : {}),
+                ...(difficulty ? { difficulty } : {}),
             },
-            orderBy: { createdAt: 'desc' },
+            include: {
+                author: { select: { username: true, name: true, avatarUrl: true } },
+            },
+            orderBy: { reads: 'desc' },
         });
     }
     async findFeatured() {
         return this.prisma.resource.findMany({
             where: { isFeatured: true },
             include: {
-                author: {
-                    select: { username: true, name: true },
-                },
+                author: { select: { username: true, name: true } },
             },
-            take: 2,
+            take: 4,
         });
+    }
+    async incrementReads(id) {
+        return this.prisma.resource.update({
+            where: { id },
+            data: { reads: { increment: 1 } },
+        });
+    }
+    async getTypeCounts() {
+        const groups = await this.prisma.resource.groupBy({
+            by: ['type'],
+            _count: { id: true },
+            orderBy: { _count: { id: 'desc' } },
+        });
+        return groups.map(g => ({ type: g.type, count: g._count.id }));
     }
 };
 exports.ResourcesService = ResourcesService;

@@ -17,10 +17,12 @@ let PromptsService = class PromptsService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async findAll(filters) {
+    async findAll(filters, skip = 0, take) {
         const where = {};
         if (filters?.category)
             where.category = filters.category;
+        if (filters?.userEmail)
+            where.author = { email: filters.userEmail };
         return this.prisma.prompt.findMany({
             where,
             include: {
@@ -32,6 +34,14 @@ let PromptsService = class PromptsService {
                 },
             },
             orderBy: { views: 'desc' },
+            skip,
+            ...(take !== undefined ? { take } : {}),
+        });
+    }
+    incrementViews(id) {
+        return this.prisma.prompt.update({
+            where: { id },
+            data: { views: { increment: 1 } },
         });
     }
     findOne(id) {

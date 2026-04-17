@@ -36,4 +36,27 @@ export declare class SearchController {
             emoji: string | null;
         }[];
     }>;
+    suggest(q: string): Promise<{
+        tools: {
+            id: string;
+            name: string;
+            category: string;
+            iconUrl: string | null;
+        }[];
+        prompts: {
+            id: string;
+            title: string;
+            toolName: string;
+        }[];
+        posts: {
+            id: string;
+            category: string;
+            title: string;
+        }[];
+        labs: {
+            id: string;
+            title: string;
+            emoji: string | null;
+        }[];
+    }>;
 }

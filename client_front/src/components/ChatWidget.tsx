@@ -22,17 +22,20 @@ class ChatErrorBoundary extends Component<{children: ReactNode}, {hasError: bool
   }
 }
 
+const INITIAL_MESSAGES = [
+  {
+    id: 'welcome',
+    role: 'assistant' as const,
+    content: '안녕하세요! Ola AI 비서입니다. 🙌\n어떤 AI 도구나 노하우를 찾고 계신가요?',
+  },
+];
+
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
-    initialMessages: [
-      {
-        id: 'welcome',
-        role: 'assistant',
-        content: '안녕하세요! Ola AI 비서입니다. 🙌\n어떤 AI 도구나 노하우를 찾고 계신가요?',
-      },
-    ],
+  const { messages, input, setInput, handleInputChange, handleSubmit, isLoading } = useChat({
+    id: 'ola-ai-chatbot-v1',
+    initialMessages: INITIAL_MESSAGES,
   });
 
   const endOfMessagesRef = useRef<HTMLDivElement>(null);
@@ -94,10 +97,10 @@ export function ChatWidget() {
                     }
                   `}
                 >
-                  {msg.content.split('\n').map((line, i) => (
+                  {(msg.content || '').split('\n').map((line, i) => (
                     <React.Fragment key={i}>
                       {line}
-                      {i < msg.content.split('\n').length - 1 && <br />}
+                      {i < (msg.content || '').split('\n').length - 1 && <br />}
                     </React.Fragment>
                   ))}
                 </div>
@@ -126,7 +129,10 @@ export function ChatWidget() {
               <input
                 type="text"
                 value={input || ''}
-                onChange={handleInputChange}
+                onChange={(e) => {
+                  setInput(e.target.value);
+                  if (handleInputChange) handleInputChange(e);
+                }}
                 onKeyDown={handleKeyDown}
                 placeholder="어떤 AI가 필요하신가요?"
                 className="flex-1 bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400"

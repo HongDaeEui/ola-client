@@ -1,8 +1,10 @@
 import { PrismaService } from '../prisma/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
 export declare class PostsService {
     private prisma;
-    constructor(prisma: PrismaService);
-    findAll(category?: string): import("@prisma/client").Prisma.PrismaPromise<({
+    private notificationsService;
+    constructor(prisma: PrismaService, notificationsService: NotificationsService);
+    findAll(category?: string, skip?: number, take?: number): import("@prisma/client").Prisma.PrismaPromise<({
         author: {
             username: string;
             avatarUrl: string | null;
@@ -10,8 +12,8 @@ export declare class PostsService {
     } & {
         id: string;
         title: string;
-        content: string;
         category: string;
+        content: string;
         authorId: string;
         likes: number;
         views: number;
@@ -26,8 +28,8 @@ export declare class PostsService {
     } & {
         id: string;
         title: string;
-        content: string;
         category: string;
+        content: string;
         authorId: string;
         likes: number;
         views: number;
@@ -48,8 +50,8 @@ export declare class PostsService {
     } & {
         id: string;
         title: string;
-        content: string;
         category: string;
+        content: string;
         authorId: string;
         likes: number;
         views: number;
@@ -71,14 +73,20 @@ export declare class PostsService {
     incrementViews(id: string): import("@prisma/client").Prisma.Prisma__PostClient<{
         id: string;
         title: string;
-        content: string;
         category: string;
+        content: string;
         authorId: string;
         likes: number;
         views: number;
         createdAt: Date;
         updatedAt: Date;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
+    getTagStats(): Promise<{
+        category: string;
+        postCount: number;
+        totalLikes: number;
+        totalViews: number;
+    }[]>;
     findByUserEmail(userEmail: string): import("@prisma/client").Prisma.PrismaPromise<{
         id: string;
         title: string;

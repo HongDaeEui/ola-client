@@ -2,7 +2,7 @@ import { PostsService } from './posts.service';
 export declare class PostsController {
     private readonly postsService;
     constructor(postsService: PostsService);
-    findAll(category?: string, userEmail?: string): import("@prisma/client").Prisma.PrismaPromise<{
+    findAll(category?: string, userEmail?: string, page?: string, limit?: string): import("@prisma/client").Prisma.PrismaPromise<{
         id: string;
         title: string;
         category: string;
@@ -22,6 +22,12 @@ export declare class PostsController {
             avatarUrl: string | null;
         };
     }[]>;
+    getTagStats(): Promise<{
+        category: string;
+        postCount: number;
+        totalLikes: number;
+        totalViews: number;
+    }[]>;
     findOne(id: string): import("@prisma/client").Prisma.Prisma__PostClient<({
         author: {
             username: string;
@@ -30,8 +36,8 @@ export declare class PostsController {
     } & {
         id: string;
         title: string;
-        content: string;
         category: string;
+        content: string;
         authorId: string;
         likes: number;
         views: number;
@@ -52,8 +58,8 @@ export declare class PostsController {
     } & {
         id: string;
         title: string;
-        content: string;
         category: string;
+        content: string;
         authorId: string;
         likes: number;
         views: number;
@@ -63,8 +69,8 @@ export declare class PostsController {
     incrementViews(id: string): import("@prisma/client").Prisma.Prisma__PostClient<{
         id: string;
         title: string;
-        content: string;
         category: string;
+        content: string;
         authorId: string;
         likes: number;
         views: number;

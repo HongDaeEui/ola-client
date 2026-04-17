@@ -8,8 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MeetupsController = void 0;
+const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const meetups_service_1 = require("./meetups.service");
 let MeetupsController = class MeetupsController {
@@ -23,20 +27,46 @@ let MeetupsController = class MeetupsController {
     findUpcoming() {
         return this.meetupsService.findUpcoming();
     }
+    rsvp(id, body) {
+        return this.meetupsService.rsvpToggle(id, body.userEmail, body.userName);
+    }
+    getStatus(id, userEmail) {
+        return this.meetupsService.getStatus(id, userEmail);
+    }
 };
 exports.MeetupsController = MeetupsController;
 __decorate([
     (0, common_1.Get)(),
+    openapi.ApiResponse({ type: [Object] }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], MeetupsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('upcoming'),
+    openapi.ApiResponse({ type: [Object] }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], MeetupsController.prototype, "findUpcoming", null);
+__decorate([
+    (0, common_1.Post)(':id/rsvp'),
+    openapi.ApiResponse({}),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], MeetupsController.prototype, "rsvp", null);
+__decorate([
+    (0, common_1.Get)(':id/status'),
+    openapi.ApiResponse({}),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Query)('userEmail')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", void 0)
+], MeetupsController.prototype, "getStatus", null);
 exports.MeetupsController = MeetupsController = __decorate([
     (0, common_1.Controller)('meetups'),
     __metadata("design:paramtypes", [meetups_service_1.MeetupsService])

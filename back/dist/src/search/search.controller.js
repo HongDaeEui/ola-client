@@ -24,6 +24,9 @@ let SearchController = class SearchController {
     search(q) {
         return this.searchService.search(q ?? '');
     }
+    suggest(q) {
+        return this.searchService.suggest(q ?? '');
+    }
 };
 exports.SearchController = SearchController;
 __decorate([
@@ -34,6 +37,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], SearchController.prototype, "search", null);
+__decorate([
+    (0, common_1.Get)('suggest'),
+    openapi.ApiResponse({}),
+    __param(0, (0, common_1.Query)('q')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], SearchController.prototype, "suggest", null);
 exports.SearchController = SearchController = __decorate([
     (0, common_1.Controller)('search'),
     __metadata("design:paramtypes", [search_service_1.SearchService])

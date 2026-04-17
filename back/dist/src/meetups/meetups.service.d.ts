@@ -8,15 +8,15 @@ export declare class MeetupsService {
         };
     } & {
         id: string;
-        description: string;
-        coverUrl: string | null;
-        status: string;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
+        description: string;
         date: Date;
         location: string;
         isVirtual: boolean;
+        status: string;
+        coverUrl: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     })[]>;
     findUpcoming(): Promise<({
         _count: {
@@ -24,14 +24,21 @@ export declare class MeetupsService {
         };
     } & {
         id: string;
-        description: string;
-        coverUrl: string | null;
-        status: string;
-        createdAt: Date;
-        updatedAt: Date;
         title: string;
+        description: string;
         date: Date;
         location: string;
         isVirtual: boolean;
+        status: string;
+        coverUrl: string | null;
+        createdAt: Date;
+        updatedAt: Date;
     })[]>;
+    rsvpToggle(meetupId: string, userEmail: string, userName: string): Promise<{
+        attending: boolean;
+        attendeeCount: number;
+    }>;
+    getStatus(meetupId: string, userEmail: string): Promise<{
+        attending: boolean;
+    }>;
 }

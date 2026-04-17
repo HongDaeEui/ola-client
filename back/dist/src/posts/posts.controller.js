@@ -21,13 +21,18 @@ let PostsController = class PostsController {
     constructor(postsService) {
         this.postsService = postsService;
     }
-    findAll(category, userEmail) {
+    findAll(category, userEmail, page = '1', limit) {
         if (userEmail)
             return this.postsService.findByUserEmail(userEmail);
-        return this.postsService.findAll(category);
+        const take = limit ? parseInt(limit, 10) : undefined;
+        const skip = take ? (parseInt(page, 10) - 1) * take : 0;
+        return this.postsService.findAll(category, skip, take);
     }
     findTopByViews() {
         return this.postsService.findTopByViews();
+    }
+    getTagStats() {
+        return this.postsService.getTagStats();
     }
     findOne(id) {
         return this.postsService.findOne(id);
@@ -45,17 +50,26 @@ __decorate([
     openapi.ApiResponse({}),
     __param(0, (0, common_1.Query)('category')),
     __param(1, (0, common_1.Query)('userEmail')),
+    __param(2, (0, common_1.Query)('page')),
+    __param(3, (0, common_1.Query)('limit')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:paramtypes", [String, String, Object, String]),
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('ranking'),
-    openapi.ApiResponse({ type: Object }),
+    openapi.ApiResponse({}),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "findTopByViews", null);
+__decorate([
+    (0, common_1.Get)('tag-stats'),
+    openapi.ApiResponse({}),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], PostsController.prototype, "getTagStats", null);
 __decorate([
     (0, common_1.Get)(':id'),
     openapi.ApiResponse({}),

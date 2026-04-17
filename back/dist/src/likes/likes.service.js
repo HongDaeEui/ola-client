@@ -48,6 +48,9 @@ let LikesService = class LikesService {
         else if (targetType === 'LAB') {
             await this.prisma.experiment.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
         }
+        else if (targetType === 'TOOL') {
+            await this.prisma.tool.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
+        }
     }
     async decrementLikes(targetType, targetId) {
         if (targetType === 'POST') {
@@ -58,6 +61,9 @@ let LikesService = class LikesService {
         }
         else if (targetType === 'LAB') {
             await this.prisma.experiment.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
+        }
+        else if (targetType === 'TOOL') {
+            await this.prisma.tool.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
         }
     }
 };

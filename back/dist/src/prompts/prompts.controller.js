@@ -21,11 +21,16 @@ let PromptsController = class PromptsController {
     constructor(promptsService) {
         this.promptsService = promptsService;
     }
-    getPrompts(category) {
-        return this.promptsService.findAll({ category });
+    getPrompts(category, userEmail, page = '1', limit) {
+        const take = limit ? parseInt(limit, 10) : undefined;
+        const skip = take ? (parseInt(page, 10) - 1) * take : 0;
+        return this.promptsService.findAll({ category, userEmail }, skip, take);
     }
     findOne(id) {
         return this.promptsService.findOne(id);
+    }
+    incrementViews(id) {
+        return this.promptsService.incrementViews(id);
     }
     create(body) {
         return this.promptsService.create(body);
@@ -36,8 +41,11 @@ __decorate([
     (0, common_1.Get)(),
     openapi.ApiResponse({ type: [Object] }),
     __param(0, (0, common_1.Query)('category')),
+    __param(1, (0, common_1.Query)('userEmail')),
+    __param(2, (0, common_1.Query)('page')),
+    __param(3, (0, common_1.Query)('limit')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, String, Object, String]),
     __metadata("design:returntype", void 0)
 ], PromptsController.prototype, "getPrompts", null);
 __decorate([
@@ -48,6 +56,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], PromptsController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Patch)(':id/view'),
+    openapi.ApiResponse({}),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], PromptsController.prototype, "incrementViews", null);
 __decorate([
     (0, common_1.Post)(),
     openapi.ApiResponse({}),
