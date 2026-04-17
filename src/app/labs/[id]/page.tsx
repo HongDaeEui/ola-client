@@ -146,7 +146,7 @@ export default async function LabDetailPage({ params }: { params: Promise<{ id: 
       </section>
 
       {/* ── Main Content ── */}
-      <section className="max-w-5xl mx-auto px-6 -mt-4 pb-24">
+      <section className="max-w-5xl mx-auto px-6 mt-10 md:mt-12 pb-24">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
           {/* ── Left: Steps ── */}
