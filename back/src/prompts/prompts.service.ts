@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 export class PromptsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(filters?: { category?: string; userEmail?: string }) {
+  async findAll(filters?: { category?: string; userEmail?: string }, skip = 0, take?: number) {
     const where: Record<string, unknown> = {};
     if (filters?.category) where.category = filters.category;
     if (filters?.userEmail) where.author = { email: filters.userEmail };
@@ -20,6 +20,8 @@ export class PromptsService {
         },
       },
       orderBy: { views: 'desc' },
+      skip,
+      ...(take !== undefined ? { take } : {}),
     });
   }
 

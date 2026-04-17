@@ -9,9 +9,13 @@ export class PostsController {
   findAll(
     @Query('category') category?: string,
     @Query('userEmail') userEmail?: string,
+    @Query('page') page = '1',
+    @Query('limit') limit?: string,
   ) {
     if (userEmail) return this.postsService.findByUserEmail(userEmail);
-    return this.postsService.findAll(category);
+    const take = limit ? parseInt(limit, 10) : undefined;
+    const skip = take ? (parseInt(page, 10) - 1) * take : 0;
+    return this.postsService.findAll(category, skip, take);
   }
 
   @Get('ranking')

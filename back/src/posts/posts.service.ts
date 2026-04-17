@@ -9,7 +9,7 @@ export class PostsService {
     private notificationsService: NotificationsService,
   ) {}
 
-  findAll(category?: string) {
+  findAll(category?: string, skip = 0, take?: number) {
     return this.prisma.post.findMany({
       where: category ? { category } : undefined,
       include: {
@@ -21,6 +21,8 @@ export class PostsService {
         },
       },
       orderBy: { createdAt: 'desc' },
+      skip,
+      ...(take !== undefined ? { take } : {}),
     });
   }
 
