@@ -1,8 +1,26 @@
 // @ts-nocheck
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, Component, ErrorInfo, ReactNode } from 'react';
 import { useChat } from '@ai-sdk/react';
+
+class ChatErrorBoundary extends Component<{children: ReactNode}, {hasError: boolean, error: Error | null}> {
+  constructor(props: {children: ReactNode}) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+  render() {
+    if (this.state.hasError) {
+      return <div className="fixed bottom-6 right-6 w-[340px] p-4 bg-red-100 text-red-900 rounded-xl z-50 overflow-auto max-h-[500px]">
+        <b>챗봇 렌더링 에러:</b> {this.state.error?.message}
+      </div>;
+    }
+    return this.props.children;
+  }
+}
 
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,9 +55,10 @@ export function ChatWidget() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-      {/* 챗봇 팝업 창 */}
-      {isOpen && (
+    <ChatErrorBoundary>
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        {/* 챗봇 팝업 창 */}
+        {isOpen && (
         <div 
           className="mb-4 w-[340px] h-[500px] max-h-[80vh] flex flex-col bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 transition-all duration-300 ease-out origin-bottom-right"
           style={{ animation: 'chatPopup 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}
@@ -106,7 +125,7 @@ export function ChatWidget() {
             >
               <input
                 type="text"
-                value={input}
+                value={input || ''}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 placeholder="어떤 AI가 필요하신가요?"
@@ -115,9 +134,9 @@ export function ChatWidget() {
               />
               <button
                 type="submit"
-                disabled={!input.trim() || isLoading}
+                disabled={!(input || '').trim() || isLoading}
                 className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
-                  input.trim() && !isLoading
+                  (input || '').trim() && !isLoading
                     ? 'bg-sky-500 text-white hover:bg-sky-600 shadow-md shadow-sky-200' 
                     : 'bg-slate-200 text-slate-400 cursor-not-allowed'
                 }`}
@@ -185,6 +204,7 @@ export function ChatWidget() {
           animation: fadeInUp 0.2s ease-out forwards;
         }
       `}} />
-    </div>
+      </div>
+    </ChatErrorBoundary>
   );
 }
