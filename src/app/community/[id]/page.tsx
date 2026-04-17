@@ -17,6 +17,7 @@ interface Post {
   title: string;
   content: string;
   category: string;
+  imageUrl: string | null;
   likes: number;
   views: number;
   createdAt: string;
@@ -111,6 +112,11 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
 
           {/* Body */}
           <div className="p-8 md:p-12">
+            {post.imageUrl && (
+              <div className="mb-8 rounded-2xl overflow-hidden border border-slate-100">
+                <img src={post.imageUrl} alt={post.title} className="w-full max-h-[480px] object-cover" />
+              </div>
+            )}
             <div className="prose prose-slate max-w-none">
               {post.content.split('\n\n').map((paragraph, i) => (
                 <p key={i} className="text-slate-700 text-base leading-relaxed mb-5 last:mb-0 whitespace-pre-line">
