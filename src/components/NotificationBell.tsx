@@ -2,9 +2,11 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
+import { io, Socket } from 'socket.io-client';
 import { useAuth } from '@/context/AuthContext';
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-psi.vercel.app/api';
+const WS_URL = API.replace(/\/api$/, '');
 
 interface Notification {
   id: string;
@@ -40,15 +42,7 @@ export function NotificationBell() {
   const [unread, setUnread] = useState(0);
   const [loaded, setLoaded] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
-
-  const fetchCount = useCallback(async () => {
-    if (!user?.email) return;
-    try {
-      const res = await fetch(`${API}/notifications/unread-count?userEmail=${encodeURIComponent(user.email)}`);
-      const data = await res.json();
-      setUnread(data.count ?? 0);
-    } catch { /* ignore */ }
-  }, [user?.email]);
+  const socketRef = useRef<Socket | null>(null);
 
   const fetchAll = useCallback(async () => {
     if (!user?.email) return;
@@ -56,17 +50,38 @@ export function NotificationBell() {
       const res = await fetch(`${API}/notifications?userEmail=${encodeURIComponent(user.email)}`);
       const data = await res.json();
       setNotifications(data);
+      setUnread(data.filter((n: Notification) => !n.read).length);
       setLoaded(true);
     } catch { /* ignore */ }
   }, [user?.email]);
 
-  // Poll unread count every 30s
+  // WebSocket connection
   useEffect(() => {
     if (!user?.email) return;
-    fetchCount();
-    const timer = setInterval(fetchCount, 30000);
-    return () => clearInterval(timer);
-  }, [fetchCount, user?.email]);
+
+    // Initial fetch for unread count
+    fetch(`${API}/notifications/unread-count?userEmail=${encodeURIComponent(user.email)}`)
+      .then(r => r.json())
+      .then(d => setUnread(d.count ?? 0))
+      .catch(() => {});
+
+    const socket = io(`${WS_URL}/notifications`, {
+      query: { userEmail: user.email },
+      transports: ['websocket', 'polling'],
+      reconnectionDelay: 2000,
+    });
+    socketRef.current = socket;
+
+    socket.on('notification', (n: Notification) => {
+      setUnread(prev => prev + 1);
+      setNotifications(prev => [n, ...prev]);
+    });
+
+    return () => {
+      socket.disconnect();
+      socketRef.current = null;
+    };
+  }, [user?.email]);
 
   // Close on outside click
   useEffect(() => {
