@@ -1,4 +1,5 @@
 import { RsvpButton } from '@/components/RsvpButton';
+import { SuggestTopicModal } from '@/components/SuggestTopicModal';
 
 async function getUpcomingMeetups() {
   try {
@@ -25,7 +26,7 @@ export default async function Meetups() {
       <header className="px-6 md:px-12 mb-20 text-center max-w-4xl mx-auto space-y-6">
         <span className="material-symbols-outlined text-5xl text-primary mb-4 block">groups</span>
         <h1 className="font-['Noto_Serif'] text-5xl md:text-7xl font-bold text-on-surface leading-[1.1] tracking-tight">
-          Synchronize <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Minds.</span>
+          Synchronize <span className="italic text-transparent bg-clip-text bg-linear-to-r from-primary to-secondary">Minds.</span>
         </h1>
         <p className="text-on-surface-variant text-lg md:text-xl font-light leading-relaxed">
           Join live seminars, asynchronous design sprints, and atmospheric hacking sessions with the Ola community.
@@ -35,9 +36,9 @@ export default async function Meetups() {
       {/* Featured Upcoming Meetup */}
       {featuredMeetup && (
         <section className="px-6 md:px-12 mb-32">
-          <div className="max-w-7xl mx-auto rounded-[3rem] bg-gradient-to-br from-surface-container-low to-white shadow-[0_30px_60px_-15px_rgba(0,101,141,0.1)] p-8 md:p-14 relative overflow-hidden border border-white">
+          <div className="max-w-7xl mx-auto rounded-[3rem] bg-linear-to-br from-surface-container-low to-white shadow-[0_30px_60px_-15px_rgba(0,101,141,0.1)] p-8 md:p-14 relative overflow-hidden border border-white">
             <div className="absolute top-0 right-0 w-1/2 h-full">
-              <div className="absolute inset-0 bg-gradient-to-l from-transparent to-surface-container-low z-10"></div>
+              <div className="absolute inset-0 bg-linear-to-l from-transparent to-surface-container-low z-10"></div>
               <img
                 src={featuredMeetup.coverUrl || "https://images.unsplash.com/photo-1540575861501-7ce0e1d1aa6f?auto=format&fit=crop&w=1200&q=80"}
                 alt={featuredMeetup.title}
@@ -102,7 +103,7 @@ export default async function Meetups() {
              <span className="material-symbols-outlined text-4xl text-outline mb-4">edit_calendar</span>
              <h3 className="font-['Noto_Serif'] text-xl font-bold mb-2 text-on-surface">Suggest a Topic</h3>
              <p className="text-on-surface-variant text-sm mb-6 leading-relaxed">Have a technique you want to share with the community?</p>
-             <button className="text-primary font-bold hover:underline underline-offset-4 text-sm">Submit Proposal</button>
+             <SuggestTopicModal />
           </div>
 
         </div>
