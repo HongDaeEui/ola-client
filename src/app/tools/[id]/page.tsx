@@ -3,6 +3,19 @@ import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
 import { ShareButton } from '@/components/ShareButton';
 
+interface RelatedLab {
+  id: string;
+  title: string;
+  emoji: string | null;
+  difficulty: string | null;
+  category: string;
+  likes: number;
+  author: {
+    username: string;
+    avatarUrl: string | null;
+  };
+}
+
 interface Tool {
   id: string;
   name: string;
@@ -20,6 +33,7 @@ interface Tool {
   status?: string;
   createdAt?: string;
   likes: number;
+  relatedLabs?: RelatedLab[];
 }
 
 const API_BASE = 'https://ola-backend-psi.vercel.app/api';
@@ -265,6 +279,89 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
                       </div>
                     </Link>
                   ))}
+                </div>
+              </div>
+            )}
+            {/* Related Labs Section */}
+            {tool.relatedLabs && tool.relatedLabs.length > 0 && (
+              <div className="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm mt-8">
+                <h2 className="text-lg font-extrabold text-slate-900 mb-2 flex items-center gap-2.5">
+                  <span className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
+                    <span className="material-symbols-outlined text-emerald-500 text-[18px]">science</span>
+                  </span>
+                  이 도구가 활용된 커뮤니티 투토리얼
+                </h2>
+                <p className="text-slate-500 text-sm mb-6 ml-10">
+                  {tool.name}의 강력한 기능을 활용해 다른 유저들이 만들어낸 실험 결과를 확인해보세요.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {tool.relatedLabs.map((lab) => {
+                    const seed = parseInt((lab.id || '1').split('-')[0], 16) % 10000 || lab.likes || 1;
+                    return (
+                      <Link
+                        key={lab.id}
+                        href={`/labs/${lab.id}`}
+                        className="group flex flex-col bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg hover:shadow-emerald-100/50 hover:border-emerald-300 transition-all duration-300"
+                      >
+                        {/* Compact Banner */}
+                        <div className={`h-28 relative p-4 flex flex-col justify-between overflow-hidden bg-gradient-to-br ${
+                          [
+                            'from-sky-500 to-indigo-600',
+                            'from-rose-500 to-fuchsia-600',
+                            'from-emerald-400 to-teal-600',
+                            'from-amber-400 to-orange-500',
+                            'from-violet-500 to-purple-700',
+                            'from-pink-500 to-rose-500'
+                          ][seed % 6]
+                        } group-hover:shadow-[inset_0_0_80px_rgba(0,0,0,0.3)] transition-shadow duration-700`}>
+                          <img 
+                            src={`https://api.dicebear.com/9.x/shapes/svg?seed=${lab.title}&backgroundColor=transparent`} 
+                            alt={lab.title}
+                            loading="lazy"
+                            className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-60 group-hover:scale-110 group-hover:opacity-80 transition-all duration-700 ease-in-out"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+                          <div className="relative z-10 flex justify-between items-start">
+                            <span className="text-[10px] font-black tracking-wider px-2.5 py-1 rounded-full bg-white/20 text-white backdrop-blur-md border border-white/20 shadow-sm uppercase">
+                              {lab.category}
+                            </span>
+                            {lab.difficulty && (
+                              <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-slate-900/40 text-white backdrop-blur-md border border-white/10 flex items-center gap-1 shadow-sm">
+                                <span className={`w-1.5 h-1.5 rounded-full ${
+                                  lab.difficulty === '입문' ? 'bg-emerald-400' :
+                                  lab.difficulty === '중급' ? 'bg-amber-400' : 'bg-rose-400'
+                                }`} />
+                                {lab.difficulty}
+                              </span>
+                            )}
+                          </div>
+                          <div className="relative z-10 font-bold text-white text-base leading-tight mt-auto flex items-center gap-2 group-hover:-translate-y-1 transition-transform duration-500">
+                            {lab.emoji && <span className="text-xl drop-shadow-md">{lab.emoji}</span>}
+                            <span className="drop-shadow-md line-clamp-1">{lab.title}</span>
+                          </div>
+                        </div>
+                        {/* Compact Content */}
+                        <div className="p-4 flex flex-col flex-1">
+                          <div className="mt-auto flex items-center justify-between">
+                            <div className="flex items-center gap-2 text-slate-500">
+                              <div className="w-6 h-6 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center font-bold text-slate-600 text-[10px] shadow-sm uppercase overflow-hidden">
+                                {lab.author.avatarUrl ? (
+                                  <img src={lab.author.avatarUrl} alt={lab.author.username} className="w-full h-full object-cover" />
+                                ) : (
+                                  lab.author.username.charAt(0)
+                                )}
+                              </div>
+                              <span className="text-xs font-bold truncate max-w-[100px]">@{lab.author.username}</span>
+                            </div>
+                            <div className="flex items-center gap-1 text-slate-400 group-hover:text-emerald-500 transition-colors">
+                              <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>favorite</span>
+                              <span className="text-xs font-bold">{lab.likes}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
             )}
