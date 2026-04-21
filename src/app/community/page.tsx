@@ -40,7 +40,8 @@ async function getPosts(category?: string): Promise<Post[]> {
     if (!res.ok) return [];
     const data = await res.json();
     return Array.isArray(data) ? data : [];
-  } catch {
+  } catch (e) {
+    console.error('[CommunityPage] getPosts Error:', e);
     return [];
   }
 }
@@ -51,7 +52,8 @@ async function getUpcomingMeetups(): Promise<Meetup[]> {
     if (!res.ok) return [];
     const data = await res.json();
     return Array.isArray(data) ? data : [];
-  } catch {
+  } catch (e) {
+    console.error('[CommunityPage] getUpcomingMeetups Error:', e);
     return [];
   }
 }
@@ -62,7 +64,8 @@ async function getTagStats(): Promise<TagStat[]> {
     if (!res.ok) return [];
     const data = await res.json();
     return Array.isArray(data) ? data : [];
-  } catch {
+  } catch (e) {
+    console.error('[CommunityPage] getTagStats Error:', e);
     return [];
   }
 }
