@@ -1,15 +1,15 @@
 [project]
 name = "ola"
-description = ""
-lang = "en"
+description = "AI 개발자 커뮤니티 플랫폼"
+lang = "ko"
 
 [ci]
 command = "cd client_front && npm install && npm run build"
-architecture_check = ""
-frontend_dir = ""
+architecture_check = "cd back && npx tsc --noEmit"
+frontend_dir = "client_front"
 
 [models]
-default = ""
+default = "claude-sonnet-4-6"
 
 [workflow]
 max_iterations = 3
