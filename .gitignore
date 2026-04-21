@@ -11,3 +11,7 @@
 
 # node_modules (each subdir has its own)
 node_modules/
+
+# harness — do not track runtime state
+.agents/state.json
+.agents/.stop

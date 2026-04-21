@@ -1,0 +1,30 @@
+[project]
+name = "ola"
+description = ""
+lang = "en"
+
+[ci]
+command = "cd client_front && npm install && npm run build"
+architecture_check = ""
+frontend_dir = ""
+
+[models]
+default = ""
+
+[workflow]
+max_iterations = 3
+pass_threshold = 7.0
+auto_merge = true
+branch_prefix = "agent"
+trunk_branch = "main"
+
+[native]
+adversarial_model = "gpt-4.1"
+adversarial_mechanism = "auto"
+review_gate = "eng"
+gate_full_review_min = 5
+gate_summary_confirm_min = 3
+
+[integrations.memverse]
+enabled = false
+domain_prefix = ""
