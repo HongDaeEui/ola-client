@@ -109,8 +109,15 @@ export default async function LabsPage({
                   className="group flex flex-col bg-white rounded-3xl border border-slate-200 overflow-hidden hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-300 h-full">
 
                   {/* Banner */}
-                  <div className={`h-48 bg-gradient-to-br ${exp.color || 'from-slate-700 to-slate-900'} relative p-6 flex flex-col justify-between overflow-hidden`}>
-                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
+                  <div className={`h-48 bg-gradient-to-br ${exp.color || 'from-slate-700 to-slate-900'} relative p-6 flex flex-col justify-between overflow-hidden group-hover:shadow-[inset_0_0_80px_rgba(0,0,0,0.5)] transition-shadow duration-700`}>
+                    {/* Dynamic CDN Image */}
+                    <img 
+                      src={`https://loremflickr.com/800/600/technology,${encodeURIComponent(exp.category || 'ai')}?lock=${parseInt((exp.id || '1').split('-')[0], 16) % 10000 || 1}`} 
+                      alt={exp.title}
+                      className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40 group-hover:scale-110 group-hover:opacity-75 transition-all duration-700 ease-in-out"
+                    />
+                    <div className="absolute inset-0 bg-slate-900/40 mix-blend-multiply group-hover:bg-slate-900/20 transition-colors duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/20 to-transparent opacity-90" />
                     <div className="relative z-10 flex justify-between items-start">
                       <span className="bg-white/20 backdrop-blur-md text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">
                         {exp.category}
