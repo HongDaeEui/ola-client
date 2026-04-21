@@ -68,7 +68,7 @@ export function PromptFeed({ initialPrompts, category }: Props) {
     return (
       <div className="text-center py-20">
         <span className="material-symbols-outlined text-6xl text-slate-200">search_off</span>
-        <p className="mt-4 text-slate-500 font-medium">해당 카테고리의 프롬프트가 없어요.</p>
+        <p className="mt-4 text-slate-500 dark:text-slate-400 font-medium">해당 카테고리의 프롬프트가 없어요.</p>
         <Link href="/prompts" className="mt-4 inline-block text-sky-600 font-bold text-sm hover:underline">
           전체 보기 →
         </Link>
@@ -83,7 +83,7 @@ export function PromptFeed({ initialPrompts, category }: Props) {
           <Link
             key={p.id}
             href={`/prompts/${p.id}`}
-            className="bg-white border border-slate-200 rounded-3xl p-6 flex flex-col justify-between hover:border-sky-300 hover:shadow-xl hover:shadow-sky-50 transition-all group"
+            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 flex flex-col justify-between hover:border-sky-300 dark:hover:border-sky-700 hover:shadow-xl hover:shadow-sky-50 transition-all group"
           >
             <div>
               <div className="flex justify-between items-start mb-4">
@@ -92,20 +92,20 @@ export function PromptFeed({ initialPrompts, category }: Props) {
                 </span>
                 <span className="text-xs font-bold text-slate-400">#{p.category}</span>
               </div>
-              <h3 className="text-lg font-extrabold text-slate-900 mb-3 group-hover:text-sky-600 transition-colors">
+              <h3 className="text-lg font-extrabold text-slate-900 dark:text-white mb-3 group-hover:text-sky-600 transition-colors">
                 {p.title}
               </h3>
-              <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100 relative mb-4">
-                <p className="text-sm text-slate-600 font-mono italic leading-relaxed line-clamp-4">
+              <div className="bg-slate-50 dark:bg-slate-800 rounded-2xl p-4 border border-slate-100 dark:border-slate-700 relative mb-4">
+                <p className="text-sm text-slate-600 dark:text-slate-300 font-mono italic leading-relaxed line-clamp-4">
                   {p.content}
                 </p>
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-50 via-transparent to-transparent rounded-2xl pointer-events-none" />
+                <div className="absolute inset-0 bg-linear-to-t from-slate-50 dark:from-slate-800 via-transparent to-transparent rounded-2xl pointer-events-none" />
                 <CopyButton text={p.content} />
               </div>
             </div>
-            <div className="flex items-center justify-between pt-4 border-t border-slate-50 mt-auto">
+            <div className="flex items-center justify-between pt-4 border-t border-slate-50 dark:border-slate-700 mt-auto">
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-500 uppercase overflow-hidden">
+                <div className="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase overflow-hidden">
                   {p.author?.username?.charAt(0) ?? '?'}
                 </div>
                 <span className="text-xs font-bold text-slate-500">@{p.author?.username ?? 'Unknown'}</span>

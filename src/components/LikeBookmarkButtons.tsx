@@ -110,7 +110,7 @@ export function LikeBookmarkButtons({ targetType, targetId, initialLikes, varian
         className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all ${
           bookmarked
             ? 'bg-sky-500 text-white hover:bg-sky-600'
-            : 'bg-sky-50 text-sky-700 border border-sky-100 hover:bg-sky-100'
+            : 'bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-400 border border-sky-100 dark:border-sky-800 hover:bg-sky-100 dark:hover:bg-sky-900/50'
         } ${isColumn ? 'justify-center w-full' : ''}`}
       >
         <motion.span
@@ -132,7 +132,7 @@ export function LikeBookmarkButtons({ targetType, targetId, initialLikes, varian
           <span>로그인이 필요해요</span>
           <button
             onClick={signInWithGoogle}
-            className="bg-white text-slate-900 px-2.5 py-1 rounded-lg text-xs font-black hover:bg-slate-100 transition-colors flex-shrink-0"
+            className="bg-white text-slate-900 px-2.5 py-1 rounded-lg text-xs font-black hover:bg-slate-100 transition-colors shrink-0"
           >
             로그인
           </button>
