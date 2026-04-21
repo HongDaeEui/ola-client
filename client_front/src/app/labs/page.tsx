@@ -119,12 +119,23 @@ export default async function LabsPage({
                   className="group flex flex-col bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-2xl hover:shadow-slate-200/50 dark:hover:shadow-sky-900/20 hover:border-sky-200 dark:hover:border-sky-800 transition-all duration-300 h-full">
 
                   {/* Banner */}
-                  <div className={`h-48 relative p-6 flex flex-col justify-between overflow-hidden bg-gradient-to-br ${exp.color || 'from-sky-500 to-indigo-600'} group-hover:shadow-[inset_0_0_80px_rgba(0,0,0,0.3)] transition-shadow duration-700`}>
-                    {/* Dynamic Reliable CDN Image via LoremFlickr */}
+                  <div className={`h-48 relative p-6 flex flex-col justify-between overflow-hidden bg-gradient-to-br ${
+                    [
+                      'from-sky-500 to-indigo-600',
+                      'from-rose-500 to-fuchsia-600',
+                      'from-emerald-400 to-teal-600',
+                      'from-amber-400 to-orange-500',
+                      'from-violet-500 to-purple-700',
+                      'from-pink-500 to-rose-500'
+                    ][seed % 6]
+                  } group-hover:shadow-[inset_0_0_80px_rgba(0,0,0,0.3)] transition-shadow duration-700`}>
+                    {/* Dynamic AI Illustration Image via Pollinations */}
                     <img 
-                      src={`https://loremflickr.com/800/600/${imgKeywords}?lock=${seed}`} 
+                      src={`https://image.pollinations.ai/prompt/${encodeURIComponent(`High quality 3D isometric tech illustration representing ${exp.category}, clean cute UI design, pastel gradient, transparent background`)}?width=800&height=400&nologo=true&seed=${seed}`} 
                       alt={exp.title}
-                      className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-60 group-hover:scale-110 group-hover:opacity-80 transition-all duration-700 ease-in-out"
+                      loading="lazy"
+                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-50 group-hover:scale-110 group-hover:opacity-70 transition-all duration-700 ease-in-out"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                     <div className="relative z-10 flex justify-between items-start">
