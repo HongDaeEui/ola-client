@@ -134,7 +134,6 @@ export default async function LabsPage({
                       src={`https://image.pollinations.ai/prompt/${encodeURIComponent(`High quality 3D isometric tech illustration representing ${exp.category}, clean cute UI design, pastel gradient, transparent background`)}?width=800&height=400&nologo=true&seed=${seed}`} 
                       alt={exp.title}
                       loading="lazy"
-                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
                       className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-50 group-hover:scale-110 group-hover:opacity-70 transition-all duration-700 ease-in-out"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
