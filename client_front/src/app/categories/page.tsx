@@ -12,17 +12,30 @@ async function getCategoryCounts(): Promise<CategoryCount[]> {
 }
 
 const CATEGORY_META: Record<string, { icon: string; color: string }> = {
-  '에이전트 / 자동화': { icon: 'robot_2', color: 'from-sky-400 to-blue-600' },
+  '노코드 에이전트 · 업무 자동화': { icon: 'robot_2', color: 'from-sky-400 to-blue-600' },
+  '에이전트 빌더 · 워크플로': { icon: 'account_tree', color: 'from-emerald-400 to-teal-600' },
   '코딩 / 개발 도구': { icon: 'code', color: 'from-indigo-400 to-purple-600' },
-  '비디오 / 아바타': { icon: 'movie', color: 'from-rose-400 to-pink-600' },
+  '엔터프라이즈 에이전트 플랫폼': { icon: 'business', color: 'from-slate-700 to-slate-900' },
+  'AI 브라우저 · 생산성': { icon: 'public', color: 'from-yellow-400 to-orange-500' },
+  'AI 브라우저 · 리서치': { icon: 'manage_search', color: 'from-cyan-400 to-sky-600' },
+  '데스크톱 에이전트 · 생산성': { icon: 'desktop_mac', color: 'from-slate-500 to-slate-700' },
+  '고객지원 에이전트 · 음성 AI': { icon: 'support_agent', color: 'from-pink-500 to-rose-600' },
+  'CRM · 프로그램 관리 · 분석': { icon: 'monitoring', color: 'from-emerald-500 to-teal-700' },
+  '에이전트 앱 마켓 · 생산성': { icon: 'storefront', color: 'from-amber-400 to-orange-500' },
+  '버티컬(펫케어) 에이전트': { icon: 'pets', color: 'from-amber-500 to-orange-600' },
+  '에이전트 플랫폼 · 개발자 도구': { icon: 'terminal', color: 'from-blue-600 to-indigo-800' },
+  '개발자 도구 · Q&A': { icon: 'forum', color: 'from-indigo-500 to-violet-600' },
+  '클라우드 AI 플랫폼 · 에이전트': { icon: 'cloud', color: 'from-sky-400 to-blue-600' },
+  '스타트업 전략 · 생산성': { icon: 'rocket_launch', color: 'from-rose-400 to-pink-600' },
+  '범용 LLM · 에이전트용 모델': { icon: 'memory', color: 'from-violet-400 to-fuchsia-600' },
+  '업무용 코파일럿 · 에이전트': { icon: 'work', color: 'from-slate-600 to-slate-800' },
+  '에이전트 · 자동화 모델 (API)': { icon: 'api', color: 'from-sky-500 to-indigo-600' },
+  '오피스 / 연구': { icon: 'article', color: 'from-slate-600 to-slate-800' },
   '이미지 / 디자인': { icon: 'palette', color: 'from-orange-400 to-amber-600' },
   '텍스트 / 글쓰기': { icon: 'history_edu', color: 'from-emerald-400 to-teal-600' },
   '오디오 / 음악': { icon: 'music_note', color: 'from-violet-400 to-fuchsia-600' },
-  '비즈니스 / 마케팅': { icon: 'business_center', color: 'from-slate-700 to-slate-900' },
-  '데이터 / 분석': { icon: 'analytics', color: 'from-blue-600 to-indigo-800' },
-  '교육 / 학습': { icon: 'school', color: 'from-lime-400 to-green-600' },
-  '검색 / 리서치': { icon: 'manage_search', color: 'from-cyan-400 to-sky-600' },
-  '생산성': { icon: 'bolt', color: 'from-yellow-400 to-orange-500' },
+  '영상 생성': { icon: 'movie', color: 'from-rose-400 to-pink-600' },
+  '이미지 · 영상 생성 · 마케팅': { icon: 'campaign', color: 'from-fuchsia-500 to-purple-600' },
 };
 
 const DEFAULT_META = { icon: 'science', color: 'from-red-400 to-orange-600' };
