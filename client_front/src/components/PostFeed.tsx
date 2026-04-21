@@ -109,7 +109,7 @@ export function PostFeed({ initialPosts, category }: Props) {
             <Link
               key={post.id}
               href={`/community/${post.id}`}
-              className="block bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-lg hover:border-sky-200 transition-all group"
+              className="block bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 hover:shadow-lg hover:border-sky-200 dark:hover:border-sky-700 transition-all group"
             >
               <div className="flex items-center gap-3 mb-3">
                 <span className={`text-[10px] font-black px-2.5 py-1 rounded-lg uppercase tracking-wider ${tagClass}`}>
@@ -119,18 +119,18 @@ export function PostFeed({ initialPosts, category }: Props) {
                   {relativeTime(post.createdAt)}
                 </span>
               </div>
-              <h3 className="text-xl font-extrabold text-slate-900 group-hover:text-sky-600 transition-colors mb-2 tracking-tight leading-snug">
+              <h3 className="text-xl font-extrabold text-slate-900 dark:text-white group-hover:text-sky-600 transition-colors mb-2 tracking-tight leading-snug">
                 {post.title}
               </h3>
-              <p className="text-sm text-slate-500 line-clamp-2 mb-4 leading-relaxed">
+              <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-4 leading-relaxed">
                 {post.content}
               </p>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-[10px] font-bold text-white uppercase">
+                  <div className="w-6 h-6 rounded-full bg-linear-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-[10px] font-bold text-white uppercase">
                     {post.author?.username?.charAt(0) || '?'}
                   </div>
-                  <span className="text-sm font-bold text-slate-600">@{post.author?.username}</span>
+                  <span className="text-sm font-bold text-slate-600 dark:text-slate-400">@{post.author?.username}</span>
                 </div>
                 <div className="flex items-center gap-4 text-slate-400">
                   <div className="flex items-center gap-1">
