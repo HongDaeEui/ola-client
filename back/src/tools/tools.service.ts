@@ -60,9 +60,28 @@ export class ToolsService {
   }
 
   async findOne(id: string) {
-    return this.prisma.tool.findUnique({
+    const tool = await this.prisma.tool.findUnique({
       where: { id },
     });
+
+    if (!tool) return null;
+
+    const relatedLabs = await this.prisma.experiment.findMany({
+      where: {
+        stack: {
+          has: tool.name,
+        },
+      },
+      include: {
+        author: {
+          select: { username: true, avatarUrl: true },
+        },
+      },
+      orderBy: { likes: 'desc' },
+      take: 4,
+    });
+
+    return { ...tool, relatedLabs };
   }
 
   async create(data: {
