@@ -20,12 +20,12 @@ export default async function Meetups() {
   const otherMeetups = meetups.slice(1);
 
   return (
-    <main className="pt-32 pb-24 max-w-[1920px] mx-auto min-h-screen">
+    <main className="pt-32 pb-24 max-w-[1920px] mx-auto min-h-screen bg-white dark:bg-slate-950">
 
       {/* Header */}
       <header className="px-6 md:px-12 mb-20 text-center max-w-4xl mx-auto space-y-6">
         <span className="material-symbols-outlined text-5xl text-primary mb-4 block">groups</span>
-        <h1 className="font-['Noto_Serif'] text-5xl md:text-7xl font-bold text-on-surface leading-[1.1] tracking-tight">
+        <h1 className="font-['Noto_Serif'] text-5xl md:text-7xl font-bold text-on-surface dark:text-white leading-[1.1] tracking-tight">
           Synchronize <span className="italic text-transparent bg-clip-text bg-linear-to-r from-primary to-secondary">Minds.</span>
         </h1>
         <p className="text-on-surface-variant text-lg md:text-xl font-light leading-relaxed">
@@ -36,7 +36,7 @@ export default async function Meetups() {
       {/* Featured Upcoming Meetup */}
       {featuredMeetup && (
         <section className="px-6 md:px-12 mb-32">
-          <div className="max-w-7xl mx-auto rounded-[3rem] bg-linear-to-br from-surface-container-low to-white shadow-[0_30px_60px_-15px_rgba(0,101,141,0.1)] p-8 md:p-14 relative overflow-hidden border border-white">
+          <div className="max-w-7xl mx-auto rounded-[3rem] bg-linear-to-br from-surface-container-low to-white dark:from-slate-800 dark:to-slate-900 shadow-[0_30px_60px_-15px_rgba(0,101,141,0.1)] p-8 md:p-14 relative overflow-hidden border border-white dark:border-slate-700">
             <div className="absolute top-0 right-0 w-1/2 h-full">
               <div className="absolute inset-0 bg-linear-to-l from-transparent to-surface-container-low z-10"></div>
               <img
@@ -84,7 +84,7 @@ export default async function Meetups() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
           {otherMeetups.map((meetup: { id: string; title: string; description: string; date: string; _count?: { attendees: number } }) => (
-            <div key={meetup.id} className="bg-white rounded-3xl p-8 border border-outline-variant/20 shadow-sm hover:shadow-[0_20px_40px_-10px_rgba(0,101,141,0.08)] transition-all hover:-translate-y-1">
+            <div key={meetup.id} className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-outline-variant/20 dark:border-slate-700 shadow-sm hover:shadow-[0_20px_40px_-10px_rgba(0,101,141,0.08)] transition-all hover:-translate-y-1">
                <div className="flex justify-between items-start mb-8">
                  <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-2xl font-bold font-['Noto_Serif']">
                    {new Date(meetup.date).getDate()}
@@ -93,16 +93,16 @@ export default async function Meetups() {
                    {new Date(meetup.date).toLocaleString('en-US', { month: 'short' })}
                  </span>
                </div>
-               <h3 className="font-['Noto_Serif'] text-2xl font-bold mb-3 text-on-surface">{meetup.title}</h3>
-               <p className="text-on-surface-variant text-sm mb-8 leading-relaxed">{meetup.description}</p>
+               <h3 className="font-['Noto_Serif'] text-2xl font-bold mb-3 text-on-surface dark:text-white">{meetup.title}</h3>
+               <p className="text-on-surface-variant dark:text-slate-400 text-sm mb-8 leading-relaxed">{meetup.description}</p>
                <RsvpButton meetupId={meetup.id} initialCount={meetup._count?.attendees || 0} />
             </div>
           ))}
 
-          <div className="bg-surface-container-low rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-inner border border-outline-variant/10">
-             <span className="material-symbols-outlined text-4xl text-outline mb-4">edit_calendar</span>
-             <h3 className="font-['Noto_Serif'] text-xl font-bold mb-2 text-on-surface">Suggest a Topic</h3>
-             <p className="text-on-surface-variant text-sm mb-6 leading-relaxed">Have a technique you want to share with the community?</p>
+          <div className="bg-surface-container-low dark:bg-slate-800 rounded-3xl p-8 flex flex-col items-center justify-center text-center shadow-inner border border-outline-variant/10 dark:border-slate-700">
+             <span className="material-symbols-outlined text-4xl text-outline dark:text-slate-500 mb-4">edit_calendar</span>
+             <h3 className="font-['Noto_Serif'] text-xl font-bold mb-2 text-on-surface dark:text-white">Suggest a Topic</h3>
+             <p className="text-on-surface-variant dark:text-slate-400 text-sm mb-6 leading-relaxed">Have a technique you want to share with the community?</p>
              <SuggestTopicModal />
           </div>
 

@@ -94,14 +94,14 @@ export default async function CommunityPage({
   ]);
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-28 lg:pt-32 pb-20 font-['Noto_Sans_KR']">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-28 lg:pt-32 pb-20 font-['Noto_Sans_KR']">
       <div className="max-w-[1400px] mx-auto px-6">
         <div className="flex flex-col lg:flex-row gap-10">
 
           {/* Main Feed */}
           <main className="flex-1">
             <div className="flex justify-between items-center mb-8">
-              <h1 className="text-3xl font-extrabold text-slate-900 tracking-tighter">Ola 커뮤니티</h1>
+              <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tighter">Ola 커뮤니티</h1>
               <Link href="/community/write"
                 className="hidden sm:flex items-center gap-2 bg-sky-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-sky-100 hover:bg-sky-700 transition-all">
                 <span className="material-symbols-outlined text-[18px]">edit</span>
@@ -110,7 +110,7 @@ export default async function CommunityPage({
             </div>
 
             {/* Category Tabs */}
-            <div className="flex gap-1 border-b border-slate-200 mb-8 overflow-x-auto">
+            <div className="flex gap-1 border-b border-slate-200 dark:border-slate-700 mb-8 overflow-x-auto">
               {CATEGORIES.map(cat => (
                 <Link
                   key={cat}
@@ -118,7 +118,7 @@ export default async function CommunityPage({
                   className={`px-4 pb-3 pt-1 text-sm font-bold whitespace-nowrap border-b-2 transition-colors ${
                     activeCategory === cat
                       ? 'text-sky-600 border-sky-600'
-                      : 'text-slate-500 border-transparent hover:text-slate-800'
+                      : 'text-slate-500 dark:text-slate-400 border-transparent hover:text-slate-800 dark:hover:text-white'
                   }`}
                 >
                   {cat}
@@ -148,12 +148,12 @@ export default async function CommunityPage({
             </div>
 
             {/* Trending Tags */}
-            <div className="bg-white border border-slate-200 rounded-3xl p-8">
-              <h3 className="text-xl font-extrabold text-slate-900 mb-1 flex items-center gap-2">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-8">
+              <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mb-1 flex items-center gap-2">
                 <span className="material-symbols-outlined text-amber-500 text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>local_fire_department</span>
                 인기 토픽
               </h3>
-              <p className="text-xs text-slate-400 font-medium mb-6">실제 게시글 기준 · 좋아요순</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 font-medium mb-6">실제 게시글 기준 · 좋아요순</p>
               {tagStats.length === 0 ? (
                 <p className="text-sm text-slate-400 text-center py-4">데이터를 불러오는 중...</p>
               ) : (
@@ -161,7 +161,7 @@ export default async function CommunityPage({
                   {tagStats.map((stat, i) => {
                     const isActive = activeCategory === stat.category;
                     const activeStyle = TAG_ACTIVE_COLORS[stat.category] ?? 'bg-sky-600 text-white border-sky-600';
-                    const inactiveStyle = 'bg-slate-50 text-slate-700 border-slate-100 hover:border-sky-200 hover:bg-sky-50 hover:text-sky-600';
+                    const inactiveStyle = 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-100 dark:border-slate-700 hover:border-sky-200 hover:bg-sky-50 hover:text-sky-600';
                     return (
                       <Link
                         key={stat.category}
@@ -201,8 +201,8 @@ export default async function CommunityPage({
             </div>
 
             {/* Upcoming Meetups */}
-            <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
-              <h3 className="text-xl font-extrabold text-slate-900 mb-6 flex items-center gap-2">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 shadow-sm">
+              <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
                 <span className="material-symbols-outlined text-rose-500">groups</span>
                 진행 중인 스터디
               </h3>
@@ -222,12 +222,12 @@ export default async function CommunityPage({
                           }`}>{status}</span>
                           <span className="text-xs font-bold text-slate-400">{meetupType(m)}</span>
                         </div>
-                        <h4 className="font-extrabold text-slate-800 group-hover:text-sky-600 transition-colors mb-2 leading-tight">
+                        <h4 className="font-extrabold text-slate-800 dark:text-slate-200 group-hover:text-sky-600 transition-colors mb-2 leading-tight">
                           {m.title}
                         </h4>
                         <div className="flex justify-between items-center text-xs">
-                          <span className="text-slate-500 font-medium">{new Date(m.date).toLocaleDateString('ko-KR')}</span>
-                          <span className="text-slate-900 font-bold">{m._count?.attendees ?? 0}명 참여</span>
+                          <span className="text-slate-500 dark:text-slate-400 font-medium">{new Date(m.date).toLocaleDateString('ko-KR')}</span>
+                          <span className="text-slate-900 dark:text-slate-200 font-bold">{m._count?.attendees ?? 0}명 참여</span>
                         </div>
                       </div>
                     );
@@ -235,7 +235,7 @@ export default async function CommunityPage({
                 </div>
               )}
               <Link href="/meetups" className="block mt-8">
-                <button className="w-full py-3 rounded-2xl bg-slate-50 text-slate-600 font-bold text-sm hover:bg-slate-100 transition-colors">
+                <button className="w-full py-3 rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-sm hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
                   모든 모임 탐색
                 </button>
               </Link>

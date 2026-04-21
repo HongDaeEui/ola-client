@@ -130,35 +130,35 @@ export default function ProfilePage() {
   ];
 
   return (
-    <main className="min-h-screen bg-slate-50 pt-24 pb-16 font-['Noto_Sans_KR']">
+    <main className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-24 pb-16 font-['Noto_Sans_KR']">
       <div className="max-w-2xl mx-auto px-4">
 
         {/* Profile Card */}
-        <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden mb-6">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden mb-6">
           <div className="h-28 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-500" />
           <div className="px-6 pb-6">
             <div className="-mt-10 mb-4 flex items-end justify-between">
               {avatarUrl ? (
                 <img src={avatarUrl} alt={displayName}
-                  className="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover" />
+                  className="w-20 h-20 rounded-full border-4 border-white dark:border-slate-800 shadow-md object-cover" />
               ) : (
-                <div className="w-20 h-20 rounded-full border-4 border-white shadow-md bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white text-2xl font-bold">
+                <div className="w-20 h-20 rounded-full border-4 border-white dark:border-slate-800 shadow-md bg-linear-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white text-2xl font-bold">
                   {initial}
                 </div>
               )}
               <button onClick={signOut}
-                className="text-xs text-slate-400 font-bold hover:text-slate-700 transition-colors border border-slate-200 rounded-xl px-3 py-1.5">
+                className="text-xs text-slate-400 font-bold hover:text-slate-700 dark:hover:text-slate-200 transition-colors border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5">
                 로그아웃
               </button>
             </div>
-            <h1 className="text-xl font-extrabold text-slate-900">{displayName}</h1>
-            <p className="text-slate-400 text-sm mt-0.5">{user.email}</p>
+            <h1 className="text-xl font-extrabold text-slate-900 dark:text-white">{displayName}</h1>
+            <p className="text-slate-400 dark:text-slate-500 text-sm mt-0.5">{user.email}</p>
             <div className="mt-3 flex gap-2">
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-sky-50 text-sky-600 text-xs font-bold border border-sky-100">
                 <span className="material-symbols-outlined text-[12px]">verified</span>
                 Google 계정
               </span>
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-50 text-slate-500 text-xs font-bold border border-slate-100">
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs font-bold border border-slate-100 dark:border-slate-700">
                 <span className="material-symbols-outlined text-[12px]">calendar_today</span>
                 {new Date(user.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'short' })} 가입
               </span>
@@ -167,11 +167,11 @@ export default function ProfilePage() {
         </div>
 
         {/* Tabs */}
-        <div className="flex bg-white rounded-2xl border border-slate-100 p-1 mb-6 shadow-sm">
+        <div className="flex bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700 p-1 mb-6 shadow-sm">
           {TABS.map(t => (
             <button key={t.key} onClick={() => setTab(t.key)}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                tab === t.key ? 'bg-slate-900 text-white shadow' : 'text-slate-500 hover:text-slate-800'
+                tab === t.key ? 'bg-slate-900 dark:bg-slate-700 text-white shadow' : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
               }`}>
               <span className="material-symbols-outlined text-[16px]">{t.icon}</span>
               {t.label}
@@ -182,7 +182,7 @@ export default function ProfilePage() {
         {/* ── Overview ── */}
         {tab === 'overview' && (
           <div className="space-y-4">
-            <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700 p-6 shadow-sm">
               <h2 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">계정 정보</h2>
               <div className="space-y-3">
                 {[
@@ -190,15 +190,15 @@ export default function ProfilePage() {
                   { label: '이메일', value: user.email ?? '' },
                   { label: '가입일', value: new Date(user.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' }) },
                 ].map(({ label, value }) => (
-                  <div key={label} className="flex justify-between items-center py-2 border-b border-slate-50 last:border-0">
-                    <span className="text-sm text-slate-500">{label}</span>
-                    <span className="text-sm font-bold text-slate-800">{value}</span>
+                  <div key={label} className="flex justify-between items-center py-2 border-b border-slate-50 dark:border-slate-700 last:border-0">
+                    <span className="text-sm text-slate-500 dark:text-slate-400">{label}</span>
+                    <span className="text-sm font-bold text-slate-800 dark:text-slate-200">{value}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700 p-6 shadow-sm">
               <h2 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">바로가기</h2>
               <div className="grid grid-cols-2 gap-3">
                 {[
@@ -210,9 +210,9 @@ export default function ProfilePage() {
                   { href: '/community/write', icon: 'edit',   label: '글 쓰기',    color: 'text-indigo-500' },
                 ].map(({ href, icon, label, color }) => (
                   <Link key={href} href={href}
-                    className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 hover:bg-slate-50 transition-colors">
+                    className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
                     <span className={`material-symbols-outlined text-[20px] ${color}`}>{icon}</span>
-                    <span className="text-sm font-bold text-slate-700">{label}</span>
+                    <span className="text-sm font-bold text-slate-700 dark:text-slate-300">{label}</span>
                   </Link>
                 ))}
               </div>
@@ -237,7 +237,7 @@ export default function ProfilePage() {
                 <div className="w-6 h-6 border-2 border-sky-500 border-t-transparent rounded-full animate-spin" />
               </div>
             ) : posts.length === 0 ? (
-              <div className="text-center py-16 bg-white rounded-2xl border border-slate-100">
+              <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700">
                 <span className="material-symbols-outlined text-[40px] text-slate-200 block mb-3">edit_note</span>
                 <p className="text-slate-400 font-bold mb-4">아직 작성한 글이 없어요.</p>
                 <Link href="/community/write"
@@ -249,12 +249,12 @@ export default function ProfilePage() {
               const tagClass = CATEGORY_COLORS[post.category] ?? 'text-slate-600 bg-slate-100';
               return (
                 <Link key={post.id} href={`/community/${post.id}`}
-                  className="block bg-white border border-slate-100 rounded-2xl p-5 hover:shadow-md hover:border-sky-200 transition-all group">
+                  className="block bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 rounded-2xl p-5 hover:shadow-md hover:border-sky-200 dark:hover:border-sky-700 transition-all group">
                   <div className="flex items-center gap-2 mb-2">
                     <span className={`text-[10px] font-black px-2 py-0.5 rounded-lg ${tagClass}`}>{post.category}</span>
                     <span className="text-xs text-slate-400">{relativeTime(post.createdAt)}</span>
                   </div>
-                  <h3 className="font-extrabold text-slate-900 group-hover:text-sky-600 transition-colors leading-snug mb-3">
+                  <h3 className="font-extrabold text-slate-900 dark:text-white group-hover:text-sky-600 transition-colors leading-snug mb-3">
                     {post.title}
                   </h3>
                   <div className="flex items-center gap-4 text-xs text-slate-400 font-bold">
@@ -288,7 +288,7 @@ export default function ProfilePage() {
                 <div className="w-6 h-6 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
               </div>
             ) : prompts.length === 0 ? (
-              <div className="text-center py-16 bg-white rounded-2xl border border-slate-100">
+              <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700">
                 <span className="material-symbols-outlined text-[40px] text-slate-200 block mb-3">auto_awesome</span>
                 <p className="text-slate-400 font-bold mb-4">아직 공유한 프롬프트가 없어요.</p>
                 <Link href="/prompts/write"
@@ -298,13 +298,13 @@ export default function ProfilePage() {
               </div>
             ) : prompts.map(prompt => (
               <Link key={prompt.id} href={`/prompts/${prompt.id}`}
-                className="block bg-white border border-slate-100 rounded-2xl p-5 hover:shadow-md hover:border-amber-200 transition-all group">
+                className="block bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 rounded-2xl p-5 hover:shadow-md hover:border-amber-200 dark:hover:border-amber-700 transition-all group">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-[10px] font-black px-2 py-0.5 rounded-lg bg-amber-50 text-amber-600">{prompt.category}</span>
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-500">{prompt.toolName}</span>
                   <span className="text-xs text-slate-400 ml-auto">{relativeTime(prompt.createdAt)}</span>
                 </div>
-                <h3 className="font-extrabold text-slate-900 group-hover:text-amber-600 transition-colors leading-snug mb-3">
+                <h3 className="font-extrabold text-slate-900 dark:text-white group-hover:text-amber-600 transition-colors leading-snug mb-3">
                   {prompt.title}
                 </h3>
                 <div className="flex items-center gap-4 text-xs text-slate-400 font-bold">
@@ -332,7 +332,7 @@ export default function ProfilePage() {
                 <div className="w-6 h-6 border-2 border-sky-500 border-t-transparent rounded-full animate-spin" />
               </div>
             ) : bookmarks.length === 0 ? (
-              <div className="text-center py-16 bg-white rounded-2xl border border-slate-100">
+              <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700">
                 <span className="material-symbols-outlined text-[40px] text-slate-200 block mb-3">bookmark</span>
                 <p className="text-slate-400 font-bold mb-4">저장한 항목이 없어요.</p>
                 <p className="text-xs text-slate-400">도구, 프롬프트, 커뮤니티 글에서 북마크 버튼을 눌러보세요.</p>
@@ -342,12 +342,12 @@ export default function ProfilePage() {
               const title = b.item.title ?? b.item.name ?? '제목 없음';
               return (
                 <Link key={b.id} href={meta.href(b.targetId)}
-                  className="flex items-center gap-4 bg-white border border-slate-100 rounded-2xl p-4 hover:shadow-md hover:border-sky-200 transition-all group">
+                  className="flex items-center gap-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 rounded-2xl p-4 hover:shadow-md hover:border-sky-200 dark:hover:border-sky-700 transition-all group">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${meta.color}`}>
                     <span className="material-symbols-outlined text-[20px]">{meta.icon}</span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-extrabold text-slate-900 group-hover:text-sky-600 transition-colors truncate text-sm">
+                    <p className="font-extrabold text-slate-900 dark:text-white group-hover:text-sky-600 transition-colors truncate text-sm">
                       {title}
                     </p>
                     <p className="text-xs text-slate-400 mt-0.5">

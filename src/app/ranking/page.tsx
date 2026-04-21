@@ -51,7 +51,7 @@ export default async function RankingPage() {
   const [tools, posts, labs] = await Promise.all([getToolRanking(), getPostRanking(), getLabRanking()]);
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-28 lg:pt-32 pb-20 font-['Noto_Sans_KR']">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-28 lg:pt-32 pb-20 font-['Noto_Sans_KR']">
       <div className="max-w-5xl mx-auto px-6">
 
         <div className="bg-gradient-to-br from-slate-900 to-indigo-900 rounded-[40px] p-10 text-center text-white mb-12 shadow-2xl shadow-indigo-100">
@@ -66,25 +66,25 @@ export default async function RankingPage() {
         <section className="mb-14">
           <div className="flex items-center gap-3 mb-5">
             <span className="material-symbols-outlined text-sky-500 text-2xl">extension</span>
-            <h2 className="text-xl font-extrabold text-slate-900">도구 TOP 10</h2>
+            <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">도구 TOP 10</h2>
             <span className="text-xs text-slate-400 font-medium ml-auto">평점 기준</span>
           </div>
           <div className="space-y-2">
             {tools.map((tool, i) => (
               <Link key={tool.id} href={`/tools/${tool.id}`}
-                className="flex items-center gap-4 bg-white border border-slate-100 rounded-2xl px-5 py-4 hover:border-sky-300 hover:shadow-lg hover:shadow-sky-50 transition-all group">
-                <div className={`w-10 flex items-center justify-center font-black text-xl italic flex-shrink-0 ${i < 3 ? 'text-sky-600' : 'text-slate-300'}`}>{i + 1}</div>
-                <div className="w-11 h-11 rounded-xl bg-slate-100 flex-shrink-0 flex items-center justify-center font-bold text-slate-500 text-sm group-hover:bg-slate-900 group-hover:text-white transition-colors overflow-hidden">
+                className="flex items-center gap-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 rounded-2xl px-5 py-4 hover:border-sky-300 dark:hover:border-sky-700 hover:shadow-lg hover:shadow-sky-50 transition-all group">
+                <div className={`w-10 flex items-center justify-center font-black text-xl italic shrink-0 ${i < 3 ? 'text-sky-600' : 'text-slate-300'}`}>{i + 1}</div>
+                <div className="w-11 h-11 rounded-xl bg-slate-100 dark:bg-slate-800 shrink-0 flex items-center justify-center font-bold text-slate-500 dark:text-slate-400 text-sm group-hover:bg-slate-900 group-hover:text-white transition-colors overflow-hidden">
                   {tool.iconUrl ? <img src={tool.iconUrl} alt={tool.name} className="w-full h-full object-cover" /> : tool.name.substring(0, 2)}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <p className="font-bold text-slate-900 group-hover:text-sky-600 truncate">{tool.name}</p>
-                    {tool.isFeatured && <span className="text-[10px] bg-sky-500 text-white px-1.5 py-0.5 rounded font-black uppercase flex-shrink-0">Featured</span>}
+                    <p className="font-bold text-slate-900 dark:text-white group-hover:text-sky-600 truncate">{tool.name}</p>
+                    {tool.isFeatured && <span className="text-[10px] bg-sky-500 text-white px-1.5 py-0.5 rounded font-black uppercase shrink-0">Featured</span>}
                   </div>
-                  <p className="text-xs text-slate-500 truncate">{tool.shortDesc}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{tool.shortDesc}</p>
                 </div>
-                <div className="hidden sm:flex items-center gap-4 flex-shrink-0">
+                <div className="hidden sm:flex items-center gap-4 shrink-0">
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${PRICING_COLOR[tool.pricingModel ?? ''] ?? 'bg-slate-100 text-slate-500'}`}>
                     {tool.pricingModel ?? 'Free'}
                   </span>
@@ -102,19 +102,19 @@ export default async function RankingPage() {
         <section className="mb-14">
           <div className="flex items-center gap-3 mb-5">
             <span className="material-symbols-outlined text-rose-500 text-2xl">local_fire_department</span>
-            <h2 className="text-xl font-extrabold text-slate-900">커뮤니티 인기글 TOP 10</h2>
+            <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">커뮤니티 인기글 TOP 10</h2>
             <span className="text-xs text-slate-400 font-medium ml-auto">조회수 기준</span>
           </div>
           <div className="space-y-2">
             {posts.map((post, i) => (
               <Link key={post.id} href={`/community/${post.id}`}
-                className="flex items-center gap-4 bg-white border border-slate-100 rounded-2xl px-5 py-4 hover:border-rose-200 hover:shadow-lg hover:shadow-rose-50 transition-all group">
-                <div className={`w-10 text-center font-black text-xl italic flex-shrink-0 ${i < 3 ? 'text-rose-500' : 'text-slate-300'}`}>{i + 1}</div>
+                className="flex items-center gap-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 rounded-2xl px-5 py-4 hover:border-rose-200 dark:hover:border-rose-700 hover:shadow-lg hover:shadow-rose-50 transition-all group">
+                <div className={`w-10 text-center font-black text-xl italic shrink-0 ${i < 3 ? 'text-rose-500' : 'text-slate-300'}`}>{i + 1}</div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-slate-900 group-hover:text-rose-600 truncate">{post.title}</p>
-                  <p className="text-xs text-slate-500 mt-0.5">{post.category} · {post.author.username} · {new Date(post.createdAt).toLocaleDateString('ko-KR')}</p>
+                  <p className="font-semibold text-slate-900 dark:text-white group-hover:text-rose-600 truncate">{post.title}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{post.category} · {post.author.username} · {new Date(post.createdAt).toLocaleDateString('ko-KR')}</p>
                 </div>
-                <div className="hidden sm:flex items-center gap-4 text-xs text-slate-400 flex-shrink-0">
+                <div className="hidden sm:flex items-center gap-4 text-xs text-slate-400 shrink-0">
                   <span className="flex items-center gap-1"><span className="material-symbols-outlined text-base">visibility</span>{post.views.toLocaleString()}</span>
                   <span className="flex items-center gap-1"><span className="material-symbols-outlined text-base">favorite</span>{post.likes.toLocaleString()}</span>
                 </div>
@@ -133,21 +133,21 @@ export default async function RankingPage() {
         <section>
           <div className="flex items-center gap-3 mb-5">
             <span className="material-symbols-outlined text-purple-500 text-2xl">science</span>
-            <h2 className="text-xl font-extrabold text-slate-900">AI 실험실 인기 TOP 10</h2>
+            <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">AI 실험실 인기 TOP 10</h2>
             <span className="text-xs text-slate-400 font-medium ml-auto">좋아요 기준</span>
           </div>
           <div className="space-y-2">
             {labs.map((lab, i) => (
               <Link key={lab.id} href={`/labs/${lab.id}`}
-                className="flex items-center gap-4 bg-white border border-slate-100 rounded-2xl px-5 py-4 hover:border-purple-200 hover:shadow-lg hover:shadow-purple-50 transition-all group">
-                <div className={`w-10 text-center font-black text-xl italic flex-shrink-0 ${i < 3 ? 'text-purple-500' : 'text-slate-300'}`}>{i + 1}</div>
+                className="flex items-center gap-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 rounded-2xl px-5 py-4 hover:border-purple-200 dark:hover:border-purple-700 hover:shadow-lg hover:shadow-purple-50 transition-all group">
+                <div className={`w-10 text-center font-black text-xl italic shrink-0 ${i < 3 ? 'text-purple-500' : 'text-slate-300'}`}>{i + 1}</div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-slate-900 group-hover:text-purple-600 truncate">
+                  <p className="font-semibold text-slate-900 dark:text-white group-hover:text-purple-600 truncate">
                     {lab.emoji && <span className="mr-1.5">{lab.emoji}</span>}{lab.title}
                   </p>
-                  <p className="text-xs text-slate-500 mt-0.5">{lab.category}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{lab.category}</p>
                 </div>
-                <div className="hidden sm:flex items-center gap-3 flex-shrink-0">
+                <div className="hidden sm:flex items-center gap-3 shrink-0">
                   {lab.difficulty && (
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${DIFFICULTY_COLOR[lab.difficulty] ?? 'bg-slate-100 text-slate-500'}`}>{lab.difficulty}</span>
                   )}
