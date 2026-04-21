@@ -129,12 +129,12 @@ export default async function LabsPage({
                       'from-pink-500 to-rose-500'
                     ][seed % 6]
                   } group-hover:shadow-[inset_0_0_80px_rgba(0,0,0,0.3)] transition-shadow duration-700`}>
-                    {/* Dynamic AI Illustration Image via Pollinations */}
+                    {/* Dynamic AI Abstract Illustration via DiceBear */}
                     <img 
-                      src={`https://image.pollinations.ai/prompt/${encodeURIComponent(`High quality 3D isometric tech illustration representing ${exp.category}, clean cute UI design, pastel gradient, transparent background`)}?width=800&height=400&nologo=true&seed=${seed}`} 
+                      src={`https://api.dicebear.com/9.x/shapes/svg?seed=${exp.title}&backgroundColor=transparent`} 
                       alt={exp.title}
                       loading="lazy"
-                      className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-50 group-hover:scale-110 group-hover:opacity-70 transition-all duration-700 ease-in-out"
+                      className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-60 group-hover:scale-110 group-hover:opacity-80 transition-all duration-700 ease-in-out"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                     <div className="relative z-10 flex justify-between items-start">
