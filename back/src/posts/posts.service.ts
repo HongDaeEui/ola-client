@@ -75,9 +75,9 @@ export class PostsService {
     });
 
     // 비동기로 디스코드 알림 발송
-    this.notificationsService.sendPostNotification(newPost).catch((err) => {
-      console.error('Failed to send notification via PostsService', err);
-    });
+    // this.notificationsService.sendPostNotification(newPost).catch((err) => {
+    //   console.error('Failed to send notification via PostsService', err);
+    // });
 
     return newPost;
   }
