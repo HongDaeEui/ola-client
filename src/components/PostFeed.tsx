@@ -61,7 +61,7 @@ export function PostFeed({ initialPosts, category }: Props) {
       if (category !== '전체') qs.set('category', category);
       const res = await fetch(`${API}/posts?${qs}`);
       const data: Post[] = await res.json();
-      if (data.length === 0) {
+      if (!Array.isArray(data) || data.length === 0) {
         setHasMore(false);
       } else {
         setPosts(prev => [...prev, ...data]);

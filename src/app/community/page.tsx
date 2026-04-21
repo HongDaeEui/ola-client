@@ -38,7 +38,8 @@ async function getPosts(category?: string): Promise<Post[]> {
     if (category && category !== '전체') qs.set('category', category);
     const res = await fetch(`${API}/posts?${qs}`, { next: { revalidate: 30 } });
     if (!res.ok) return [];
-    return res.json();
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
   } catch {
     return [];
   }
@@ -48,7 +49,8 @@ async function getUpcomingMeetups(): Promise<Meetup[]> {
   try {
     const res = await fetch(`${API}/meetups/upcoming`, { next: { revalidate: 30 } });
     if (!res.ok) return [];
-    return res.json();
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
   } catch {
     return [];
   }
@@ -58,7 +60,8 @@ async function getTagStats(): Promise<TagStat[]> {
   try {
     const res = await fetch(`${API}/posts/tag-stats`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
-    return res.json();
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
   } catch {
     return [];
   }
