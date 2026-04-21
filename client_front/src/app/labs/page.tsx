@@ -148,33 +148,33 @@ export default async function LabsPage({
 
                   {/* Content */}
                   <div className="p-6 flex-1 flex flex-col">
-                    <p className="text-slate-600 text-sm font-medium leading-relaxed mb-6 flex-1">{exp.description}</p>
+                    <p className="text-slate-600 dark:text-slate-300 text-sm font-medium leading-relaxed mb-6 flex-1">{exp.description}</p>
 
                     <div className="mb-6">
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Tech Stack Used</p>
+                      <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Tech Stack Used</p>
                       <div className="flex flex-wrap gap-2">
                         {exp.stack.map((tool: string, j: number) => (
-                          <span key={j} className="flex items-center gap-1.5 bg-slate-50 border border-slate-100 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg">
-                            <span className="w-2 h-2 rounded-full bg-sky-400" />
+                          <span key={j} className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold px-3 py-1.5 rounded-lg">
+                            <span className="w-2 h-2 rounded-full bg-sky-400 dark:bg-sky-500" />
                             {tool}
                           </span>
                         ))}
                       </div>
                     </div>
 
-                    <div className="bg-emerald-50 rounded-2xl p-4 mb-6 border border-emerald-100 flex items-center gap-2 text-emerald-700 group-hover:bg-emerald-100 transition-colors">
+                    <div className="bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl p-4 mb-6 border border-emerald-100 dark:border-emerald-800/50 flex items-center gap-2 text-emerald-700 dark:text-emerald-400 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/50 transition-colors">
                       <span className="material-symbols-outlined font-light">bolt</span>
                       <span className="font-extrabold text-sm">{exp.metric}</span>
                     </div>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-100 mt-auto">
+                    <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800 mt-auto">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-slate-200 border-2 border-white shadow-sm flex items-center justify-center text-slate-400 text-xs font-bold uppercase">
+                        <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 border-2 border-white dark:border-slate-800 shadow-sm flex items-center justify-center text-slate-400 dark:text-slate-300 text-xs font-bold uppercase">
                           {exp.author?.username?.charAt(0) || '?'}
                         </div>
-                        <span className="text-sm font-bold text-slate-700">@{exp.author?.username || 'Unknown'}</span>
+                        <span className="text-sm font-bold text-slate-700 dark:text-slate-300">@{exp.author?.username || 'Unknown'}</span>
                       </div>
-                      <div className="flex items-center gap-1.5 text-slate-400 text-sm font-bold">
+                      <div className="flex items-center gap-1.5 text-slate-400 dark:text-slate-500 text-sm font-bold">
                         <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>favorite</span>
                         {exp.likes.toLocaleString()}
                       </div>
