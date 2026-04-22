@@ -1,0 +1,49 @@
+import { useQuery } from '@tanstack/react-query';
+import { ugcService } from '@/services/ugc.service';
+import { GetUgcParams } from '@/models/ugc';
+
+// 쿼리 키 정의
+export const UGC_KEYS = {
+  prompts: (params: GetUgcParams) => ['prompts', params] as const,
+  posts: (params: GetUgcParams) => ['posts', params] as const,
+  labs: (params: { category?: string }) => ['labs', params] as const,
+};
+
+// 1. 프롬프트 목록
+export function usePromptsList(params: GetUgcParams = {}) {
+  return useQuery({
+    queryKey: UGC_KEYS.prompts(params),
+    queryFn: async () => {
+      const res = await ugcService.getPrompts(params);
+      if (!res.success) throw new Error(res.error || 'Failed to fetch prompts');
+      const data = res.response?.data?.data || res.data?.data;
+      return Array.isArray(data) ? data : (data?.items || []);
+    },
+  });
+}
+
+// 2. 게시글 목록
+export function usePostsList(params: GetUgcParams = {}) {
+  return useQuery({
+    queryKey: UGC_KEYS.posts(params),
+    queryFn: async () => {
+      const res = await ugcService.getPosts(params);
+      if (!res.success) throw new Error(res.error || 'Failed to fetch posts');
+      const data = res.response?.data?.data || res.data?.data;
+      return Array.isArray(data) ? data : (data?.items || []);
+    },
+  });
+}
+
+// 3. 실험실 목록
+export function useLabsList(params: { category?: string } = {}) {
+  return useQuery({
+    queryKey: UGC_KEYS.labs(params),
+    queryFn: async () => {
+      const res = await ugcService.getLabs(params);
+      if (!res.success) throw new Error(res.error || 'Failed to fetch labs');
+      const data = res.response?.data?.data || res.data?.data;
+      return Array.isArray(data) ? data : (data?.items || []);
+    },
+  });
+}
