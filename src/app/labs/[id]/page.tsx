@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
+import { WorkshopButton, MeetupCreateBridge } from '@/components/WorkshopClient';
 
 interface Author {
   username: string;
@@ -111,14 +112,29 @@ export default async function LabDetailPage({ params }: { params: Promise<{ id: 
             )}
           </div>
 
-          {/* Title */}
-          <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4 drop-shadow-lg">
-            {lab.emoji && <span className="mr-3">{lab.emoji}</span>}
-            {lab.title}
-          </h1>
-          <p className="text-white/80 text-lg font-medium mb-8 max-w-2xl leading-relaxed">
-            {lab.description}
-          </p>
+          {/* Title and Workshop Button */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+            <div className="flex-1">
+              <h1 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4 drop-shadow-lg">
+                {lab.emoji && <span className="mr-3">{lab.emoji}</span>}
+                {lab.title}
+              </h1>
+              <p className="text-white/80 text-lg font-medium max-w-2xl leading-relaxed">
+                {lab.description}
+              </p>
+            </div>
+            
+            {/* Workshop Button */}
+            <div className="shrink-0 pb-1">
+              <WorkshopButton 
+                labId={lab.id} 
+                title={lab.title} 
+                steps={steps} 
+                emoji={lab.emoji} 
+                color={lab.color} 
+              />
+            </div>
+          </div>
 
           {/* Meta footer */}
           <div className="flex flex-wrap items-center gap-5">
@@ -246,7 +262,7 @@ export default async function LabDetailPage({ params }: { params: Promise<{ id: 
           {/* ── Right: Sidebar ── */}
           <div className="space-y-5">
 
-            {/* Actions */}
+            {/* View Actions */}
             <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
               <LikeBookmarkButtons
                 targetType="LAB"
@@ -255,6 +271,9 @@ export default async function LabDetailPage({ params }: { params: Promise<{ id: 
                 variant="column"
               />
             </div>
+
+            {/* Meetup Creation Pipeline CTA */}
+            <MeetupCreateBridge labId={lab.id} title={lab.title} emoji={lab.emoji || ''} />
 
             {/* Tech Stack */}
             <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
