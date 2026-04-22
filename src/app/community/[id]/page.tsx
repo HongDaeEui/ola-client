@@ -60,7 +60,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
   const categoryClass = CATEGORY_COLORS[post.category] ?? 'bg-slate-50 text-slate-600 border-slate-200';
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-28 lg:pt-32 pb-20 font-['Noto_Sans_KR']">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-28 lg:pt-32 pb-20 font-['Noto_Sans_KR']">
       <ViewTracker type="posts" id={post.id} />
       <div className="max-w-3xl mx-auto px-6">
 
@@ -74,26 +74,26 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
         </div>
 
         {/* Post Card */}
-        <article className="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50 overflow-hidden mb-8">
+        <article className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl shadow-slate-200/50 overflow-hidden mb-8">
 
           {/* Header */}
-          <div className="p-8 md:p-12 border-b border-slate-100">
+          <div className="p-8 md:p-12 border-b border-slate-100 dark:border-slate-700">
             <div className="flex flex-wrap items-center gap-3 mb-5">
               <span className={`text-xs font-black px-3 py-1 rounded-full border uppercase tracking-wider ${categoryClass}`}>
                 {post.category}
               </span>
               <span className="text-xs text-slate-400 font-medium">{formatDate(post.createdAt)}</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
+            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight mb-6">
               {post.title}
             </h1>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold uppercase text-sm">
+                <div className="w-10 h-10 rounded-full bg-linear-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold uppercase text-sm">
                   {post.author?.username?.charAt(0) || '?'}
                 </div>
                 <div>
-                  <p className="font-bold text-slate-900 text-sm">@{post.author?.username}</p>
+                  <p className="font-bold text-slate-900 dark:text-white text-sm">@{post.author?.username}</p>
                   <p className="text-xs text-slate-400 font-medium">Ola 멤버</p>
                 </div>
               </div>
@@ -111,7 +111,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
           </div>
 
           {/* Body */}
-          <div className="p-8 md:p-12">
+          <div className="p-8 md:p-12 dark:bg-slate-900">
             {post.imageUrl && (
               <div className="mb-8 rounded-2xl overflow-hidden border border-slate-100">
                 <img src={post.imageUrl} alt={post.title} className="w-full max-h-[480px] object-cover" />
@@ -119,7 +119,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
             )}
             <div className="prose prose-slate max-w-none">
               {post.content.split('\n\n').map((paragraph, i) => (
-                <p key={i} className="text-slate-700 text-base leading-relaxed mb-5 last:mb-0 whitespace-pre-line">
+                <p key={i} className="text-slate-700 dark:text-slate-300 text-base leading-relaxed mb-5 last:mb-0 whitespace-pre-line">
                   {paragraph}
                 </p>
               ))}
@@ -127,9 +127,9 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
           </div>
 
           {/* Actions */}
-          <div className="px-8 md:px-12 py-6 border-t border-slate-100 flex items-center gap-3">
+          <div className="px-8 md:px-12 py-6 border-t border-slate-100 dark:border-slate-700 flex items-center gap-3">
             <LikeBookmarkButtons targetType="POST" targetId={post.id} initialLikes={post.likes} />
-            <ShareButton title={post.title} className="flex items-center gap-2 bg-slate-50 text-slate-600 border border-slate-200 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-100 transition-colors ml-auto" />
+            <ShareButton title={post.title} className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors ml-auto" />
           </div>
         </article>
 

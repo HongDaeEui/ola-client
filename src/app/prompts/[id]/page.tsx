@@ -37,7 +37,7 @@ export default async function PromptDetailPage({ params }: { params: Promise<{ i
   if (!prompt) notFound();
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-28 lg:pt-32 pb-20 font-['Noto_Sans_KR']">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-28 lg:pt-32 pb-20 font-['Noto_Sans_KR']">
       <ViewTracker type="prompts" id={prompt.id} />
       <div className="max-w-4xl mx-auto px-6">
 
@@ -51,8 +51,8 @@ export default async function PromptDetailPage({ params }: { params: Promise<{ i
         </div>
 
         {/* Hero Section */}
-        <div className="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50 p-10 md:p-14 mb-10 relative overflow-hidden">
-          <div className="absolute -top-20 -right-20 w-72 h-72 bg-indigo-50 rounded-full blur-3xl opacity-50"></div>
+        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-xl shadow-slate-200/50 p-10 md:p-14 mb-10 relative overflow-hidden">
+          <div className="absolute -top-20 -right-20 w-72 h-72 bg-indigo-50 dark:bg-indigo-900/20 rounded-full blur-3xl opacity-50"></div>
           <div className="relative z-10">
             <div className="flex flex-wrap items-center gap-3 mb-5">
               <span className="text-xs font-black uppercase tracking-widest text-sky-600 bg-sky-50 px-3 py-1.5 rounded-full border border-sky-100">
@@ -60,15 +60,15 @@ export default async function PromptDetailPage({ params }: { params: Promise<{ i
               </span>
               <span className="text-xs font-bold text-slate-500">#{prompt.category}</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-5">
+            <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight mb-5">
               {prompt.title}
             </h1>
             <div className="flex items-center gap-5">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-500 uppercase">
+                <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">
                   {prompt.author?.username?.charAt(0) || '?'}
                 </div>
-                <span className="text-sm font-bold text-slate-600">@{prompt.author?.username || 'Unknown'}</span>
+                <span className="text-sm font-bold text-slate-600 dark:text-slate-400">@{prompt.author?.username || 'Unknown'}</span>
               </div>
               <div className="flex items-center gap-1 text-slate-400 text-sm font-bold">
                 <span className="material-symbols-outlined text-[16px]">thumb_up</span>
@@ -88,9 +88,9 @@ export default async function PromptDetailPage({ params }: { params: Promise<{ i
           <div className="md:col-span-2 space-y-8">
 
             {/* Prompt Content */}
-            <div className="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-700 p-8 shadow-sm">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                <h2 className="text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
                   <span className="material-symbols-outlined text-sky-500">code</span>
                   프롬프트 내용
                 </h2>
@@ -100,8 +100,8 @@ export default async function PromptDetailPage({ params }: { params: Promise<{ i
                   label="복사"
                 />
               </div>
-              <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 relative">
-                <p className="text-sm text-slate-700 font-mono leading-relaxed whitespace-pre-wrap">
+              <div className="bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 relative">
+                <p className="text-sm text-slate-700 dark:text-slate-300 font-mono leading-relaxed whitespace-pre-wrap">
                   {prompt.content}
                 </p>
               </div>
@@ -117,20 +117,20 @@ export default async function PromptDetailPage({ params }: { params: Promise<{ i
               <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">Info</h3>
               <ul className="space-y-3 text-sm">
                 <li className="flex justify-between items-center">
-                  <span className="text-slate-500 font-medium">카테고리</span>
-                  <span className="font-bold text-slate-900">#{prompt.category}</span>
+                  <span className="text-slate-500 dark:text-slate-400 font-medium">카테고리</span>
+                  <span className="font-bold text-slate-900 dark:text-white">#{prompt.category}</span>
                 </li>
                 <li className="flex justify-between items-center">
-                  <span className="text-slate-500 font-medium">AI 도구</span>
+                  <span className="text-slate-500 dark:text-slate-400 font-medium">AI 도구</span>
                   <span className="font-bold text-sky-600">{prompt.toolName}</span>
                 </li>
                 <li className="flex justify-between items-center">
-                  <span className="text-slate-500 font-medium">좋아요</span>
+                  <span className="text-slate-500 dark:text-slate-400 font-medium">좋아요</span>
                   <span className="font-bold text-rose-500">{prompt.likes || 0}</span>
                 </li>
                 <li className="flex justify-between items-center">
-                  <span className="text-slate-500 font-medium">조회수</span>
-                  <span className="font-bold text-slate-900">{prompt.views || 0}</span>
+                  <span className="text-slate-500 dark:text-slate-400 font-medium">조회수</span>
+                  <span className="font-bold text-slate-900 dark:text-white">{prompt.views || 0}</span>
                 </li>
               </ul>
             </div>
@@ -140,7 +140,7 @@ export default async function PromptDetailPage({ params }: { params: Promise<{ i
               <LikeBookmarkButtons targetType="PROMPT" targetId={prompt.id} initialLikes={prompt.likes} variant="column" />
               <ShareButton
                 title={prompt.title}
-                className="w-full flex items-center justify-center gap-2 bg-slate-50 text-slate-600 border border-slate-200 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-100 transition-colors"
+                className="w-full flex items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
               />
             </div>
 
