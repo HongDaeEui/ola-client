@@ -21,7 +21,6 @@ export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const chatContext = useChat({
-    id: 'ola-ai-chatbot',
     // @ts-expect-error Vercel AI SDK type error fallback
     initialMessages: INITIAL_MESSAGES,
     onError: (error) => {
@@ -33,20 +32,27 @@ export function ChatWidget() {
     },
   });
   // @ts-expect-error Vercel AI SDK type error fallback
-  const { messages, input, setInput, handleSubmit, isLoading, append } = chatContext;
+  const { messages, isLoading, append } = chatContext;
 
+  const [localInput, setLocalInput] = useState('');
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen) endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isOpen, isLoading]);
 
+  function doSubmit(e?: React.FormEvent) {
+    if (e) e.preventDefault();
+    if (!localInput.trim() || isLoading) return;
+    append({ role: 'user', content: localInput });
+    setLocalInput('');
+  }
+
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.nativeEvent.isComposing) return;
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      handleSubmit(e as any);
+      doSubmit(e);
     }
   }
 
@@ -146,13 +152,13 @@ export function ChatWidget() {
           {/* Input */}
           <div className="p-4 bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700 flex-shrink-0">
             <form
-              onSubmit={handleSubmit}
+              onSubmit={doSubmit}
               className="flex items-center gap-2 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-2xl pl-4 pr-2 py-2 focus-within:border-sky-400 focus-within:ring-2 focus-within:ring-sky-100 dark:focus-within:ring-sky-900 transition-all"
             >
               <input
                 type="text"
-                value={input || ''}
-                onChange={e => setInput(e.target.value)}
+                value={localInput}
+                onChange={e => setLocalInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="어떤 AI가 필요하신가요?"
                 className="flex-1 bg-transparent text-sm text-slate-700 dark:text-slate-200 outline-none placeholder:text-slate-400"
@@ -160,9 +166,9 @@ export function ChatWidget() {
               />
               <button
                 type="submit"
-                disabled={!(input || '').trim() || isLoading}
+                disabled={!localInput.trim() || isLoading}
                 className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
-                  (input || '').trim() && !isLoading
+                  localInput.trim() && !isLoading
                     ? 'bg-sky-500 text-white hover:bg-sky-600 shadow-md shadow-sky-200'
                     : 'bg-slate-200 dark:bg-slate-600 text-slate-400 cursor-not-allowed'
                 }`}
