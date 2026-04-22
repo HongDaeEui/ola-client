@@ -24,6 +24,13 @@ export function ChatWidget() {
     id: 'ola-ai-chatbot',
     // @ts-expect-error Vercel AI SDK type error fallback
     initialMessages: INITIAL_MESSAGES,
+    onError: (error) => {
+      console.error('Chat error:', error);
+      alert(
+        'AI 서비스 통신 중 오류가 발생했습니다. API 키 설정이 올바른지 확인해주세요.\n' +
+        '상세: ' + error.message
+      );
+    },
   });
   // @ts-expect-error Vercel AI SDK type error fallback
   const { messages, input, setInput, handleSubmit, isLoading, append } = chatContext;
