@@ -15,7 +15,24 @@ export class ToolsService {
       : filters?.sort === 'popular' ? { isFeatured: 'desc' as const }
       : { createdAt: 'desc' as const };
 
-    return this.prisma.tool.findMany({ where, orderBy });
+    return this.prisma.tool.findMany({
+      where,
+      orderBy,
+      select: {
+        id: true,
+        name: true,
+        shortDesc: true,
+        description: true,
+        category: true,
+        pricingModel: true,
+        rating: true,
+        tags: true,
+        iconUrl: true,
+        coverUrl: true,
+        isFeatured: true,
+        // 목록에 불필요한 필드 제외: launchUrl, developer, status, createdAt, updatedAt
+      },
+    });
   }
 
   async findFeatured() {

@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { LabsService } from './labs.service';
 
 @Controller('labs')
@@ -6,8 +6,8 @@ export class LabsController {
   constructor(private readonly labsService: LabsService) {}
 
   @Get()
-  async getExperiments() {
-    return this.labsService.findAll();
+  async getExperiments(@Query('category') category?: string) {
+    return this.labsService.findAll(category);
   }
 
   @Get(':id')

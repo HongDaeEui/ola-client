@@ -5,9 +5,24 @@ import { PrismaService } from '../prisma/prisma.service';
 export class LabsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll() {
+  async findAll(category?: string) {
+    const where: Record<string, unknown> = {};
+    if (category) where.category = category;
+
     return this.prisma.experiment.findMany({
-      include: {
+      where,
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        difficulty: true,
+        emoji: true,
+        metric: true,
+        category: true,
+        stack: true,
+        color: true,
+        likes: true,
+        // content 필드 제외 — 목록에서 본문 수천 자 전송 방지
         author: {
           select: {
             username: true,
