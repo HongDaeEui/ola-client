@@ -77,7 +77,7 @@ export default async function ResourcesPage({
   const totalCount = typeCounts.reduce((s, t) => s + t.count, 0);
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-28 lg:pt-32 pb-20 font-['Noto_Sans_KR']">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-28 lg:pt-32 pb-20 font-['Noto_Sans_KR']">
 
       {/* Hero */}
       <header className="max-w-5xl mx-auto px-6 mb-16 text-center">
@@ -85,11 +85,11 @@ export default async function ResourcesPage({
           <span className="material-symbols-outlined text-[16px]">library_books</span>
           Learning Archive
         </div>
-        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-[1.1] mb-4">
+        <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.1] mb-4">
           The Learning<br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-indigo-600">Archive</span>
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-sky-500 to-indigo-600">Archive</span>
         </h1>
-        <p className="text-slate-500 text-lg font-medium max-w-xl mx-auto">
+        <p className="text-slate-500 dark:text-slate-400 text-lg font-medium max-w-xl mx-auto">
           커뮤니티가 만든 프롬프트 덱, 워크플로우 스크립트, 케이스 스터디
         </p>
         <p className="text-slate-400 text-sm mt-2 font-bold">{totalCount}개의 리소스</p>
@@ -102,10 +102,10 @@ export default async function ResourcesPage({
             {featuredResources.map((r, idx) => (
               <div
                 key={r.id}
-                className={`min-w-[340px] md:min-w-[480px] rounded-3xl p-8 relative overflow-hidden flex-shrink-0 ${
+                className={`min-w-[340px] md:min-w-[480px] rounded-3xl p-8 relative overflow-hidden shrink-0 ${
                   idx % 2 === 0
-                    ? 'bg-gradient-to-br from-slate-900 to-sky-900 text-white'
-                    : 'bg-gradient-to-br from-indigo-600 to-violet-700 text-white'
+                    ? 'bg-linear-to-br from-slate-900 to-sky-900 text-white'
+                    : 'bg-linear-to-br from-indigo-600 to-violet-700 text-white'
                 }`}
               >
                 <div className="absolute -right-10 -top-10 w-48 h-48 bg-white/5 rounded-full blur-2xl" />
@@ -137,14 +137,14 @@ export default async function ResourcesPage({
           <aside className="lg:col-span-1 space-y-6">
 
             {/* Type Filter */}
-            <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-700 p-6 shadow-sm">
               <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">유형</h3>
               <ul className="space-y-1">
                 <li>
                   <Link
                     href={activeDifficulty ? `/resources?difficulty=${activeDifficulty}` : '/resources'}
                     className={`flex items-center justify-between w-full px-3 py-2.5 rounded-xl text-sm font-bold transition-colors ${
-                      !activeType ? 'bg-sky-600 text-white' : 'text-slate-600 hover:bg-slate-50 hover:text-sky-600'
+                      !activeType ? 'bg-sky-600 text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-sky-600'
                     }`}
                   >
                     <span className="flex items-center gap-2">
@@ -166,7 +166,7 @@ export default async function ResourcesPage({
                       <Link
                         href={`/resources?${params.toString()}`}
                         className={`flex items-center justify-between w-full px-3 py-2.5 rounded-xl text-sm font-bold transition-colors ${
-                          isActive ? 'bg-sky-600 text-white' : 'text-slate-600 hover:bg-slate-50 hover:text-sky-600'
+                          isActive ? 'bg-sky-600 text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-sky-600'
                         }`}
                       >
                         <span className="flex items-center gap-2">
@@ -184,7 +184,7 @@ export default async function ResourcesPage({
             </div>
 
             {/* Difficulty Filter */}
-            <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
+            <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-700 p-6 shadow-sm">
               <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-4">난이도</h3>
               <div className="flex flex-col gap-2">
                 {(['Beginner', 'Intermediate', 'Advanced'] as const).map(d => {
@@ -248,10 +248,10 @@ export default async function ResourcesPage({
             ) : (
               <div className="grid sm:grid-cols-2 gap-5">
                 {resources.map(r => (
-                  <div key={r.id} className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm hover:shadow-md hover:border-sky-100 transition-all flex flex-col">
+                  <div key={r.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700 p-6 shadow-sm hover:shadow-md hover:border-sky-100 dark:hover:border-sky-800 transition-all flex flex-col">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <span className="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-100 text-slate-600 text-[10px] font-black px-2.5 py-1 rounded-lg uppercase tracking-wider">
+                        <span className="inline-flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-600 dark:text-slate-400 text-[10px] font-black px-2.5 py-1 rounded-lg uppercase tracking-wider">
                           <span className="material-symbols-outlined text-[13px]">{TYPE_ICONS[r.type] ?? 'article'}</span>
                           {r.type}
                         </span>
@@ -260,9 +260,9 @@ export default async function ResourcesPage({
                         </span>
                       </div>
                     </div>
-                    <h4 className="font-extrabold text-slate-900 text-[17px] mb-2 leading-snug">{r.title}</h4>
-                    <p className="text-sm text-slate-500 leading-relaxed mb-5 flex-grow line-clamp-3">{r.description}</p>
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-50">
+                    <h4 className="font-extrabold text-slate-900 dark:text-white text-[17px] mb-2 leading-snug">{r.title}</h4>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-5 grow line-clamp-3">{r.description}</p>
+                    <div className="flex items-center justify-between pt-4 border-t border-slate-50 dark:border-slate-700">
                       <div className="flex items-center gap-1.5 text-slate-400">
                         <span className="material-symbols-outlined text-[15px]">visibility</span>
                         <span className="text-xs font-bold">{r.reads >= 1000 ? `${(r.reads / 1000).toFixed(1)}k` : r.reads}</span>
