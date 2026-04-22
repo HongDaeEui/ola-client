@@ -75,7 +75,7 @@ export default function CommentSection({ postId }: { postId: string }) {
 
   return (
     <section className="mt-8">
-      <h2 className="text-lg font-extrabold text-slate-900 mb-6 flex items-center gap-2">
+      <h2 className="text-lg font-extrabold text-slate-900 dark:text-white mb-6 flex items-center gap-2">
         <span className="material-symbols-outlined text-sky-500">chat</span>
         댓글
         <span className="text-sky-600 font-extrabold">{comments.length}</span>
@@ -84,19 +84,19 @@ export default function CommentSection({ postId }: { postId: string }) {
       {/* Comment list */}
       <div className="space-y-4 mb-8">
         {comments.length === 0 && (
-          <p className="text-center text-slate-400 text-sm py-8 bg-white rounded-2xl border border-slate-100">
+          <p className="text-center text-slate-400 text-sm py-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700">
             첫 댓글을 남겨보세요!
           </p>
         )}
         {comments.map(c => (
-          <div key={c.id} className="bg-white rounded-2xl border border-slate-100 px-6 py-4">
+          <div key={c.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700 px-6 py-4">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-2.5 mb-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold text-xs uppercase flex-shrink-0">
+                <div className="w-8 h-8 rounded-full bg-linear-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold text-xs uppercase shrink-0">
                   {c.author.username.charAt(0)}
                 </div>
                 <div>
-                  <span className="text-sm font-bold text-slate-900">@{c.author.username}</span>
+                  <span className="text-sm font-bold text-slate-900 dark:text-white">@{c.author.username}</span>
                   <span className="text-xs text-slate-400 ml-2">{timeAgo(c.createdAt)}</span>
                 </div>
               </div>
@@ -104,7 +104,7 @@ export default function CommentSection({ postId }: { postId: string }) {
                 <button
                   onClick={() => handleDelete(c.id)}
                   disabled={deletingId === c.id}
-                  className="text-slate-300 hover:text-rose-400 transition-colors flex-shrink-0"
+                  className="text-slate-300 hover:text-rose-400 transition-colors shrink-0"
                 >
                   {deletingId === c.id ? (
                     <span className="w-4 h-4 border-2 border-slate-300 border-t-transparent rounded-full animate-spin block" />
@@ -114,7 +114,7 @@ export default function CommentSection({ postId }: { postId: string }) {
                 </button>
               )}
             </div>
-            <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line pl-10">
+            <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line pl-10">
               {c.content}
             </p>
           </div>
@@ -123,12 +123,12 @@ export default function CommentSection({ postId }: { postId: string }) {
 
       {/* Input */}
       {user ? (
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-slate-200 p-5">
+        <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-5">
           <div className="flex items-center gap-2.5 mb-3">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold text-xs uppercase">
               {(user.user_metadata?.full_name ?? user.email ?? '?').charAt(0)}
             </div>
-            <span className="text-sm font-bold text-slate-700">
+            <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
               {user.user_metadata?.full_name ?? user.email}
             </span>
           </div>
@@ -137,9 +137,9 @@ export default function CommentSection({ postId }: { postId: string }) {
             onChange={e => setText(e.target.value)}
             placeholder="댓글을 입력하세요..."
             rows={3}
-            className="w-full text-sm text-slate-700 placeholder-slate-300 resize-none focus:outline-none leading-relaxed"
+            className="w-full text-sm text-slate-700 dark:text-slate-300 placeholder-slate-300 dark:placeholder-slate-600 resize-none focus:outline-none leading-relaxed bg-transparent"
           />
-          <div className="flex justify-end mt-3 pt-3 border-t border-slate-100">
+          <div className="flex justify-end mt-3 pt-3 border-t border-slate-100 dark:border-slate-700">
             <button
               type="submit"
               disabled={submitting || !text.trim()}
@@ -155,8 +155,8 @@ export default function CommentSection({ postId }: { postId: string }) {
           </div>
         </form>
       ) : (
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 text-center">
-          <p className="text-slate-500 text-sm mb-4">댓글을 달려면 로그인이 필요해요.</p>
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 text-center">
+          <p className="text-slate-500 dark:text-slate-400 text-sm mb-4">댓글을 달려면 로그인이 필요해요.</p>
           <button
             onClick={signInWithGoogle}
             className="inline-flex items-center gap-2 bg-slate-900 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-slate-700 transition-all"
