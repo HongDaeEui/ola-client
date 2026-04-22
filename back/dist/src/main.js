@@ -39,8 +39,6 @@ async function bootstrapServer() {
         nestApp.useGlobalPipes(new common_1.ValidationPipe({
             whitelist: true,
             forbidNonWhitelisted: false,
-            transform: true,
-            transformOptions: { enableImplicitConversion: true },
         }));
         nestApp.useGlobalFilters(new prisma_exception_filter_1.PrismaExceptionFilter());
         await nestApp.init();

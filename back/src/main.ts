@@ -48,10 +48,8 @@ async function bootstrapServer(): Promise<express.Express> {
     // 글로벌 입력 검증 파이프 (잘못된 데이터 차단)
     nestApp.useGlobalPipes(
       new ValidationPipe({
-        whitelist: true,       // DTO에 정의되지 않은 필드 자동 제거
+        whitelist: true,
         forbidNonWhitelisted: false,
-        transform: true,       // 쿼리 파라미터 자동 타입 변환
-        transformOptions: { enableImplicitConversion: true },
       }),
     );
 
