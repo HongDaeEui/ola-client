@@ -28,7 +28,7 @@ export declare class PostsController {
         totalLikes: number;
         totalViews: number;
     }[]>;
-    findOne(id: string): import("@prisma/client").Prisma.Prisma__PostClient<({
+    findOne(id: string): Promise<{
         author: {
             username: string;
             avatarUrl: string | null;
@@ -44,7 +44,7 @@ export declare class PostsController {
         authorId: string;
         views: number;
         imageUrl: string | null;
-    }) | null, null, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
+    }>;
     create(body: {
         title: string;
         content: string;

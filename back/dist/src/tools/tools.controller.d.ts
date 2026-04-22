@@ -3,23 +3,17 @@ export declare class ToolsController {
     private readonly toolsService;
     constructor(toolsService: ToolsService);
     findAll(category?: string, pricing?: string, sort?: string): Promise<{
-        status: string;
         category: string;
         pricingModel: string | null;
         rating: number;
-        createdAt: Date;
         isFeatured: boolean;
         id: string;
         name: string;
         description: string;
         shortDesc: string;
-        developer: string | null;
         iconUrl: string | null;
         coverUrl: string | null;
-        launchUrl: string | null;
         tags: string[];
-        likes: number;
-        updatedAt: Date;
     }[]>;
     findFeatured(): Promise<{
         status: string;
@@ -113,7 +107,7 @@ export declare class ToolsController {
         tags: string[];
         likes: number;
         updatedAt: Date;
-    } | null>;
+    }>;
     approve(id: string): Promise<{
         status: string;
         category: string;

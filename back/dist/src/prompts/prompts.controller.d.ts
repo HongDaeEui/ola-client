@@ -19,7 +19,7 @@ export declare class PromptsController {
         toolName: string;
         views: number;
     })[]>;
-    findOne(id: string): import("@prisma/client").Prisma.Prisma__PromptClient<({
+    findOne(id: string): Promise<{
         author: {
             username: string;
             avatarUrl: string | null;
@@ -35,7 +35,7 @@ export declare class PromptsController {
         authorId: string;
         toolName: string;
         views: number;
-    }) | null, null, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
+    }>;
     incrementViews(id: string): import("@prisma/client").Prisma.Prisma__PromptClient<{
         category: string;
         createdAt: Date;

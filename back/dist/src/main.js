@@ -8,6 +8,8 @@ const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const swagger_1 = require("@nestjs/swagger");
 const platform_express_1 = require("@nestjs/platform-express");
+const common_1 = require("@nestjs/common");
+const prisma_exception_filter_1 = require("./common/prisma-exception.filter");
 const express_1 = __importDefault(require("express"));
 let cachedServer;
 async function bootstrapServer() {
@@ -34,6 +36,13 @@ async function bootstrapServer() {
             .build();
         const document = swagger_1.SwaggerModule.createDocument(nestApp, config);
         swagger_1.SwaggerModule.setup('api/docs', nestApp, document);
+        nestApp.useGlobalPipes(new common_1.ValidationPipe({
+            whitelist: true,
+            forbidNonWhitelisted: false,
+            transform: true,
+            transformOptions: { enableImplicitConversion: true },
+        }));
+        nestApp.useGlobalFilters(new prisma_exception_filter_1.PrismaExceptionFilter());
         await nestApp.init();
         cachedServer = expressApp;
         if (!process.env.VERCEL) {

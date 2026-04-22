@@ -36,8 +36,8 @@ let PostsService = class PostsService {
             ...(take !== undefined ? { take } : {}),
         });
     }
-    findOne(id) {
-        return this.prisma.post.findUnique({
+    async findOne(id) {
+        const post = await this.prisma.post.findUnique({
             where: { id },
             include: {
                 author: {
@@ -48,6 +48,9 @@ let PostsService = class PostsService {
                 },
             },
         });
+        if (!post)
+            throw new common_1.NotFoundException(`게시글(${id})을 찾을 수 없습니다.`);
+        return post;
     }
     async create(data) {
         const base = data.userName.replace(/\s+/g, '_').toLowerCase();

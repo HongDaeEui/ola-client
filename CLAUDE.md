@@ -1,15 +1,19 @@
 # CLAUDE.md — Ola AI Platform
 
-## 하네스: Ola AI 커뮤니티 플랫폼
+## 하네스: Ola 풀스택 개발팀
 
-**목표:** AI 도구·튜토리얼·커뮤니티를 하나로 묶는 풀스택 플랫폼의 기능 개발·유지보수를 전문 에이전트 팀이 분업 처리
+**목표:** AI 커뮤니티 플랫폼의 기능 구현·버그 수정·UI 개선 등 모든 코드 작업을 전문 에이전트 팀이 안전하고 일관성 있게 처리한다.
 
-**트리거:** Ola 플랫폼 관련 개발 작업(기능 구현, 버그 수정, UI 개선, DB 변경 등) 요청 시 `ola-orchestrator` 스킬을 사용하라. 단순 질문이나 설명 요청은 직접 응답 가능.
+**트리거:** Ola 코드 변경을 수반하는 모든 작업 요청 시 `ola-dev` 스킬을 사용하라. 단순 질문은 직접 응답 가능.
 
-**팀 구성:** 4인 (Analyst → Frontend Builder + Backend Builder ↔ QA Engineer)
-**아키텍처:** 파이프라인 + 팬아웃/팬인 하이브리드
+**에이전트:**
+- `ola-backend` — NestJS/Prisma/PostgreSQL
+- `ola-frontend` — Next.js 16/React 19/Tailwind CSS v4/Supabase
+- `ola-integrator` — 프론트-백 연동/타입 매핑/환경변수
+- `ola-qa` — 통합 정합성 검증
 
 **변경 이력:**
 | 날짜 | 변경 내용 | 대상 | 사유 |
 |------|----------|------|------|
-| 2026-04-22 | 초기 구성 | 전체 | Ola 프로젝트 전용 하네스 신규 구축 |
+| 2026-04-22 | 초기 구성 (ola-orchestrator) | 전체 | Ola 프로젝트 전용 하네스 신규 구축 |
+| 2026-04-22 | ola-dev 오케스트레이터로 재구성 | 전체 | Harness v1.2 (revfactory/harness) 전면 도입, 에이전트 팀 아키텍처 적용 |

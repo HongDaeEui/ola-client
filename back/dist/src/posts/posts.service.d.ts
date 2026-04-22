@@ -21,7 +21,7 @@ export declare class PostsService {
         views: number;
         imageUrl: string | null;
     })[]>;
-    findOne(id: string): import("@prisma/client").Prisma.Prisma__PostClient<({
+    findOne(id: string): Promise<{
         author: {
             username: string;
             avatarUrl: string | null;
@@ -37,7 +37,7 @@ export declare class PostsService {
         authorId: string;
         views: number;
         imageUrl: string | null;
-    }) | null, null, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
+    }>;
     create(data: {
         title: string;
         content: string;

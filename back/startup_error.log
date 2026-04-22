@@ -1,0 +1,106 @@
+
+> back@0.0.1 start
+> nest start
+
+[32m[Nest] 54828  - [39m04/22/2026, 9:30:47 AM [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 54828  - [39m04/22/2026, 9:30:47 AM [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPrismaModule dependencies initialized[39m[38;5;3m +12ms[39m
+[31m[Nest] 54828  - [39m04/22/2026, 9:30:47 AM [31m  ERROR[39m [38;5;3m[ExceptionHandler] [39mUnknownDependenciesException [Error]: Nest can't resolve dependencies of the PostsService (PrismaService, ?). Please make sure that the argument NotificationsService at index [1] is available in the PostsModule module.
+
+Potential solutions:
+- Is PostsModule a valid NestJS module?
+- If NotificationsService is a provider, is it part of the current PostsModule?
+- If NotificationsService is exported from a separate @Module, is that module imported within PostsModule?
+  @Module({
+    imports: [ /* the Module containing NotificationsService */ ]
+  })
+
+For more common dependency resolution issues, see: https://docs.nestjs.com/faq/common-errors
+    at Injector.lookupComponentInParentModules [90m(/Users/dobedub/Documents/source/ola/back/[39mnode_modules/[4m@nestjs/core[24m/injector/injector.js:290:19[90m)[39m
+    at async resolveParam [90m(/Users/dobedub/Documents/source/ola/back/[39mnode_modules/[4m@nestjs/core[24m/injector/injector.js:140:38[90m)[39m
+    at async Promise.all (index 1)
+    at async Injector.resolveConstructorParams [90m(/Users/dobedub/Documents/source/ola/back/[39mnode_modules/[4m@nestjs/core[24m/injector/injector.js:169:27[90m)[39m
+    at async Injector.loadInstance [90m(/Users/dobedub/Documents/source/ola/back/[39mnode_modules/[4m@nestjs/core[24m/injector/injector.js:75:13[90m)[39m
+    at async Injector.loadProvider [90m(/Users/dobedub/Documents/source/ola/back/[39mnode_modules/[4m@nestjs/core[24m/injector/injector.js:103:9[90m)[39m
+    at async [90m/Users/dobedub/Documents/source/ola/back/[39mnode_modules/[4m@nestjs/core[24m/injector/instance-loader.js:56:13
+    at async Promise.all (index 3)
+    at async InstanceLoader.createInstancesOfProviders [90m(/Users/dobedub/Documents/source/ola/back/[39mnode_modules/[4m@nestjs/core[24m/injector/instance-loader.js:55:9[90m)[39m
+    at async [90m/Users/dobedub/Documents/source/ola/back/[39mnode_modules/[4m@nestjs/core[24m/injector/instance-loader.js:40:13 {
+  type: [32m'PostsService'[39m,
+  context: {
+    index: [33m1[39m,
+    dependencies: [
+      [class PrismaService extends t] {
+        pool: BoundPool {
+          _events: [Object: null prototype] {},
+          _eventsCount: [33m0[39m,
+          _maxListeners: [90mundefined[39m,
+          options: {
+            connectionString: [32m'postgresql://postgres.yrtmuhuzqdfheymulrjd:%40Ensxkrwlg8@aws-1-ap-northeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true'[39m,
+            max: [33m10[39m,
+            min: [33m0[39m,
+            maxUses: [33mInfinity[39m,
+            allowExitOnIdle: [33mfalse[39m,
+            maxLifetimeSeconds: [33m0[39m,
+            idleTimeoutMillis: [33m10000[39m
+          },
+          log: [36m[Function (anonymous)][39m,
+          Client: [class Client extends EventEmitter] {
+            Query: [36m[class Query extends EventEmitter][39m
+          },
+          Promise: [36m[Function: Promise][39m,
+          _clients: [],
+          _idle: [],
+          _expired: WeakSet {
+            [36m<items unknown>[39m
+          },
+          _pendingQueue: [],
+          _endCallback: [90mundefined[39m,
+          ending: [33mfalse[39m,
+          ended: [33mfalse[39m,
+          [32mSymbol(shapeMode)[39m: [33mfalse[39m,
+          [32mSymbol(kCapture)[39m: [33mfalse[39m
+        },
+        adapter: PrismaPgAdapterFactory {
+          provider: [32m'postgres'[39m,
+          adapterName: [32m'@prisma/adapter-pg'[39m,
+          config: {
+            connectionString: [32m'postgresql://postgres.yrtmuhuzqdfheymulrjd:%40Ensxkrwlg8@aws-1-ap-northeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true'[39m,
+            max: [33m10[39m,
+            min: [33m0[39m,
+            maxUses: [33mInfinity[39m,
+            allowExitOnIdle: [33mfalse[39m,
+            maxLifetimeSeconds: [33m0[39m,
+            idleTimeoutMillis: [33m10000[39m
+          },
+          externalPool: BoundPool {
+            _events: [Object: null prototype] {},
+            _eventsCount: [33m0[39m,
+            _maxListeners: [90mundefined[39m,
+            options: [36m[Object][39m,
+            log: [36m[Function (anonymous)][39m,
+            Client: [36m[Function][39m,
+            Promise: [36m[Function: Promise][39m,
+            _clients: [],
+            _idle: [],
+            _expired: [36m[WeakSet][39m,
+            _pendingQueue: [],
+            _endCallback: [90mundefined[39m,
+            ending: [33mfalse[39m,
+            ended: [33mfalse[39m,
+            [32mSymbol(shapeMode)[39m: [33mfalse[39m,
+            [32mSymbol(kCapture)[39m: [33mfalse[39m
+          },
+          options: [90mundefined[39m
+        }
+      },
+      [36m[class NotificationsService][39m
+    ],
+    name: [36m[class NotificationsService][39m
+  },
+  metadata: {
+    id: [32m'f452a347f7f4ddb10c796'[39m
+  },
+  moduleRef: {
+    id: [32m'1a0b4529df311d58ca416'[39m
+  }
+}

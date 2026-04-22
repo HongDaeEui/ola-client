@@ -7,23 +7,17 @@ export declare class ToolsService {
         pricing?: string;
         sort?: string;
     }): Promise<{
-        status: string;
         category: string;
         pricingModel: string | null;
         rating: number;
-        createdAt: Date;
         isFeatured: boolean;
         id: string;
         name: string;
         description: string;
         shortDesc: string;
-        developer: string | null;
         iconUrl: string | null;
         coverUrl: string | null;
-        launchUrl: string | null;
         tags: string[];
-        likes: number;
-        updatedAt: Date;
     }[]>;
     findFeatured(): Promise<{
         status: string;
@@ -155,7 +149,7 @@ export declare class ToolsService {
         tags: string[];
         likes: number;
         updatedAt: Date;
-    } | null>;
+    }>;
     create(data: {
         name: string;
         shortDesc: string;

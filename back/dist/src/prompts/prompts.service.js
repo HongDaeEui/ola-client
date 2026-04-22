@@ -44,8 +44,8 @@ let PromptsService = class PromptsService {
             data: { views: { increment: 1 } },
         });
     }
-    findOne(id) {
-        return this.prisma.prompt.findUnique({
+    async findOne(id) {
+        const prompt = await this.prisma.prompt.findUnique({
             where: { id },
             include: {
                 author: {
@@ -56,6 +56,9 @@ let PromptsService = class PromptsService {
                 },
             },
         });
+        if (!prompt)
+            throw new common_1.NotFoundException(`프롬프트(${id})를 찾을 수 없습니다.`);
+        return prompt;
     }
     async create(data) {
         const base = data.userName.replace(/\s+/g, '_').toLowerCase();

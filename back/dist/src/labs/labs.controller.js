@@ -20,8 +20,8 @@ let LabsController = class LabsController {
     constructor(labsService) {
         this.labsService = labsService;
     }
-    async getExperiments() {
-        return this.labsService.findAll();
+    async getExperiments(category) {
+        return this.labsService.findAll(category);
     }
     findOne(id) {
         return this.labsService.findOne(id);
@@ -30,8 +30,9 @@ let LabsController = class LabsController {
 exports.LabsController = LabsController;
 __decorate([
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)('category')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], LabsController.prototype, "getExperiments", null);
 __decorate([

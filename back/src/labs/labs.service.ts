@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -34,8 +34,8 @@ export class LabsService {
     });
   }
 
-  findOne(id: string) {
-    return this.prisma.experiment.findUnique({
+  async findOne(id: string) {
+    const lab = await this.prisma.experiment.findUnique({
       where: { id },
       include: {
         author: {
@@ -46,5 +46,7 @@ export class LabsService {
         },
       },
     });
+    if (!lab) throw new NotFoundException(`실험실(${id})을 찾을 수 없습니다.`);
+    return lab;
   }
 }

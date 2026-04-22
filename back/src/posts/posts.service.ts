@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 
@@ -26,8 +26,8 @@ export class PostsService {
     });
   }
 
-  findOne(id: string) {
-    return this.prisma.post.findUnique({
+  async findOne(id: string) {
+    const post = await this.prisma.post.findUnique({
       where: { id },
       include: {
         author: {
@@ -38,6 +38,8 @@ export class PostsService {
         },
       },
     });
+    if (!post) throw new NotFoundException(`게시글(${id})을 찾을 수 없습니다.`);
+    return post;
   }
 
   async create(data: {

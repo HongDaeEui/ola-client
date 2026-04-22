@@ -34,7 +34,7 @@ export declare class PromptsService {
         toolName: string;
         views: number;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
-    findOne(id: string): import("@prisma/client").Prisma.Prisma__PromptClient<({
+    findOne(id: string): Promise<{
         author: {
             username: string;
             avatarUrl: string | null;
@@ -50,7 +50,7 @@ export declare class PromptsService {
         authorId: string;
         toolName: string;
         views: number;
-    }) | null, null, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
+    }>;
     create(data: {
         title: string;
         toolName: string;

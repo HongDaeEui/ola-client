@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -32,8 +32,8 @@ export class PromptsService {
     });
   }
 
-  findOne(id: string) {
-    return this.prisma.prompt.findUnique({
+  async findOne(id: string) {
+    const prompt = await this.prisma.prompt.findUnique({
       where: { id },
       include: {
         author: {
@@ -44,6 +44,8 @@ export class PromptsService {
         },
       },
     });
+    if (!prompt) throw new NotFoundException(`프롬프트(${id})를 찾을 수 없습니다.`);
+    return prompt;
   }
 
   async create(data: {

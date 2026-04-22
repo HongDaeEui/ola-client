@@ -17,9 +17,23 @@ let LabsService = class LabsService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async findAll() {
+    async findAll(category) {
+        const where = {};
+        if (category)
+            where.category = category;
         return this.prisma.experiment.findMany({
-            include: {
+            where,
+            select: {
+                id: true,
+                title: true,
+                description: true,
+                difficulty: true,
+                emoji: true,
+                metric: true,
+                category: true,
+                stack: true,
+                color: true,
+                likes: true,
                 author: {
                     select: {
                         username: true,
@@ -30,8 +44,8 @@ let LabsService = class LabsService {
             orderBy: { likes: 'desc' },
         });
     }
-    findOne(id) {
-        return this.prisma.experiment.findUnique({
+    async findOne(id) {
+        const lab = await this.prisma.experiment.findUnique({
             where: { id },
             include: {
                 author: {
@@ -42,6 +56,9 @@ let LabsService = class LabsService {
                 },
             },
         });
+        if (!lab)
+            throw new common_1.NotFoundException(`실험실(${id})을 찾을 수 없습니다.`);
+        return lab;
     }
 };
 exports.LabsService = LabsService;

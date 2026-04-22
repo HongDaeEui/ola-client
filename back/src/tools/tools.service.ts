@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -81,7 +81,7 @@ export class ToolsService {
       where: { id },
     });
 
-    if (!tool) return null;
+    if (!tool) throw new NotFoundException(`도구(${id})를 찾을 수 없습니다.`);
 
     const relatedLabs = await this.prisma.experiment.findMany({
       where: {

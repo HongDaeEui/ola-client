@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ExpressAdapter } from '@nestjs/platform-express';
+import { ValidationPipe } from '@nestjs/common';
+import { PrismaExceptionFilter } from './common/prisma-exception.filter';
 import express from 'express';
 
 // 서버 인스턴스를 하나만 생성하여 캐싱 (콜드 스타트 최소화)
@@ -42,6 +44,19 @@ async function bootstrapServer(): Promise<express.Express> {
       .build();
     const document = SwaggerModule.createDocument(nestApp, config);
     SwaggerModule.setup('api/docs', nestApp, document);
+
+    // 글로벌 입력 검증 파이프 (잘못된 데이터 차단)
+    nestApp.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,       // DTO에 정의되지 않은 필드 자동 제거
+        forbidNonWhitelisted: false,
+        transform: true,       // 쿼리 파라미터 자동 타입 변환
+        transformOptions: { enableImplicitConversion: true },
+      }),
+    );
+
+    // 글로벌 예외 필터 (Prisma 에러를 HTTP 응답으로 변환)
+    nestApp.useGlobalFilters(new PrismaExceptionFilter());
 
     await nestApp.init();
     cachedServer = expressApp;

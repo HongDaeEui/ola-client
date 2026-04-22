@@ -26,7 +26,23 @@ let ToolsService = class ToolsService {
         const orderBy = filters?.sort === 'rating' ? { rating: 'desc' }
             : filters?.sort === 'popular' ? { isFeatured: 'desc' }
                 : { createdAt: 'desc' };
-        return this.prisma.tool.findMany({ where, orderBy });
+        return this.prisma.tool.findMany({
+            where,
+            orderBy,
+            select: {
+                id: true,
+                name: true,
+                shortDesc: true,
+                description: true,
+                category: true,
+                pricingModel: true,
+                rating: true,
+                tags: true,
+                iconUrl: true,
+                coverUrl: true,
+                isFeatured: true,
+            },
+        });
     }
     async findFeatured() {
         return this.prisma.tool.findMany({
@@ -68,7 +84,7 @@ let ToolsService = class ToolsService {
             where: { id },
         });
         if (!tool)
-            return null;
+            throw new common_1.NotFoundException(`도구(${id})를 찾을 수 없습니다.`);
         const relatedLabs = await this.prisma.experiment.findMany({
             where: {
                 stack: {
