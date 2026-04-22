@@ -10,10 +10,11 @@ import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import LoginPage from '@/pages/login/LoginPage'
 
 // Route Modules
-import { exampleRoutes } from './routes/exampleRoutes'
 import { userRoutes } from './routes/userRoutes'
-import { productRoutes } from './routes/productRoutes'
-import { noticeRoutes } from './routes/noticeRoutes'
+import { toolRoutes } from './routes/toolRoutes'
+import { labRoutes } from './routes/labRoutes'
+import { promptRoutes } from './routes/promptRoutes'
+import { postRoutes } from './routes/postRoutes'
 import { categoryRoutes } from './routes/categoryRoutes'
 
 // Types
@@ -41,24 +42,17 @@ export const routes: RouteWithMeta[] = [
         path: '',
         element: <AdminLayout />,
         children: [
-          // 메인 페이지 (/) - 예제 페이지로 리다이렉트
+          // 메인 페이지 (/) - 도구 관리 페이지로 우선 리다이렉트 (대시보드가 아직 없으므로)
           {
-            element: <Navigate to="/example" replace />
+            element: <Navigate to="/tools" replace />
           },
 
-          // 예제 관리
-          ...exampleRoutes,
-
-          // 사용자 관리
+          // 도메인별 관리 라우트 목록
           ...userRoutes,
-
-          // 상품 관리
-          ...productRoutes,
-
-          // 공지사항
-          ...noticeRoutes,
-
-          // 카테고리 관리
+          ...toolRoutes,
+          ...labRoutes,
+          ...promptRoutes,
+          ...postRoutes,
           ...categoryRoutes,
         ]
       }

@@ -6,10 +6,11 @@
 // Base Prefixes
 export const API_PREFIX = {
   AUTH: '/auth',
-  EXAMPLE: '/examples',
+  TOOLS: '/tools',
+  LABS: '/labs',
+  PROMPTS: '/prompts',
+  POSTS: '/posts',
   USER: '/users',
-  PRODUCT: '/products',
-  NOTICE: '/notices',
   CATEGORY: '/categories',
 } as const
 
@@ -19,28 +20,34 @@ export const AUTH_API = {
   SELF: `/self`,
 } as const
 
-// Example API
-export const EXAMPLE_API = {
-  PREFIX: API_PREFIX.EXAMPLE,
-  ID: (id: number) => `${API_PREFIX.EXAMPLE}/${id}`,
+// Tools API
+export const TOOLS_API = {
+  PREFIX: API_PREFIX.TOOLS,
+  ID: (id: number) => `${API_PREFIX.TOOLS}/${id}`,
+} as const
+
+// Labs API
+export const LABS_API = {
+  PREFIX: API_PREFIX.LABS,
+  ID: (id: number) => `${API_PREFIX.LABS}/${id}`,
+} as const
+
+// Prompts API
+export const PROMPTS_API = {
+  PREFIX: API_PREFIX.PROMPTS,
+  ID: (id: number) => `${API_PREFIX.PROMPTS}/${id}`,
+} as const
+
+// Posts API
+export const POSTS_API = {
+  PREFIX: API_PREFIX.POSTS,
+  ID: (id: number) => `${API_PREFIX.POSTS}/${id}`,
 } as const
 
 // User API
 export const USER_API = {
   PREFIX: API_PREFIX.USER,
   ID: (id: number) => `${API_PREFIX.USER}/${id}`,
-} as const
-
-// Product API
-export const PRODUCT_API = {
-  PREFIX: API_PREFIX.PRODUCT,
-  ID: (id: number) => `${API_PREFIX.PRODUCT}/${id}`,
-} as const
-
-// Notice API
-export const NOTICE_API = {
-  PREFIX: API_PREFIX.NOTICE,
-  ID: (id: number) => `${API_PREFIX.NOTICE}/${id}`,
 } as const
 
 // Category API

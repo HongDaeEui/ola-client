@@ -1,31 +1,24 @@
-import { RouteWithMeta } from '../types';
-import { withSuspense } from '../utils/withSuspense';
 import { lazy } from 'react';
+import type { RouteWithMeta } from '../types';
 
-const CategoryListPage = withSuspense(lazy(() => import('@/pages/category/CategoryListPage')));
-const CategoryDetailPage = withSuspense(lazy(() => import('@/pages/category/CategoryDetailPage')));
-const CategoryCreatePage = withSuspense(lazy(() => import('@/pages/category/CategoryCreatePage')));
+const CategoriesListPage = lazy(() => import('@/pages/categories/list/CategoriesListPage'));
 
 export const categoryRoutes: RouteWithMeta[] = [
   {
     path: 'category',
-    meta: { label: 'Categories', showInMenu: true },
+    meta: {
+      label: '카테고리 관리',
+      icon: '📂',
+      showInMenu: true,
+    },
     children: [
       {
-        index: true,
-        element: CategoryListPage,
-        meta: { label: 'Category Management', showInMenu: true },
-      },
-      {
-        path: 'add',
-        element: CategoryCreatePage,
-        meta: { label: 'Create Category', showInMenu: false },
-      },
-      {
-        path: ':id',
-        element: CategoryDetailPage,
-        meta: { label: 'Category Detail', showInMenu: false },
-      },
-    ],
-  },
+        path: '',
+        element: <CategoriesListPage />,
+        meta: {
+          label: '카테고리 목록',
+        }
+      }
+    ]
+  }
 ];

@@ -62,7 +62,6 @@ export const useAuthStore = create<AuthState>()(
                 name: 'Admin User',
                 email: 'admin@example.com',
                 createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
               }
 
               // Save mock tokens
