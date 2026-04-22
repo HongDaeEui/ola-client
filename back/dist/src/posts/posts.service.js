@@ -75,9 +75,6 @@ let PostsService = class PostsService {
                 },
             },
         });
-        this.notificationsService.sendPostNotification(newPost).catch((err) => {
-            console.error('Failed to send notification via PostsService', err);
-        });
         return newPost;
     }
     findTopByViews(limit = 10) {

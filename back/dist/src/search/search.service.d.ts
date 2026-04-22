@@ -14,26 +14,26 @@ export declare class SearchService {
         prompts: {
             category: string;
             id: string;
-            title: string;
             likes: number;
+            title: string;
             toolName: string;
         }[];
         posts: {
             category: string;
             createdAt: Date;
             id: string;
-            title: string;
             likes: number;
+            title: string;
             views: number;
         }[];
         labs: {
             category: string;
             id: string;
             description: string;
+            likes: number;
             title: string;
             difficulty: string | null;
             emoji: string | null;
-            likes: number;
         }[];
     }>;
     suggest(q: string): Promise<{

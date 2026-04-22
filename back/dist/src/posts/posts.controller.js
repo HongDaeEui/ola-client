@@ -13,7 +13,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostsController = void 0;
-const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const posts_service_1 = require("./posts.service");
 let PostsController = class PostsController {
@@ -47,7 +46,6 @@ let PostsController = class PostsController {
 exports.PostsController = PostsController;
 __decorate([
     (0, common_1.Get)(),
-    openapi.ApiResponse({}),
     __param(0, (0, common_1.Query)('category')),
     __param(1, (0, common_1.Query)('userEmail')),
     __param(2, (0, common_1.Query)('page')),
@@ -58,21 +56,18 @@ __decorate([
 ], PostsController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('ranking'),
-    openapi.ApiResponse({}),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "findTopByViews", null);
 __decorate([
     (0, common_1.Get)('tag-stats'),
-    openapi.ApiResponse({}),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "getTagStats", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    openapi.ApiResponse({}),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -80,7 +75,6 @@ __decorate([
 ], PostsController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Post)(),
-    openapi.ApiResponse({ type: Object }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -88,7 +82,6 @@ __decorate([
 ], PostsController.prototype, "create", null);
 __decorate([
     (0, common_1.Patch)(':id/view'),
-    openapi.ApiResponse({}),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

@@ -64,9 +64,26 @@ let ToolsService = class ToolsService {
         return this.prisma.tool.update({ where: { id }, data: { status: 'REJECTED' } });
     }
     async findOne(id) {
-        return this.prisma.tool.findUnique({
+        const tool = await this.prisma.tool.findUnique({
             where: { id },
         });
+        if (!tool)
+            return null;
+        const relatedLabs = await this.prisma.experiment.findMany({
+            where: {
+                stack: {
+                    has: tool.name,
+                },
+            },
+            include: {
+                author: {
+                    select: { username: true, avatarUrl: true },
+                },
+            },
+            orderBy: { likes: 'desc' },
+            take: 4,
+        });
+        return { ...tool, relatedLabs };
     }
     async create(data) {
         return this.prisma.tool.create({

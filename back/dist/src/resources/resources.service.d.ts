@@ -15,10 +15,10 @@ export declare class ResourcesService {
         description: string;
         updatedAt: Date;
         title: string;
-        type: string;
         difficulty: string;
-        contentUrl: string | null;
         authorId: string;
+        type: string;
+        contentUrl: string | null;
         reads: number;
     })[]>;
     findFeatured(): Promise<({
@@ -33,10 +33,10 @@ export declare class ResourcesService {
         description: string;
         updatedAt: Date;
         title: string;
-        type: string;
         difficulty: string;
-        contentUrl: string | null;
         authorId: string;
+        type: string;
+        contentUrl: string | null;
         reads: number;
     })[]>;
     incrementReads(id: string): Promise<{
@@ -46,10 +46,10 @@ export declare class ResourcesService {
         description: string;
         updatedAt: Date;
         title: string;
-        type: string;
         difficulty: string;
-        contentUrl: string | null;
         authorId: string;
+        type: string;
+        contentUrl: string | null;
         reads: number;
     }>;
     getTypeCounts(): Promise<{

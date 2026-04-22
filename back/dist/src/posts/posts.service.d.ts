@@ -10,15 +10,16 @@ export declare class PostsService {
             avatarUrl: string | null;
         };
     } & {
+        category: string;
+        createdAt: Date;
         id: string;
+        likes: number;
+        updatedAt: Date;
         title: string;
         content: string;
-        category: string;
         authorId: string;
-        likes: number;
         views: number;
-        createdAt: Date;
-        updatedAt: Date;
+        imageUrl: string | null;
     })[]>;
     findOne(id: string): import("@prisma/client").Prisma.Prisma__PostClient<({
         author: {
@@ -26,15 +27,16 @@ export declare class PostsService {
             avatarUrl: string | null;
         };
     } & {
+        category: string;
+        createdAt: Date;
         id: string;
+        likes: number;
+        updatedAt: Date;
         title: string;
         content: string;
-        category: string;
         authorId: string;
-        likes: number;
         views: number;
-        createdAt: Date;
-        updatedAt: Date;
+        imageUrl: string | null;
     }) | null, null, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     create(data: {
         title: string;
@@ -49,38 +51,40 @@ export declare class PostsService {
             avatarUrl: string | null;
         };
     } & {
+        category: string;
+        createdAt: Date;
         id: string;
+        likes: number;
+        updatedAt: Date;
         title: string;
         content: string;
-        category: string;
         authorId: string;
-        likes: number;
         views: number;
-        createdAt: Date;
-        updatedAt: Date;
+        imageUrl: string | null;
     }>;
     findTopByViews(limit?: number): import("@prisma/client").Prisma.PrismaPromise<{
-        id: string;
-        title: string;
         category: string;
-        likes: number;
-        views: number;
         createdAt: Date;
+        id: string;
+        likes: number;
+        title: string;
         author: {
             username: string;
             avatarUrl: string | null;
         };
+        views: number;
     }[]>;
     incrementViews(id: string): import("@prisma/client").Prisma.Prisma__PostClient<{
+        category: string;
+        createdAt: Date;
         id: string;
+        likes: number;
+        updatedAt: Date;
         title: string;
         content: string;
-        category: string;
         authorId: string;
-        likes: number;
         views: number;
-        createdAt: Date;
-        updatedAt: Date;
+        imageUrl: string | null;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     getTagStats(): Promise<{
         category: string;
@@ -89,11 +93,11 @@ export declare class PostsService {
         totalViews: number;
     }[]>;
     findByUserEmail(userEmail: string): import("@prisma/client").Prisma.PrismaPromise<{
-        id: string;
-        title: string;
         category: string;
-        likes: number;
-        views: number;
         createdAt: Date;
+        id: string;
+        likes: number;
+        title: string;
+        views: number;
     }[]>;
 }

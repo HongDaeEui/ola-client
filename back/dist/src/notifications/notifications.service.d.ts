@@ -4,11 +4,31 @@ export declare class NotificationsService {
     private prisma;
     private gateway?;
     constructor(prisma: PrismaService, gateway?: NotificationsGateway | undefined);
-    getByUserEmail(email: string): Promise<any>;
+    getByUserEmail(email: string): Promise<{
+        createdAt: Date;
+        id: string;
+        type: string;
+        recipientId: string;
+        message: string;
+        targetType: string;
+        targetId: string;
+        targetTitle: string | null;
+        read: boolean;
+    }[]>;
     getUnreadCount(email: string): Promise<{
-        count: any;
+        count: number;
     }>;
-    markRead(id: string): Promise<any>;
+    markRead(id: string): Promise<{
+        createdAt: Date;
+        id: string;
+        type: string;
+        recipientId: string;
+        message: string;
+        targetType: string;
+        targetId: string;
+        targetTitle: string | null;
+        read: boolean;
+    }>;
     markAllRead(email: string): Promise<{
         success: boolean;
     } | undefined>;
@@ -19,5 +39,15 @@ export declare class NotificationsService {
         targetType: string;
         targetId: string;
         targetTitle?: string;
-    }): Promise<any>;
+    }): Promise<{
+        createdAt: Date;
+        id: string;
+        type: string;
+        recipientId: string;
+        message: string;
+        targetType: string;
+        targetId: string;
+        targetTitle: string | null;
+        read: boolean;
+    }>;
 }

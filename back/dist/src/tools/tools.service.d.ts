@@ -22,6 +22,7 @@ export declare class ToolsService {
         coverUrl: string | null;
         launchUrl: string | null;
         tags: string[];
+        likes: number;
         updatedAt: Date;
     }[]>;
     findFeatured(): Promise<{
@@ -40,6 +41,7 @@ export declare class ToolsService {
         coverUrl: string | null;
         launchUrl: string | null;
         tags: string[];
+        likes: number;
         updatedAt: Date;
     }[]>;
     findTopByRating(limit?: number): Promise<{
@@ -72,6 +74,7 @@ export declare class ToolsService {
         coverUrl: string | null;
         launchUrl: string | null;
         tags: string[];
+        likes: number;
         updatedAt: Date;
     }[]>;
     approve(id: string): Promise<{
@@ -90,6 +93,7 @@ export declare class ToolsService {
         coverUrl: string | null;
         launchUrl: string | null;
         tags: string[];
+        likes: number;
         updatedAt: Date;
     }>;
     reject(id: string): Promise<{
@@ -108,9 +112,32 @@ export declare class ToolsService {
         coverUrl: string | null;
         launchUrl: string | null;
         tags: string[];
+        likes: number;
         updatedAt: Date;
     }>;
     findOne(id: string): Promise<{
+        relatedLabs: ({
+            author: {
+                username: string;
+                avatarUrl: string | null;
+            };
+        } & {
+            category: string;
+            createdAt: Date;
+            id: string;
+            description: string;
+            likes: number;
+            updatedAt: Date;
+            title: string;
+            content: string | null;
+            difficulty: string | null;
+            emoji: string | null;
+            thumbnailUrl: string | null;
+            metric: string;
+            authorId: string;
+            stack: string[];
+            color: string | null;
+        })[];
         status: string;
         category: string;
         pricingModel: string | null;
@@ -126,6 +153,7 @@ export declare class ToolsService {
         coverUrl: string | null;
         launchUrl: string | null;
         tags: string[];
+        likes: number;
         updatedAt: Date;
     } | null>;
     create(data: {
@@ -152,6 +180,7 @@ export declare class ToolsService {
         coverUrl: string | null;
         launchUrl: string | null;
         tags: string[];
+        likes: number;
         updatedAt: Date;
     }>;
 }
