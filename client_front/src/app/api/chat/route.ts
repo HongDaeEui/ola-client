@@ -20,7 +20,7 @@ export async function POST(req: Request) {
       system: SYSTEM_PROMPT,
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
   } catch (error: unknown) {
     console.error('Chat API Error:', error);
     const message = error instanceof Error ? error.message : 'An error occurred during chat';

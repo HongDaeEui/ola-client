@@ -1,15 +1,7 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useChat } from '@ai-sdk/react';
-
-const INITIAL_MESSAGES = [
-  {
-    id: 'welcome',
-    role: 'assistant' as const,
-    content: '안녕하세요! Ola AI 비서입니다. 🙌\n어떤 AI 도구나 노하우를 찾고 계신가요?',
-  },
-];
 
 const QUICK_QUESTIONS = [
   '요즘 핫한 AI 도구 추천해줘',
@@ -20,51 +12,41 @@ const QUICK_QUESTIONS = [
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const chatContext = useChat({
-    // @ts-expect-error Vercel AI SDK type error fallback
-    initialMessages: INITIAL_MESSAGES,
+  const endRef = useRef<HTMLDivElement>(null);
+
+  const { messages, input, handleInputChange, handleSubmit, status, append } = useChat({
+    api: '/api/chat',
+    initialMessages: [
+      {
+        id: 'welcome',
+        role: 'assistant',
+        content: '안녕하세요! Ola AI 비서입니다. 🙌\n어떤 AI 도구나 노하우를 찾고 계신가요?',
+        createdAt: new Date(),
+      },
+    ],
     onError: (error) => {
       console.error('Chat error:', error);
-      alert(
-        'AI 서비스 통신 중 오류가 발생했습니다. API 키 설정이 올바른지 확인해주세요.\n' +
-        '상세: ' + error.message
-      );
     },
   });
-  // @ts-expect-error Vercel AI SDK type error fallback
-  const { messages, isLoading, append } = chatContext;
 
-  const [localInput, setLocalInput] = useState('');
-  const endRef = useRef<HTMLDivElement>(null);
+  const isLoading = status === 'streaming' || status === 'submitted';
 
   useEffect(() => {
     if (isOpen) endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isOpen, isLoading]);
 
-  function doSubmit(e?: React.FormEvent) {
-    if (e) e.preventDefault();
-    if (!localInput.trim() || isLoading) return;
-    append({ role: 'user', content: localInput });
-    setLocalInput('');
-  }
-
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.nativeEvent.isComposing) return;
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      doSubmit(e);
+      handleSubmit(e as unknown as React.FormEvent);
     }
-  }
-
-  function handleQuickQuestion(q: string) {
-    append({ role: 'user', content: q });
   }
 
   const showQuickQuestions = messages.length === 1 && !isLoading;
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-      {/* Chat panel */}
       {isOpen && (
         <div
           className="mb-4 w-[340px] h-[520px] max-h-[80vh] flex flex-col bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-100 dark:border-slate-700"
@@ -94,7 +76,7 @@ export function ChatWidget() {
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/50 dark:bg-slate-900/30">
-            {messages.map((msg: any) => (
+            {messages.map((msg) => (
               <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {msg.role === 'assistant' && (
                   <div className="w-6 h-6 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center flex-shrink-0 mt-1 mr-2">
@@ -108,7 +90,7 @@ export function ChatWidget() {
                       : 'bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-600 text-slate-700 dark:text-slate-200 rounded-tl-sm'
                   }`}
                 >
-                  {(String(msg.content || '')).split('\n').map((line: string, i: number, arr: string[]) => (
+                  {String(msg.content || '').split('\n').map((line, i, arr) => (
                     <React.Fragment key={i}>
                       {line}
                       {i < arr.length - 1 && <br />}
@@ -124,7 +106,7 @@ export function ChatWidget() {
                 {QUICK_QUESTIONS.map(q => (
                   <button
                     key={q}
-                    onClick={() => handleQuickQuestion(q)}
+                    onClick={() => append({ role: 'user', content: q })}
                     className="text-left text-xs text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-900/30 border border-sky-100 dark:border-sky-800 rounded-xl px-3 py-2 hover:bg-sky-100 dark:hover:bg-sky-900/50 transition-colors"
                   >
                     💬 {q}
@@ -152,13 +134,13 @@ export function ChatWidget() {
           {/* Input */}
           <div className="p-4 bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700 flex-shrink-0">
             <form
-              onSubmit={doSubmit}
+              onSubmit={handleSubmit}
               className="flex items-center gap-2 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-2xl pl-4 pr-2 py-2 focus-within:border-sky-400 focus-within:ring-2 focus-within:ring-sky-100 dark:focus-within:ring-sky-900 transition-all"
             >
               <input
                 type="text"
-                value={localInput}
-                onChange={e => setLocalInput(e.target.value)}
+                value={input}
+                onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 placeholder="어떤 AI가 필요하신가요?"
                 className="flex-1 bg-transparent text-sm text-slate-700 dark:text-slate-200 outline-none placeholder:text-slate-400"
@@ -166,9 +148,9 @@ export function ChatWidget() {
               />
               <button
                 type="submit"
-                disabled={!localInput.trim() || isLoading}
+                disabled={!input.trim() || isLoading}
                 className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
-                  localInput.trim() && !isLoading
+                  input.trim() && !isLoading
                     ? 'bg-sky-500 text-white hover:bg-sky-600 shadow-md shadow-sky-200'
                     : 'bg-slate-200 dark:bg-slate-600 text-slate-400 cursor-not-allowed'
                 }`}
@@ -198,21 +180,12 @@ export function ChatWidget() {
             : '0 10px 25px -5px rgba(14,165,233,0.5)',
         }}
       >
-        <span
-          className={`material-symbols-outlined text-[28px] transition-all duration-300 absolute ${
-            isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
-          }`}
-        >
+        <span className={`material-symbols-outlined text-[28px] transition-all duration-300 absolute ${isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}>
           close
         </span>
-        <span
-          className={`material-symbols-outlined text-[28px] transition-all duration-300 absolute ${
-            isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'
-          }`}
-        >
+        <span className={`material-symbols-outlined text-[28px] transition-all duration-300 absolute ${isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'}`}>
           forum
         </span>
-
         {!isOpen && isHovered && (
           <div className="absolute -top-10 bg-slate-800 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg whitespace-nowrap">
             AI 비서에게 물어보기
