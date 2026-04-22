@@ -32,7 +32,7 @@ export default function RootLayout({
         `}} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Noto Serif KR — preload + swap for fast text rendering */}
+        {/* Noto Serif KR — preload hint + normal load with display=swap (already non-blocking via Google param) */}
         <link
           rel="preload"
           as="style"
@@ -41,11 +41,8 @@ export default function RootLayout({
         <link
           href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;700&display=swap"
           rel="stylesheet"
-          media="print"
-          // @ts-expect-error onLoad is valid on link elements
-          onLoad="this.media='all'"
         />
-        {/* Pretendard — async load, non-blocking */}
+        {/* Pretendard — preload hint + normal load */}
         <link
           rel="preload"
           as="style"
@@ -54,11 +51,8 @@ export default function RootLayout({
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
-          media="print"
-          // @ts-expect-error onLoad is valid on link elements
-          onLoad="this.media='all'"
         />
-        {/* Material Symbols — async load, non-blocking */}
+        {/* Material Symbols — critical for UI icons, must load normally */}
         <link
           rel="preload"
           as="style"
@@ -67,9 +61,6 @@ export default function RootLayout({
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
-          media="print"
-          // @ts-expect-error onLoad is valid on link elements
-          onLoad="this.media='all'"
         />
       </head>
       <body className="bg-surface text-on-surface min-h-screen selection:bg-primary-container selection:text-on-primary-container antialiased flex flex-col">

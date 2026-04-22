@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="w-full rounded-t-[3rem] mt-20 bg-slate-50 dark:bg-slate-950 flex flex-col md:flex-row justify-between items-center px-6 md:px-16 py-12 gap-8 max-w-[1920px] mx-auto border-t border-slate-200 dark:border-slate-800">
       <div className="flex flex-col gap-4 items-center md:items-start text-center md:text-left">
         <img 
-          src="/logo.jpg" 
+          src="/logo.png" 
           alt="Ola All-round AI club" 
           className="h-14 w-auto object-contain mix-blend-multiply" 
         />
