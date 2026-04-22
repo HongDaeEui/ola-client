@@ -16,13 +16,12 @@ interface Experiment {
 
 async function getExperiments(category?: string): Promise<Experiment[]> {
   try {
-    const res = await fetch('https://ola-backend-psi.vercel.app/api/labs', { next: { revalidate: 60 } });
+    const params = new URLSearchParams();
+    if (category && category !== '전체 레시피') params.set('category', category);
+    const qs = params.toString();
+    const res = await fetch(`https://ola-backend-psi.vercel.app/api/labs${qs ? `?${qs}` : ''}`, { next: { revalidate: 60 } });
     if (!res.ok) throw new Error('Failed to fetch data');
-    const data: Experiment[] = await res.json();
-    if (category && category !== '전체 레시피') {
-      return data.filter(e => e.category === category);
-    }
-    return data;
+    return await res.json();
   } catch (error) {
     console.error('API Fetch failed:', error);
     return [];
