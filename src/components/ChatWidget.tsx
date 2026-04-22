@@ -144,7 +144,7 @@ export function ChatWidget() {
             >
               <input
                 type="text"
-                value={input}
+                value={input || ''}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="어떤 AI가 필요하신가요?"
@@ -153,9 +153,9 @@ export function ChatWidget() {
               />
               <button
                 type="submit"
-                disabled={!input.trim() || isLoading}
+                disabled={!(input || '').trim() || isLoading}
                 className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
-                  input.trim() && !isLoading
+                  (input || '').trim() && !isLoading
                     ? 'bg-sky-500 text-white hover:bg-sky-600 shadow-md shadow-sky-200'
                     : 'bg-slate-200 dark:bg-slate-600 text-slate-400 cursor-not-allowed'
                 }`}
