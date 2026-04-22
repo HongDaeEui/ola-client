@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import { ValidationPipe } from '@nestjs/common';
 import { PrismaExceptionFilter } from './common/prisma-exception.filter';
 import express from 'express';
 
@@ -44,14 +43,6 @@ async function bootstrapServer(): Promise<express.Express> {
       .build();
     const document = SwaggerModule.createDocument(nestApp, config);
     SwaggerModule.setup('api/docs', nestApp, document);
-
-    // 글로벌 입력 검증 파이프 (잘못된 데이터 차단)
-    nestApp.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: false,
-      }),
-    );
 
     // 글로벌 예외 필터 (Prisma 에러를 HTTP 응답으로 변환)
     nestApp.useGlobalFilters(new PrismaExceptionFilter());
