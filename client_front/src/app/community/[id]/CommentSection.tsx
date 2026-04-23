@@ -3,6 +3,9 @@ import { API_BASE } from '@/lib/api';
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { createClient } from '@/lib/supabase/client';
+
+const supabase = createClient();
 
 
 interface Comment {
@@ -61,13 +64,17 @@ export default function CommentSection({ postId }: { postId: string }) {
   }
 
   async function handleDelete(id: string) {
-    if (!user?.email) return;
+    if (!user) return;
     setDeletingId(id);
     try {
-      await fetch(`${API_BASE}/comments/${id}?userEmail=${encodeURIComponent(user.email)}`, {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) return;
+      const res = await fetch(`${API_BASE}/comments/${id}`, {
         method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
       });
-      setComments(prev => prev.filter(c => c.id !== id));
+      if (res.ok) setComments(prev => prev.filter(c => c.id !== id));
     } finally {
       setDeletingId(null);
     }
