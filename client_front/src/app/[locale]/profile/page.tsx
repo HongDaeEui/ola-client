@@ -1,10 +1,12 @@
 "use client";
+import Image from "next/image";
 import { API_BASE } from '@/lib/api';
 
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from '@/i18n/routing';
 import { useEffect, useState } from 'react';
 import { Link } from '@/i18n/routing';
+export const revalidate = 300;
 
 
 type Tab = 'overview' | 'posts' | 'prompts' | 'bookmarks';

@@ -1,5 +1,10 @@
 import Image from "next/image";
 
+
+
+
+export const revalidate = 300;
+
 export default function AboutStory() {
   return (
     <main className="pt-32 pb-24 max-w-[1920px] mx-auto min-h-screen">

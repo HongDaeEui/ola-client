@@ -1,5 +1,7 @@
 import { API_BASE } from '@/lib/api';
+import Image from "next/image";
 import { Link } from '@/i18n/routing';
+export const revalidate = 300;
 
 
 interface Tool {
@@ -207,7 +209,7 @@ export default async function ToolsPage({
                     <div className="flex gap-4 mb-4">
                       <div className="w-14 h-14 rounded-xl bg-slate-100 flex-shrink-0 flex items-center justify-center text-slate-500 font-bold text-lg uppercase tracking-tighter border border-slate-100 group-hover:bg-slate-900 group-hover:text-white transition-all duration-300 overflow-hidden">
                         {tool.iconUrl
-                          ? <img src={tool.iconUrl} alt={tool.name} className="w-full h-full object-cover" />
+                          ? <Image src={tool.iconUrl} alt={tool.name} width={24} height={24} className="w-full h-full object-cover" />
                           : tool.name.substring(0, 2)
                         }
                       </div>

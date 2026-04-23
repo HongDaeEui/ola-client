@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import './globals.css';
-export const runtime = "edge";
 export const revalidate = 300;
 
 export const metadata: Metadata = {

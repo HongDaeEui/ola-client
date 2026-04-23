@@ -2,6 +2,7 @@ import { API_BASE } from '@/lib/api';
 import { Link } from '@/i18n/routing';
 import { WriteFAB } from '@/components/WriteFAB';
 import { PostFeed, type Post } from '@/components/PostFeed';
+export const revalidate = 300;
 
 const LIMIT = 10;
 

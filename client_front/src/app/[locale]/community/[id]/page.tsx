@@ -1,10 +1,12 @@
 import { API_BASE } from '@/lib/api';
+import Image from "next/image";
 import { Link } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
 import { ShareButton } from '@/components/ShareButton';
 import { ViewTracker } from '@/components/ViewTracker';
 import CommentSection from './CommentSection';
+export const revalidate = 300;
 
 
 interface Author {
@@ -114,7 +116,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
           <div className="p-8 md:p-12 dark:bg-slate-900">
             {post.imageUrl && (
               <div className="mb-8 rounded-2xl overflow-hidden border border-slate-100">
-                <img src={post.imageUrl} alt={post.title} className="w-full max-h-[480px] object-cover" />
+                <Image src={post.imageUrl} alt={post.title} width={24} height={24} className="w-full max-h-[480px] object-cover" />
               </div>
             )}
             <div className="prose prose-slate max-w-none">

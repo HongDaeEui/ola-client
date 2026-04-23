@@ -1,9 +1,11 @@
 import { API_BASE } from '@/lib/api';
+import Image from "next/image";
 import { Link } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
 import { ShareButton } from '@/components/ShareButton';
 import type { Metadata } from 'next';
+export const revalidate = 300;
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
@@ -170,7 +172,7 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
               <div className="absolute -inset-2 bg-sky-400/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative w-28 h-28 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-2xl">
                 {tool.iconUrl ? (
-                  <img src={tool.iconUrl} alt={tool.name} className="w-20 h-20 rounded-xl object-cover" />
+                  <Image src={tool.iconUrl} alt={tool.name} width={24} height={24} className="w-20 h-20 rounded-xl object-cover" />
                 ) : (
                   <span className="text-white font-black text-4xl uppercase tracking-tighter">
                     {tool.name.substring(0, 2)}
@@ -367,7 +369,7 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
                             <div className="flex items-center gap-2 text-slate-500">
                               <div className="w-6 h-6 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center font-bold text-slate-600 text-[10px] shadow-sm uppercase overflow-hidden">
                                 {lab.author.avatarUrl ? (
-                                  <img src={lab.author.avatarUrl} alt={lab.author.username} className="w-full h-full object-cover" />
+                                  <Image src={lab.author.avatarUrl} alt={lab.author.username} width={24} height={24} className="w-full h-full object-cover" />
                                 ) : (
                                   lab.author.username.charAt(0)
                                 )}

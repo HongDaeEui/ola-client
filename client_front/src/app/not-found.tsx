@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import './globals.css';
+export const revalidate = 300;
 
 export default function NotFound() {
   return (

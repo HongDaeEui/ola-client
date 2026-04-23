@@ -1,6 +1,5 @@
 import { API_BASE } from '@/lib/api';
 import HomeClient from '@/components/HomeClient';
-export const runtime = "edge";
 export const revalidate = 300;
 
 interface Tool {

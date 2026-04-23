@@ -1,6 +1,7 @@
 import { API_BASE } from '@/lib/api';
 import { Link } from '@/i18n/routing';
 import ResourceCard from './ResourceCard';
+export const revalidate = 300;
 
 
 interface Resource {
