@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { NotificationBell } from '@/components/NotificationBell';
+import { CommandPalette } from '@/components/CommandPalette';
 
 
 interface Suggestions {
@@ -184,35 +185,8 @@ export function TopNavBar() {
           </div>
 
           <div className="flex items-center gap-3 md:gap-5">
-            {/* Search bar (desktop) */}
-            {searchOpen ? (
-              <div ref={searchContainerRef} className="hidden lg:block relative">
-                <form onSubmit={handleSearchSubmit} className="flex items-center relative">
-                  <input
-                    ref={searchInputRef}
-                    value={searchQuery}
-                    onChange={e => handleSearchChange(e.target.value)}
-                    onKeyDown={e => e.key === 'Escape' && (setSearchOpen(false), setShowDropdown(false))}
-                    placeholder="검색..."
-                    className="w-64 pl-4 pr-10 py-2 rounded-xl border-2 border-sky-400 outline-none text-sm font-medium text-slate-800 dark:text-slate-100 dark:bg-slate-800 transition-all"
-                  />
-                  <button type="submit" className="absolute right-2.5 text-sky-500 hover:text-sky-700">
-                    <span className="material-symbols-outlined text-xl">search</span>
-                  </button>
-                </form>
-                {showDropdown && (
-                  <SearchDropdown suggestions={suggestions} onClose={closeDropdown} />
-                )}
-              </div>
-            ) : (
-              <button
-                onClick={openSearch}
-                className="hidden lg:flex w-9 h-9 items-center justify-center text-slate-500 dark:text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 rounded-lg transition-colors"
-                aria-label="검색"
-              >
-                <span className="material-symbols-outlined text-[22px]">search</span>
-              </button>
-            )}
+            {/* Spotlight Search (desktop) */}
+            <CommandPalette />
 
             <Link href="/submit" className="hidden lg:flex text-sm text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-bold mr-2">
               + 도구 제출

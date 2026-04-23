@@ -5,10 +5,11 @@ import { API_BASE } from '@/lib/api';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
+import { OlaVerifiedBadge } from '@/components/Badges';
 
 
 
-type Tool = { id: string; name: string; shortDesc: string; category: string; iconUrl?: string; pricingModel?: string };
+type Tool = { id: string; name: string; shortDesc: string; category: string; iconUrl?: string; pricingModel?: string; rating?: number };
 type Prompt = { id: string; title: string; category: string; toolName: string; likes: number };
 type Post = { id: string; title: string; category: string; likes: number; views: number; createdAt: string };
 type Lab = { id: string; title: string; description: string; category: string; emoji?: string; difficulty?: string; likes: number };
@@ -142,9 +143,26 @@ function SearchContent() {
 
         {/* Loading */}
         {loading && (
-          <div className="flex flex-col items-center justify-center py-20 text-slate-400">
-            <div className="w-10 h-10 border-4 border-slate-200 border-t-sky-500 rounded-full animate-spin mb-4" />
-            <p className="text-sm">검색 중...</p>
+          <div className="space-y-8 mt-6">
+            <div className="space-y-4">
+              <div className="h-4 w-32 bg-slate-200 dark:bg-slate-700/50 rounded-full mb-3" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {[1, 2, 3, 4].map(key => (
+                  <div key={key} className="flex gap-4 p-4 border border-slate-100 dark:border-slate-800 rounded-2xl animate-pulse">
+                    <div className="w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-700/50 flex-shrink-0" />
+                    <div className="flex-1 space-y-2 py-1">
+                      <div className="h-4 bg-slate-200 dark:bg-slate-700/50 rounded w-1/2" />
+                      <div className="h-3 bg-slate-200 dark:bg-slate-700/50 rounded w-full" />
+                      <div className="h-3 bg-slate-200 dark:bg-slate-700/50 rounded w-2/3" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-col items-center justify-center py-6 text-sky-500 animate-pulse">
+              <span className="material-symbols-outlined text-3xl mb-2">auto_awesome</span>
+              <p className="text-sm font-semibold tracking-widest uppercase">AI is analyzing results...</p>
+            </div>
           </div>
         )}
 
@@ -200,7 +218,10 @@ function SearchContent() {
                         }
                       </div>
                       <div className="min-w-0">
-                        <p className="font-bold text-slate-800 dark:text-slate-100 group-hover:text-sky-600 truncate">{highlight(tool.name, q)}</p>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <p className="font-bold text-slate-800 dark:text-slate-100 group-hover:text-sky-600 truncate">{highlight(tool.name, q)}</p>
+                          {(tool.rating || 0) > 4.5 && <OlaVerifiedBadge />}
+                        </div>
                         <p className="text-sm text-slate-500 dark:text-slate-400 truncate">{highlight(tool.shortDesc, q)}</p>
                         <div className="flex gap-2 mt-1">
                           <span className="text-xs bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded-full">{tool.category}</span>
