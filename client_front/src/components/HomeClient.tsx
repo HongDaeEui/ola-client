@@ -161,28 +161,6 @@ function ToolCard({ tool }: { tool: Tool }) {
   );
 }
 
-/* ── Skeleton Cards ── */
-function SkeletonGrid() {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-      {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl p-5 animate-pulse">
-          <div className="flex gap-4 mb-4">
-            <div className="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-700 flex-shrink-0" />
-            <div className="flex-1 space-y-2">
-              <div className="h-4 bg-slate-100 dark:bg-slate-700 rounded w-3/4" />
-              <div className="h-3 bg-slate-100 dark:bg-slate-700 rounded w-1/2" />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <div className="h-3 bg-slate-100 dark:bg-slate-700 rounded" />
-            <div className="h-3 bg-slate-100 dark:bg-slate-700 rounded w-5/6" />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 /* ── Main Exported Client Component ── */
 export default function HomeClient({ tools, posts, categories }: HomeClientProps) {
@@ -224,7 +202,10 @@ export default function HomeClient({ tools, posts, categories }: HomeClientProps
               ))}
             </StaggerContainer>
           ) : (
-            <SkeletonGrid />
+            <div className="flex flex-col items-center justify-center py-16 text-slate-400 dark:text-slate-500">
+              <span className="material-symbols-outlined text-5xl mb-3">construction</span>
+              <p className="text-sm font-medium">서버가 깨어나는 중이에요. 잠시 후 새로고침 해주세요.</p>
+            </div>
           )}
 
           <ScrollReveal delay={0.3}>
