@@ -1,6 +1,7 @@
 import { RsvpButton } from '@/components/RsvpButton';
 import { SuggestTopicModal } from '@/components/SuggestTopicModal';
 import { API_BASE } from '@/lib/api';
+import { LivePulseBadge } from '@/components/Badges';
 
 async function getUpcomingMeetups() {
   try {
@@ -48,9 +49,9 @@ export default async function Meetups() {
             </div>
 
             <div className="relative z-20 max-w-2xl text-left">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-error text-on-error font-bold text-xs uppercase tracking-widest mb-8 animate-pulse">
-                <span className="w-2 h-2 rounded-full bg-white"></span> Live This Week
-              </span>
+              <div className="mb-8">
+                <LivePulseBadge />
+              </div>
               <h2 className="font-['Noto_Serif'] text-4xl md:text-6xl font-bold text-on-surface mb-6 leading-tight">
                 {featuredMeetup.title}
               </h2>

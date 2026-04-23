@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ScrollReveal, StaggerContainer, StaggerItem, SpringButton } from '@/components/motion';
+import { OlaVerifiedBadge } from '@/components/Badges';
 
 /* ── Pricing color map ── */
 const PRICING_COLOR: Record<string, string> = {
@@ -130,6 +131,7 @@ function ToolCard({ tool }: { tool: Tool }) {
             <div className="flex items-center gap-1.5 mb-1">
               <h3 className="font-bold text-slate-800 dark:text-slate-100 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors truncate">{tool.name}</h3>
               {tool.isFeatured && <span className="text-[9px] bg-sky-500 text-white px-1.5 py-0.5 rounded font-black uppercase flex-shrink-0">TOP</span>}
+              {tool.rating > 4.5 && <OlaVerifiedBadge />}
             </div>
             <div className="flex items-center gap-2 flex-wrap">
               <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${PRICING_COLOR[tool.pricingModel ?? ''] ?? 'bg-slate-100 text-slate-600'}`}>
