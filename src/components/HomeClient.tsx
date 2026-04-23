@@ -1,9 +1,13 @@
 'use client';
+'use client';
+import Image from "next/image";
 
 import { Link } from '@/i18n/routing';
 import { motion } from 'framer-motion';
 import { ScrollReveal, StaggerContainer, StaggerItem, SpringButton } from '@/components/motion';
 import { OlaVerifiedBadge } from '@/components/Badges';
+export const runtime = "edge";
+export const revalidate = 300;
 
 /* ── Pricing color map ── */
 const PRICING_COLOR: Record<string, string> = {
@@ -120,7 +124,7 @@ function ToolCard({ tool }: { tool: Tool }) {
         <div className="flex gap-4 mb-4">
           <div className="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-700 flex-shrink-0 overflow-hidden border border-slate-100 dark:border-slate-600 group-hover:scale-105 transition-transform duration-300">
             {tool.coverUrl || tool.iconUrl ? (
-              <img src={tool.coverUrl || tool.iconUrl} alt={tool.name} className="object-cover w-full h-full" />
+              <Image src={(tool.coverUrl || tool.iconUrl)!} alt={tool.name} width={24} height={24} className="object-cover w-full h-full" />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-slate-700 to-slate-900 group-hover:from-sky-600 group-hover:to-indigo-700 flex items-center justify-center text-white font-bold text-xl uppercase tracking-tighter transition-all duration-300">
                 {tool.name.substring(0, 2)}
