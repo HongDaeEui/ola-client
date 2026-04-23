@@ -40,7 +40,7 @@ const CATEGORY_META: Record<string, { icon: string; color: string }> = {
 
 const DEFAULT_META = { icon: 'science', color: 'from-red-400 to-orange-600' };
 
-export default async function CategoriesPage({ params }: { params: { locale: string } }) {
+export default async function CategoriesPage({ params }: { params: Promise<{ locale: string }> }) {
   const counts = await getCategoryCounts();
 
   return (

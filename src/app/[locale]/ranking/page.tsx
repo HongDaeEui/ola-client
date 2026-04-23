@@ -47,7 +47,7 @@ const PRICING_COLOR: Record<string, string> = {
   Paid: 'bg-slate-100 text-slate-500',
 };
 
-export default async function RankingPage({ params }: { params: { locale: string } }) {
+export default async function RankingPage({ params }: { params: Promise<{ locale: string }> }) {
   const [tools, posts, labs] = await Promise.all([getToolRanking(), getPostRanking(), getLabRanking()]);
 
   return (

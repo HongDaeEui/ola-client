@@ -3,7 +3,7 @@ import { API_BASE } from '@/lib/api';
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import { Link } from '@/i18n/routing';
 import { ImageUpload } from '@/components/ImageUpload';
 

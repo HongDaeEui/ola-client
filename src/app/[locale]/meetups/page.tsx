@@ -16,7 +16,7 @@ async function getUpcomingMeetups() {
   }
 }
 
-export default async function Meetups({ params }: { params: { locale: string } }) {
+export default async function Meetups({ params }: { params: Promise<{ locale: string }> }) {
   const meetups = await getUpcomingMeetups();
   const featuredMeetup = meetups[0];
   const otherMeetups = meetups.slice(1);

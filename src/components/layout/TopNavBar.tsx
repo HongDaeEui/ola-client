@@ -4,7 +4,7 @@ import { API_BASE } from '@/lib/api';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import { useAuth } from '@/context/AuthContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { NotificationBell } from '@/components/NotificationBell';

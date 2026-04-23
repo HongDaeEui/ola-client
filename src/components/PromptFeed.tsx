@@ -3,7 +3,7 @@ import { API_BASE } from '@/lib/api';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from '@/i18n/routing';
-import CopyButton from '@/app/prompts/CopyButton';
+import CopyButton from '@/app/[locale]/prompts/CopyButton';
 
 const LIMIT = 12;
 

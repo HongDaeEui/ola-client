@@ -2,7 +2,8 @@
 
 import { API_BASE } from '@/lib/api';
 
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { Link } from '@/i18n/routing';
 import { OlaVerifiedBadge } from '@/components/Badges';
