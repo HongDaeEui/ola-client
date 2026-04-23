@@ -1,6 +1,6 @@
+import { API_BASE } from '@/lib/api';
 import Link from 'next/link';
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-psi.vercel.app/api';
 
 type RankedTool = {
   id: string; name: string; shortDesc: string; category: string;
@@ -16,19 +16,19 @@ type RankedLab = {
 
 async function getToolRanking(): Promise<RankedTool[]> {
   try {
-    const res = await fetch(`${API}/tools/ranking`, { next: { revalidate: 300 } });
+    const res = await fetch(`${API_BASE}/tools/ranking`, { next: { revalidate: 300 } });
     return res.ok ? res.json() : [];
   } catch { return []; }
 }
 async function getPostRanking(): Promise<RankedPost[]> {
   try {
-    const res = await fetch(`${API}/posts/ranking`, { next: { revalidate: 300 } });
+    const res = await fetch(`${API_BASE}/posts/ranking`, { next: { revalidate: 300 } });
     return res.ok ? res.json() : [];
   } catch { return []; }
 }
 async function getLabRanking(): Promise<RankedLab[]> {
   try {
-    const res = await fetch(`${API}/labs`, { next: { revalidate: 300 } });
+    const res = await fetch(`${API_BASE}/labs`, { next: { revalidate: 300 } });
     if (!res.ok) return [];
     const all: RankedLab[] = await res.json();
     return all.slice(0, 10);

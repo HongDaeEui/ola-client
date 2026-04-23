@@ -1,6 +1,6 @@
+import { API_BASE } from '@/lib/api';
 import Link from 'next/link';
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-psi.vercel.app/api';
 
 interface Tool {
   id: string;
@@ -36,7 +36,7 @@ async function getTools(filters: { category?: string; pricing?: string; sort?: s
   if (filters.sort) params.set('sort', filters.sort);
   const qs = params.toString();
   try {
-    const res = await fetch(`${API}/tools${qs ? `?${qs}` : ''}`, { next: { revalidate: 60 } });
+    const res = await fetch(`${API_BASE}/tools${qs ? `?${qs}` : ''}`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     return res.json();
   } catch { return []; }
@@ -44,7 +44,7 @@ async function getTools(filters: { category?: string; pricing?: string; sort?: s
 
 async function getCategories(): Promise<string[]> {
   try {
-    const res = await fetch(`${API}/tools/categories`, { next: { revalidate: 300 } });
+    const res = await fetch(`${API_BASE}/tools/categories`, { next: { revalidate: 300 } });
     if (!res.ok) return [];
     const data: { category: string }[] = await res.json();
     return data.map(d => d.category);

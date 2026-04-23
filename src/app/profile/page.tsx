@@ -1,11 +1,11 @@
 "use client";
+import { API_BASE } from '@/lib/api';
 
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-const API = 'https://ola-backend-psi.vercel.app/api';
 
 type Tab = 'overview' | 'posts' | 'prompts' | 'bookmarks';
 
@@ -85,7 +85,7 @@ export default function ProfilePage() {
     if (!user) return;
     if (tab === 'posts' && posts.length === 0) {
       setDataLoading(true);
-      fetch(`${API}/posts?userEmail=${encodeURIComponent(user.email!)}`)
+      fetch(`${API_BASE}/posts?userEmail=${encodeURIComponent(user.email!)}`)
         .then(r => r.json())
         .then(d => setPosts(d))
         .catch(() => {})
@@ -93,7 +93,7 @@ export default function ProfilePage() {
     }
     if (tab === 'prompts' && prompts.length === 0) {
       setDataLoading(true);
-      fetch(`${API}/prompts?userEmail=${encodeURIComponent(user.email!)}`)
+      fetch(`${API_BASE}/prompts?userEmail=${encodeURIComponent(user.email!)}`)
         .then(r => r.json())
         .then(d => setPrompts(d))
         .catch(() => {})
@@ -101,7 +101,7 @@ export default function ProfilePage() {
     }
     if (tab === 'bookmarks' && bookmarks.length === 0) {
       setDataLoading(true);
-      fetch(`${API}/bookmarks?userId=${user.id}`)
+      fetch(`${API_BASE}/bookmarks?userId=${user.id}`)
         .then(r => r.json())
         .then(d => setBookmarks(d))
         .catch(() => {})

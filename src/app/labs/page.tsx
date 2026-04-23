@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { API_BASE } from '@/lib/api';
 
 interface Experiment {
   id: string;
@@ -19,7 +20,7 @@ async function getExperiments(category?: string): Promise<Experiment[]> {
     const params = new URLSearchParams();
     if (category && category !== '전체 레시피') params.set('category', category);
     const qs = params.toString();
-    const res = await fetch(`https://ola-backend-psi.vercel.app/api/labs${qs ? `?${qs}` : ''}`, { next: { revalidate: 60 } });
+    const res = await fetch(`${API_BASE}/labs${qs ? `?${qs}` : ''}`, { next: { revalidate: 60 } });
     if (!res.ok) throw new Error('Failed to fetch data');
     return await res.json();
   } catch (error) {

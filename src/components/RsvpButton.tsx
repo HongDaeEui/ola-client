@@ -1,9 +1,9 @@
 "use client";
+import { API_BASE } from '@/lib/api';
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-psi.vercel.app/api';
 
 interface Props {
   meetupId: string;
@@ -20,7 +20,7 @@ export function RsvpButton({ meetupId, initialCount, variant = 'card' }: Props) 
 
   useEffect(() => {
     if (!user?.email) return;
-    fetch(`${API}/meetups/${meetupId}/status?userEmail=${encodeURIComponent(user.email)}`)
+    fetch(`${API_BASE}/meetups/${meetupId}/status?userEmail=${encodeURIComponent(user.email)}`)
       .then(r => r.json())
       .then(d => setAttending(d.attending))
       .catch(() => {});
@@ -35,7 +35,7 @@ export function RsvpButton({ meetupId, initialCount, variant = 'card' }: Props) 
     if (loading) return;
     setLoading(true);
     try {
-      const res = await fetch(`${API}/meetups/${meetupId}/rsvp`, {
+      const res = await fetch(`${API_BASE}/meetups/${meetupId}/rsvp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

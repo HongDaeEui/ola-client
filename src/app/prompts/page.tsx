@@ -1,8 +1,8 @@
+import { API_BASE } from '@/lib/api';
 import Link from 'next/link';
 import PromptShareButton from './PromptShareButton';
 import { PromptFeed, type Prompt } from '@/components/PromptFeed';
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-psi.vercel.app/api';
 const LIMIT = 12;
 
 const CATEGORIES = ['이미지', '텍스트', '코딩', '비디오', '에이전트', '음악'];
@@ -11,7 +11,7 @@ async function getPrompts(category?: string): Promise<Prompt[]> {
   try {
     const qs = new URLSearchParams({ page: '1', limit: String(LIMIT) });
     if (category) qs.set('category', category);
-    const res = await fetch(`${API}/prompts?${qs}`, { next: { revalidate: 60 } });
+    const res = await fetch(`${API_BASE}/prompts?${qs}`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     return res.json();
   } catch {

@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE } from '@/lib/api';
 
 import Link from 'next/link';
 import { useState, useRef, useEffect, useCallback } from 'react';
@@ -7,7 +8,6 @@ import { useAuth } from '@/context/AuthContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { NotificationBell } from '@/components/NotificationBell';
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-psi.vercel.app/api';
 
 interface Suggestions {
   tools: { id: string; name: string; category: string; iconUrl: string | null }[];
@@ -99,7 +99,7 @@ export function TopNavBar() {
     if (q.trim().length < 2) { setSuggestions({ tools: [], prompts: [], posts: [], labs: [] }); setShowDropdown(false); return; }
     debounceRef.current = setTimeout(async () => {
       try {
-        const res = await fetch(`${API}/search/suggest?q=${encodeURIComponent(q.trim())}`);
+        const res = await fetch(`${API_BASE}/search/suggest?q=${encodeURIComponent(q.trim())}`);
         const data: Suggestions = await res.json();
         setSuggestions(data);
         const hasAny = data.tools.length + data.prompts.length + data.posts.length + data.labs.length > 0;

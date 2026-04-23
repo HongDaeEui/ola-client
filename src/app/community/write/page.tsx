@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE } from '@/lib/api';
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
@@ -6,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ImageUpload } from '@/components/ImageUpload';
 
-const API = 'https://ola-backend-psi.vercel.app/api';
 const DRAFT_KEY = 'ola_post_draft';
 
 const CATEGORIES = ['실천형 노하우', '작품 공유', '자유게시판', '전문 리포트'];
@@ -58,7 +58,7 @@ export default function WritePage() {
     if (!validate()) return;
     setSubmitting(true);
     try {
-      const res = await fetch(`${API}/posts`, {
+      const res = await fetch(`${API_BASE}/posts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

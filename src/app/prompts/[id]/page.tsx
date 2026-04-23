@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { API_BASE } from '@/lib/api';
 import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
 import { ShareButton } from '@/components/ShareButton';
@@ -22,7 +23,7 @@ interface Prompt {
 
 async function getPrompt(id: string): Promise<Prompt | null> {
   try {
-    const res = await fetch(`https://ola-backend-psi.vercel.app/api/prompts/${id}`, { cache: 'no-store' });
+    const res = await fetch(`${API_BASE}/prompts/${id}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return await res.json();
   } catch {

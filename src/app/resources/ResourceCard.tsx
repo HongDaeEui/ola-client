@@ -1,6 +1,6 @@
 "use client";
+import { API_BASE } from '@/lib/api';
 
-const API = 'https://ola-backend-psi.vercel.app/api';
 
 interface Props {
   id: string;
@@ -10,7 +10,7 @@ interface Props {
 
 export default function ResourceCard({ id, contentUrl, variant }: Props) {
   function handleClick() {
-    fetch(`${API}/resources/${id}/read`, { method: 'PATCH' }).catch(() => {});
+    fetch(`${API_BASE}/resources/${id}/read`, { method: 'PATCH' }).catch(() => {});
   }
 
   if (variant === 'featured') {

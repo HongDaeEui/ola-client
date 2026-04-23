@@ -1,12 +1,12 @@
+import { API_BASE } from '@/lib/api';
 import Link from 'next/link';
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-psi.vercel.app/api';
 
 type CategoryCount = { category: string; count: number };
 
 async function getCategoryCounts(): Promise<CategoryCount[]> {
   try {
-    const res = await fetch(`${API}/tools/categories`, { next: { revalidate: 300 } });
+    const res = await fetch(`${API_BASE}/tools/categories`, { next: { revalidate: 300 } });
     return res.ok ? res.json() : [];
   } catch { return []; }
 }

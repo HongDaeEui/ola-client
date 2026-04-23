@@ -1,9 +1,10 @@
 import { RsvpButton } from '@/components/RsvpButton';
 import { SuggestTopicModal } from '@/components/SuggestTopicModal';
+import { API_BASE } from '@/lib/api';
 
 async function getUpcomingMeetups() {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002'}/api/meetups/upcoming`, {
+    const res = await fetch(`${API_BASE}/meetups/upcoming`, {
       next: { revalidate: 3600 },
     });
     if (!res.ok) return [];

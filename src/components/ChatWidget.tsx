@@ -14,7 +14,7 @@ export function ChatWidget() {
   const [isHovered, setIsHovered] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
 
-  const { messages, input, handleInputChange, handleSubmit, status, append } = useChat({
+  const chatConfig: any = {
     api: '/api/chat',
     streamProtocol: 'text',
     initialMessages: [
@@ -25,10 +25,12 @@ export function ChatWidget() {
         createdAt: new Date(),
       },
     ],
-    onError: (error) => {
+    onError: (error: Error) => {
       console.error('Chat error:', error);
     },
-  });
+  };
+
+  const { messages, input, handleInputChange, handleSubmit, status, append } = useChat(chatConfig) as any;
 
   const isLoading = status === 'streaming' || status === 'submitted';
 
@@ -77,7 +79,7 @@ export function ChatWidget() {
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-slate-50/50 dark:bg-slate-900/30">
-            {messages.map((msg) => (
+            {messages.map((msg: any) => (
               <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {msg.role === 'assistant' && (
                   <div className="w-6 h-6 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center flex-shrink-0 mt-1 mr-2">
