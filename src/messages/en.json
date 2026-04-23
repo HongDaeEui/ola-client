@@ -1,0 +1,18 @@
+{
+  "Nav": {
+    "tools": "Tools",
+    "labs": "Labs",
+    "categories": "Categories",
+    "ranking": "Ranking",
+    "prompts": "Prompts",
+    "community": "Community"
+  },
+  "Footer": {
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "contact": "Contact Us",
+    "careers": "Careers",
+    "press": "Press Kit",
+    "support": "Support"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "Nav": {
+    "tools": "도구 탐색",
+    "labs": "AI 실험실",
+    "categories": "카테고리",
+    "ranking": "인기 랭킹",
+    "prompts": "프롬프트",
+    "community": "커뮤니티"
+  },
+  "Footer": {
+    "privacy": "개인정보 처리방침",
+    "terms": "서비스 이용약관",
+    "contact": "문의하기",
+    "careers": "채용정보",
+    "press": "프레스 키트",
+    "support": "고객지원"
+  }
+}

@@ -1,7 +1,8 @@
 "use client";
 import { API_BASE } from '@/lib/api';
 
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
+import { useTranslations } from 'next-intl';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -83,7 +84,7 @@ function SearchDropdown({ suggestions, onClose }: { suggestions: Suggestions; on
   );
 }
 
-export function TopNavBar() {
+export function TopNavBar() { const t = useTranslations('Nav');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -163,14 +164,14 @@ export function TopNavBar() {
 
           <div className="hidden lg:flex items-center gap-10 font-['Noto_Sans_KR'] font-bold text-[15px] tracking-wide ml-8">
             <Link href="/tools" className="text-slate-600 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-400 hover:-translate-y-0.5 transition-all duration-300">
-              도구 탐색
+              {t('tools')}
             </Link>
             <Link href="/labs" className="text-slate-600 dark:text-slate-300 flex items-center gap-1.5 hover:text-sky-600 dark:hover:text-sky-400 hover:-translate-y-0.5 transition-all duration-300">
               <span className="material-symbols-outlined text-[18px] text-sky-500">science</span>
-              AI 실험실
+              {t('labs')}
             </Link>
             <Link href="/categories" className="text-slate-600 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-400 hover:-translate-y-0.5 transition-all duration-300">
-              카테고리
+              {t('categories')}
             </Link>
             <Link href="/ranking" className="text-slate-600 dark:text-slate-300 flex items-center gap-1.5 hover:text-sky-600 dark:hover:text-sky-400 hover:-translate-y-0.5 transition-all duration-300">
               <span className="material-symbols-outlined text-[18px] text-amber-500">local_fire_department</span>
