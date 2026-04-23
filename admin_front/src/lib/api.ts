@@ -30,6 +30,7 @@ interface ServerErrorResponseData {
 }
 
 const BASE_URL: string = import.meta.env.VITE_BASE_URL || "";
+const ADMIN_SECRET: string = import.meta.env.VITE_ADMIN_SECRET || "";
 
 class ApiService {
   public axios: AxiosInstance;
@@ -58,6 +59,9 @@ class ApiService {
           if (token && config.headers) {
             config.headers.Authorization = `Bearer ${token}`;
           }
+        }
+        if (ADMIN_SECRET && config.headers) {
+          config.headers['X-Admin-Secret'] = ADMIN_SECRET;
         }
         return config;
       },
