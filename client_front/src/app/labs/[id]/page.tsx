@@ -1,7 +1,30 @@
+import { API_BASE } from '@/lib/api';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
 import { WorkshopButton, MeetupCreateBridge } from '@/components/WorkshopClient';
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const res = await fetch(`${API_BASE}/labs/${id}`, { cache: 'no-store' });
+    if (!res.ok) return { title: 'Lab Not Found — Ola' };
+    const lab = await res.json();
+    const title = `${lab.emoji ? lab.emoji + ' ' : ''}${lab.title} — Ola Labs`;
+    return {
+      title,
+      description: lab.description?.slice(0, 160),
+      openGraph: {
+        title,
+        description: lab.description?.slice(0, 160),
+        type: 'website',
+      },
+    };
+  } catch {
+    return { title: 'Ola Labs' };
+  }
+}
 
 interface Author {
   username: string;
@@ -24,7 +47,6 @@ interface Lab {
   createdAt?: string;
 }
 
-const API_BASE = 'https://ola-backend-psi.vercel.app/api';
 
 async function getLab(id: string): Promise<Lab | null> {
   try {
@@ -67,12 +89,11 @@ function parseContent(content: string) {
 
 export default async function LabDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [lab, relatedLabs] = await Promise.all([getLab(id), (async () => {
-    const l = await getLab(id);
-    return l ? getRelatedLabs(id, l.category) : [];
-  })()]);
+  const lab = await getLab(id);
 
   if (!lab) notFound();
+
+  const relatedLabs = await getRelatedLabs(id, lab.category);
 
   const diff = lab.difficulty ? DIFFICULTY_STYLE[lab.difficulty] ?? DIFFICULTY_STYLE['입문'] : null;
   const steps = lab.content ? parseContent(lab.content) : [];

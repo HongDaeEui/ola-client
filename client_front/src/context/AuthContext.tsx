@@ -18,10 +18,12 @@ const AuthContext = createContext<AuthContextType>({
   signOut: async () => {},
 });
 
+// 모듈 스코프에서 한 번만 생성하여 렌더링 시 재생성 방지
+const supabase = createClient();
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {

@@ -1,9 +1,9 @@
 'use client';
+import { API_BASE } from '@/lib/api';
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-psi.vercel.app/api';
 const ADMIN_EMAIL = 'admin@olalab.kr';
 
 interface Tool {
@@ -36,7 +36,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (!isAdmin) return;
-    fetch(`${API}/tools/pending`)
+    fetch(`${API_BASE}/tools/pending`)
       .then(r => r.ok ? r.json() : [])
       .then(setTools)
       .finally(() => setFetching(false));
@@ -45,7 +45,7 @@ export default function AdminPage() {
   async function handleAction(id: string, action: 'approve' | 'reject') {
     setActionLoading(prev => ({ ...prev, [id]: action }));
     try {
-      await fetch(`${API}/tools/${id}/${action}`, { method: 'PATCH' });
+      await fetch(`${API_BASE}/tools/${id}/${action}`, { method: 'PATCH' });
       setDone(prev => ({ ...prev, [id]: action === 'approve' ? 'approved' : 'rejected' }));
     } finally {
       setActionLoading(prev => ({ ...prev, [id]: null }));

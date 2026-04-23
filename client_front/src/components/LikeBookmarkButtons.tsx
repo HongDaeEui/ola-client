@@ -1,10 +1,10 @@
 "use client";
+import { API_BASE } from '@/lib/api';
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-psi.vercel.app/api';
 
 interface Props {
   targetType: 'POST' | 'PROMPT' | 'LAB' | 'TOOL';
@@ -25,8 +25,8 @@ export function LikeBookmarkButtons({ targetType, targetId, initialLikes, varian
     if (!user) return;
     const uid = user.id;
     Promise.all([
-      fetch(`${API}/likes/status?userId=${uid}&targetType=${targetType}&targetId=${targetId}`).then(r => r.json()),
-      fetch(`${API}/bookmarks/status?userId=${uid}&targetType=${targetType}&targetId=${targetId}`).then(r => r.json()),
+      fetch(`${API_BASE}/likes/status?userId=${uid}&targetType=${targetType}&targetId=${targetId}`).then(r => r.json()),
+      fetch(`${API_BASE}/bookmarks/status?userId=${uid}&targetType=${targetType}&targetId=${targetId}`).then(r => r.json()),
     ]).then(([l, b]) => {
       setLiked(l.liked);
       setBookmarked(b.bookmarked);
@@ -43,7 +43,7 @@ export function LikeBookmarkButtons({ targetType, targetId, initialLikes, varian
     if (loading) return;
     setLoading(true);
     try {
-      const res = await fetch(`${API}/likes/toggle`, {
+      const res = await fetch(`${API_BASE}/likes/toggle`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.id, targetType, targetId }),
@@ -61,7 +61,7 @@ export function LikeBookmarkButtons({ targetType, targetId, initialLikes, varian
     if (loading) return;
     setLoading(true);
     try {
-      const res = await fetch(`${API}/bookmarks/toggle`, {
+      const res = await fetch(`${API_BASE}/bookmarks/toggle`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.id, targetType, targetId }),

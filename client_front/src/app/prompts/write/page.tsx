@@ -1,11 +1,11 @@
 "use client";
+import { API_BASE } from '@/lib/api';
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-const API = 'https://ola-backend-psi.vercel.app/api';
 const DRAFT_KEY = 'ola_prompt_draft';
 
 const CATEGORIES = ['이미지', '텍스트', '코딩', '비디오', '에이전트', '음악'];
@@ -66,7 +66,7 @@ export default function PromptWritePage() {
     if (!validate()) return;
     setSubmitting(true);
     try {
-      const res = await fetch(`${API}/prompts`, {
+      const res = await fetch(`${API_BASE}/prompts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

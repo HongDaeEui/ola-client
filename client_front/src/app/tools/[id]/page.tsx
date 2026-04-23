@@ -1,7 +1,29 @@
+import { API_BASE } from '@/lib/api';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
 import { ShareButton } from '@/components/ShareButton';
+import type { Metadata } from 'next';
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const res = await fetch(`${API_BASE}/tools/${id}`, { cache: 'no-store' });
+    if (!res.ok) return { title: 'Tool Not Found — Ola' };
+    const tool = await res.json();
+    return {
+      title: `${tool.name} — Ola AI Tools`,
+      description: tool.shortDesc || tool.description?.slice(0, 160),
+      openGraph: {
+        title: `${tool.name} — Ola AI Tools`,
+        description: tool.shortDesc,
+        type: 'website',
+      },
+    };
+  } catch {
+    return { title: 'Ola AI Tools' };
+  }
+}
 
 interface RelatedLab {
   id: string;
@@ -36,7 +58,6 @@ interface Tool {
   relatedLabs?: RelatedLab[];
 }
 
-const API_BASE = 'https://ola-backend-psi.vercel.app/api';
 
 async function getTool(id: string): Promise<Tool | null> {
   try {

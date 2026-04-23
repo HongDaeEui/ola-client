@@ -1,10 +1,12 @@
 'use client';
 
+import { API_BASE } from '@/lib/api';
+
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? '';
+
 
 type Tool = { id: string; name: string; shortDesc: string; category: string; iconUrl?: string; pricingModel?: string };
 type Prompt = { id: string; title: string; category: string; toolName: string; likes: number };
@@ -54,7 +56,7 @@ function SearchContent() {
     setQuery(q);
     if (!q) { setResults(null); return; }
     setLoading(true);
-    fetch(`${API}/search?q=${encodeURIComponent(q)}`)
+    fetch(`${API_BASE}/search?q=${encodeURIComponent(q)}`)
       .then(r => r.json())
       .then((data: Results) => { setResults(data); setLoading(false); })
       .catch(() => setLoading(false));

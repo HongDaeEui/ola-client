@@ -1,12 +1,12 @@
 "use client";
+import { API_BASE } from '@/lib/api';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { io, Socket } from 'socket.io-client';
 import { useAuth } from '@/context/AuthContext';
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-psi.vercel.app/api';
-const WS_URL = API.replace(/\/api$/, '');
+const WS_URL = API_BASE.replace(/\/api$/, '');
 
 interface Notification {
   id: string;
@@ -47,7 +47,7 @@ export function NotificationBell() {
   const fetchAll = useCallback(async () => {
     if (!user?.email) return;
     try {
-      const res = await fetch(`${API}/notifications?userEmail=${encodeURIComponent(user.email)}`);
+      const res = await fetch(`${API_BASE}/notifications?userEmail=${encodeURIComponent(user.email)}`);
       const data = await res.json();
       setNotifications(data);
       setUnread(data.filter((n: Notification) => !n.read).length);
@@ -60,7 +60,7 @@ export function NotificationBell() {
     if (!user?.email) return;
 
     // Initial fetch for unread count
-    fetch(`${API}/notifications/unread-count?userEmail=${encodeURIComponent(user.email)}`)
+    fetch(`${API_BASE}/notifications/unread-count?userEmail=${encodeURIComponent(user.email)}`)
       .then(r => r.json())
       .then(d => setUnread(d.count ?? 0))
       .catch(() => {});
@@ -105,13 +105,13 @@ export function NotificationBell() {
 
   async function handleMarkAllRead() {
     if (!user?.email) return;
-    await fetch(`${API}/notifications/read-all?userEmail=${encodeURIComponent(user.email)}`, { method: 'PATCH' });
+    await fetch(`${API_BASE}/notifications/read-all?userEmail=${encodeURIComponent(user.email)}`, { method: 'PATCH' });
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
     setUnread(0);
   }
 
   async function handleClickNotification(id: string) {
-    await fetch(`${API}/notifications/${id}/read`, { method: 'PATCH' });
+    await fetch(`${API_BASE}/notifications/${id}/read`, { method: 'PATCH' });
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
     setUnread(prev => Math.max(0, prev - 1));
     setOpen(false);

@@ -1,9 +1,9 @@
 'use client';
+import { API_BASE } from '@/lib/api';
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-psi.vercel.app/api';
 
 interface Comment {
   id: string;
@@ -30,7 +30,7 @@ export default function CommentSection({ postId }: { postId: string }) {
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`${API}/comments?postId=${postId}`)
+    fetch(`${API_BASE}/comments?postId=${postId}`)
       .then(r => r.ok ? r.json() : [])
       .then(setComments);
   }, [postId]);
@@ -40,7 +40,7 @@ export default function CommentSection({ postId }: { postId: string }) {
     if (!user || !text.trim()) return;
     setSubmitting(true);
     try {
-      const res = await fetch(`${API}/comments`, {
+      const res = await fetch(`${API_BASE}/comments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -64,7 +64,7 @@ export default function CommentSection({ postId }: { postId: string }) {
     if (!user?.email) return;
     setDeletingId(id);
     try {
-      await fetch(`${API}/comments/${id}?userEmail=${encodeURIComponent(user.email)}`, {
+      await fetch(`${API_BASE}/comments/${id}?userEmail=${encodeURIComponent(user.email)}`, {
         method: 'DELETE',
       });
       setComments(prev => prev.filter(c => c.id !== id));

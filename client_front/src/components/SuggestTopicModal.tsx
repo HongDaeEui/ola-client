@@ -1,9 +1,9 @@
 'use client';
+import { API_BASE } from '@/lib/api';
 
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-psi.vercel.app/api';
 
 export function SuggestTopicModal() {
   const { user, signInWithGoogle } = useAuth();
@@ -22,7 +22,7 @@ export function SuggestTopicModal() {
 
     setLoading(true);
     try {
-      await fetch(`${API}/posts`, {
+      await fetch(`${API_BASE}/posts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -1,7 +1,7 @@
+import { API_BASE } from '@/lib/api';
 import Link from 'next/link';
 import ResourceCard from './ResourceCard';
 
-const API = 'https://ola-backend-psi.vercel.app/api';
 
 interface Resource {
   id: string;
@@ -39,7 +39,7 @@ async function getResources(type?: string, difficulty?: string): Promise<Resourc
     if (type) params.set('type', type);
     if (difficulty) params.set('difficulty', difficulty);
     const qs = params.toString();
-    const res = await fetch(`${API}/resources${qs ? `?${qs}` : ''}`, { next: { revalidate: 60 } });
+    const res = await fetch(`${API_BASE}/resources${qs ? `?${qs}` : ''}`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     return res.json();
   } catch { return []; }
@@ -47,7 +47,7 @@ async function getResources(type?: string, difficulty?: string): Promise<Resourc
 
 async function getFeaturedResources(): Promise<Resource[]> {
   try {
-    const res = await fetch(`${API}/resources/featured`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${API_BASE}/resources/featured`, { next: { revalidate: 3600 } });
     if (!res.ok) return [];
     return res.json();
   } catch { return []; }
@@ -55,7 +55,7 @@ async function getFeaturedResources(): Promise<Resource[]> {
 
 async function getTypeCounts(): Promise<TypeCount[]> {
   try {
-    const res = await fetch(`${API}/resources/type-counts`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${API_BASE}/resources/type-counts`, { next: { revalidate: 3600 } });
     if (!res.ok) return [];
     return res.json();
   } catch { return []; }

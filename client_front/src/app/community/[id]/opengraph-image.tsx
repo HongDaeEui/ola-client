@@ -1,3 +1,4 @@
+import { API_BASE } from '@/lib/api';
 import { ImageResponse } from 'next/og';
 import { getFonts } from '@/lib/fonts';
 
@@ -9,7 +10,6 @@ export const size = {
 };
 export const contentType = 'image/png';
 
-const API_BASE = 'https://ola-backend-psi.vercel.app/api';
 
 async function getPost(id: string) {
   try {

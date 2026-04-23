@@ -1,10 +1,10 @@
 "use client";
+import { API_BASE } from '@/lib/api';
 
 import { useState, useEffect, useRef, KeyboardEvent } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
 
-const API = 'https://ola-backend-psi.vercel.app/api';
 const SAVE_KEY = 'ola_submit_draft';
 
 type TabType = 'tool' | 'prompt';
@@ -128,14 +128,14 @@ export default function SubmitPage() {
     setSubmitting(true);
     try {
       if (tab === 'tool') {
-        const res = await fetch(`${API}/tools`, {
+        const res = await fetch(`${API_BASE}/tools`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...tool, tags: tool.tags }),
         });
         if (!res.ok) throw new Error();
       } else {
-        const res = await fetch(`${API}/prompts`, {
+        const res = await fetch(`${API_BASE}/prompts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

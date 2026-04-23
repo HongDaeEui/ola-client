@@ -1,3 +1,4 @@
+import { API_BASE } from '@/lib/api';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
@@ -5,7 +6,6 @@ import { ShareButton } from '@/components/ShareButton';
 import { ViewTracker } from '@/components/ViewTracker';
 import CommentSection from './CommentSection';
 
-const API = 'https://ola-backend-psi.vercel.app/api';
 
 interface Author {
   username: string;
@@ -26,7 +26,7 @@ interface Post {
 
 async function getPost(id: string): Promise<Post | null> {
   try {
-    const res = await fetch(`${API}/posts/${id}`, { cache: 'no-store' });
+    const res = await fetch(`${API_BASE}/posts/${id}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return res.json();
   } catch {

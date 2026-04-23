@@ -1,10 +1,10 @@
 "use client";
+import { API_BASE } from '@/lib/api';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import CopyButton from '@/app/prompts/CopyButton';
 
-const API = 'https://ola-backend-psi.vercel.app/api';
 const LIMIT = 12;
 
 export interface Prompt {
@@ -37,7 +37,7 @@ export function PromptFeed({ initialPrompts, category }: Props) {
       const nextPage = page + 1;
       const qs = new URLSearchParams({ page: String(nextPage), limit: String(LIMIT) });
       if (category) qs.set('category', category);
-      const res = await fetch(`${API}/prompts?${qs}`);
+      const res = await fetch(`${API_BASE}/prompts?${qs}`);
       const data: Prompt[] = await res.json();
       if (data.length === 0) {
         setHasMore(false);

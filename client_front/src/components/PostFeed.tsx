@@ -1,9 +1,9 @@
 "use client";
+import { API_BASE } from '@/lib/api';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 
-const API = 'https://ola-backend-psi.vercel.app/api';
 const LIMIT = 10;
 
 interface Author {
@@ -59,7 +59,7 @@ export function PostFeed({ initialPosts, category }: Props) {
       const nextPage = page + 1;
       const qs = new URLSearchParams({ page: String(nextPage), limit: String(LIMIT) });
       if (category !== '전체') qs.set('category', category);
-      const res = await fetch(`${API}/posts?${qs}`);
+      const res = await fetch(`${API_BASE}/posts?${qs}`);
       const data: Post[] = await res.json();
       if (!Array.isArray(data) || data.length === 0) {
         setHasMore(false);
