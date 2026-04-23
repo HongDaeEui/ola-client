@@ -34,7 +34,7 @@ async function getTopCategories(): Promise<CategoryCount[]> {
   } catch { return []; }
 }
 
-export default async function Page({ params }: { params: { locale: string } }) {
+export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const t = useTranslations('Home');
   const [tools, posts, categories] = await Promise.all([
     getFeaturedTools(),
