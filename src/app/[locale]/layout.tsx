@@ -6,7 +6,6 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import { ChatWidget } from '@/components/ChatWidget';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
-export const runtime = "edge";
 export const revalidate = 300;
 
 export const metadata: Metadata = {

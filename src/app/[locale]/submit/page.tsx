@@ -1,9 +1,12 @@
 "use client";
+"use client";
+"use client";
 import { API_BASE } from '@/lib/api';
 
 import { useState, useEffect, useRef, KeyboardEvent } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from '@/i18n/routing';
+export const revalidate = 300;
 
 const SAVE_KEY = 'ola_submit_draft';
 

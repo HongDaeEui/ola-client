@@ -1,8 +1,8 @@
 import { API_BASE } from '@/lib/api';
 import { ImageResponse } from 'next/og';
 import { getFonts } from '@/lib/fonts';
+export const revalidate = 300;
 
-export const runtime = 'edge';
 export const alt = 'Ola Labs 실험실 공유';
 export const size = {
   width: 1200,

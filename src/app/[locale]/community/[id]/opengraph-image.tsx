@@ -1,8 +1,8 @@
 import { API_BASE } from '@/lib/api';
 import { ImageResponse } from 'next/og';
 import { getFonts } from '@/lib/fonts';
+export const revalidate = 300;
 
-export const runtime = 'edge';
 export const alt = 'Ola 커뮤니티 게시글 썸네일';
 export const size = {
   width: 1200,

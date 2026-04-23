@@ -1,5 +1,7 @@
 import { API_BASE } from '@/lib/api';
+import Image from "next/image";
 import { Link } from '@/i18n/routing';
+export const revalidate = 300;
 
 
 type RankedTool = {
@@ -75,7 +77,7 @@ export default async function RankingPage({ params }: { params: Promise<{ locale
                 className="flex items-center gap-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 rounded-2xl px-5 py-4 hover:border-sky-300 dark:hover:border-sky-700 hover:shadow-lg hover:shadow-sky-50 transition-all group">
                 <div className={`w-10 flex items-center justify-center font-black text-xl italic shrink-0 ${i < 3 ? 'text-sky-600' : 'text-slate-300'}`}>{i + 1}</div>
                 <div className="w-11 h-11 rounded-xl bg-slate-100 dark:bg-slate-800 shrink-0 flex items-center justify-center font-bold text-slate-500 dark:text-slate-400 text-sm group-hover:bg-slate-900 group-hover:text-white transition-colors overflow-hidden">
-                  {tool.iconUrl ? <img src={tool.iconUrl} alt={tool.name} className="w-full h-full object-cover" /> : tool.name.substring(0, 2)}
+                  {tool.iconUrl ? <Image src={tool.iconUrl} alt={tool.name} width={24} height={24} className="w-full h-full object-cover" /> : tool.name.substring(0, 2)}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">

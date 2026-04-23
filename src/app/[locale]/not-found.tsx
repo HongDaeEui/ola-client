@@ -1,4 +1,5 @@
 import { Link } from '@/i18n/routing';
+export const revalidate = 300;
 
 export default function NotFound() {
   return (

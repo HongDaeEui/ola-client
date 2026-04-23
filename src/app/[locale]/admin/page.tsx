@@ -1,8 +1,11 @@
 'use client';
+'use client';
+'use client';
 import { API_BASE } from '@/lib/api';
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+export const revalidate = 300;
 
 const ADMIN_EMAIL = 'admin@olalab.kr';
 

@@ -1,5 +1,8 @@
 "use client";
+"use client";
+"use client";
 import { API_BASE } from '@/lib/api';
+export const revalidate = 300;
 
 
 interface Props {

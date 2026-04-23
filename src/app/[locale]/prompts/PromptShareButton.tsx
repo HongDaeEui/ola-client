@@ -1,6 +1,9 @@
 'use client';
+'use client';
+'use client';
 
 import { Link } from '@/i18n/routing';
+export const revalidate = 300;
 
 export default function PromptShareButton() {
   return (

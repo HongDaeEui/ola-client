@@ -1,5 +1,6 @@
 import { API_BASE } from '@/lib/api';
 import { Link } from '@/i18n/routing';
+export const revalidate = 300;
 
 
 type CategoryCount = { category: string; count: number };

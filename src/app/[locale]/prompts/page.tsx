@@ -2,6 +2,7 @@ import { API_BASE } from '@/lib/api';
 import { Link } from '@/i18n/routing';
 import PromptShareButton from './PromptShareButton';
 import { PromptFeed, type Prompt } from '@/components/PromptFeed';
+export const revalidate = 300;
 
 const LIMIT = 12;
 

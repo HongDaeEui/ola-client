@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import MeetupCreateForm from './MeetupCreateForm';
+export const revalidate = 300;
 
 export const metadata = {
   title: '새 모임 개설하기 | Ola',
