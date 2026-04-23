@@ -6,8 +6,11 @@ import {
   Body,
   Param,
   Query,
+  UseGuards,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { ToolsService } from './tools.service';
+import { AdminGuard } from '../common/admin.guard';
 
 @Controller('tools')
 export class ToolsController {
@@ -37,6 +40,7 @@ export class ToolsController {
     return this.toolsService.getCategoryCounts();
   }
 
+  @UseGuards(AdminGuard)
   @Get('pending')
   findPending() {
     return this.toolsService.findPending();
@@ -47,16 +51,19 @@ export class ToolsController {
     return this.toolsService.findOne(id);
   }
 
+  @UseGuards(AdminGuard)
   @Patch(':id/approve')
   approve(@Param('id') id: string) {
     return this.toolsService.approve(id);
   }
 
+  @UseGuards(AdminGuard)
   @Patch(':id/reject')
   reject(@Param('id') id: string) {
     return this.toolsService.reject(id);
   }
 
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @Post()
   create(
     @Body()

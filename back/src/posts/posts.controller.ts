@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Patch, Body, Param, Query } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { PostsService } from './posts.service';
 
 @Controller('posts')
@@ -33,6 +34,7 @@ export class PostsController {
     return this.postsService.findOne(id);
   }
 
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
   @Post()
   create(
     @Body()
