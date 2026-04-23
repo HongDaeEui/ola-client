@@ -2,7 +2,7 @@
 import { API_BASE } from '@/lib/api';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { io, Socket } from 'socket.io-client';
 import { useAuth } from '@/context/AuthContext';
 

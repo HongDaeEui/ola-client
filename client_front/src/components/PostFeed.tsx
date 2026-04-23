@@ -2,7 +2,7 @@
 import { API_BASE } from '@/lib/api';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 
 const LIMIT = 10;
 
