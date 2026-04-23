@@ -1,6 +1,7 @@
-import { useTranslations } from 'next-intl';
 import { API_BASE } from '@/lib/api';
 import HomeClient from '@/components/HomeClient';
+export const runtime = "edge";
+export const revalidate = 300;
 
 interface Tool {
   id: string; name: string; shortDesc: string; description: string;
@@ -34,8 +35,7 @@ async function getTopCategories(): Promise<CategoryCount[]> {
   } catch { return []; }
 }
 
-export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
-  const t = useTranslations('Home');
+export default async function Page() {
   const [tools, posts, categories] = await Promise.all([
     getFeaturedTools(),
     getRecentPosts(),
