@@ -1,6 +1,24 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
+// 목록 API 공통 select: description 제외하여 페이로드 최소화
+const TOOL_LIST_SELECT = {
+  id: true,
+  name: true,
+  shortDesc: true,
+  category: true,
+  pricingModel: true,
+  rating: true,
+  iconUrl: true,
+  coverUrl: true,
+  isFeatured: true,
+  tags: true,
+  likes: true,
+  status: true,
+  launchUrl: true,
+  createdAt: true,
+} as const;
+
 @Injectable()
 export class ToolsService {
   constructor(private prisma: PrismaService) {}
@@ -18,20 +36,7 @@ export class ToolsService {
     return this.prisma.tool.findMany({
       where,
       orderBy,
-      select: {
-        id: true,
-        name: true,
-        shortDesc: true,
-        description: true,
-        category: true,
-        pricingModel: true,
-        rating: true,
-        tags: true,
-        iconUrl: true,
-        coverUrl: true,
-        isFeatured: true,
-        // 목록에 불필요한 필드 제외: launchUrl, developer, status, createdAt, updatedAt
-      },
+      select: TOOL_LIST_SELECT,
     });
   }
 
@@ -39,6 +44,7 @@ export class ToolsService {
     return this.prisma.tool.findMany({
       where: { isFeatured: true },
       take: 5,
+      select: TOOL_LIST_SELECT,
     });
   }
 
@@ -47,7 +53,7 @@ export class ToolsService {
       where: { status: 'ACTIVE' },
       orderBy: { rating: 'desc' },
       take: limit,
-      select: { id: true, name: true, shortDesc: true, category: true, rating: true, pricingModel: true, iconUrl: true, isFeatured: true },
+      select: TOOL_LIST_SELECT,
     });
   }
 
@@ -99,6 +105,26 @@ export class ToolsService {
     });
 
     return { ...tool, relatedLabs };
+  }
+
+  async findRelated(id: string) {
+    const tool = await this.prisma.tool.findUnique({
+      where: { id },
+      select: { id: true, category: true },
+    });
+
+    if (!tool) throw new NotFoundException(`도구(${id})를 찾을 수 없습니다.`);
+
+    return this.prisma.tool.findMany({
+      where: {
+        category: tool.category,
+        status: 'ACTIVE',
+        NOT: { id: tool.id },
+      },
+      orderBy: { rating: 'desc' },
+      take: 4,
+      select: TOOL_LIST_SELECT,
+    });
   }
 
   async create(data: {

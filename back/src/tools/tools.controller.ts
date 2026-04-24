@@ -46,6 +46,11 @@ export class ToolsController {
     return this.toolsService.findPending();
   }
 
+  @Get(':id/related')
+  findRelated(@Param('id') id: string) {
+    return this.toolsService.findRelated(id);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.toolsService.findOne(id);
