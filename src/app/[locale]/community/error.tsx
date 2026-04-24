@@ -2,7 +2,6 @@
 "use client";
 "use client";
 import { useEffect } from 'react';
-export const revalidate = 300;
 
 export default function CommunityError({
   error,

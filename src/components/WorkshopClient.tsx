@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Link } from '@/i18n/routing';
-export const runtime = "edge";
-export const revalidate = 300;
 
 interface Step {
   heading: string;

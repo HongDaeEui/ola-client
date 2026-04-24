@@ -6,7 +6,6 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from '@/i18n/routing';
 import { FormEvent, useState } from 'react';
 import { Link } from '@/i18n/routing';
-export const revalidate = 300;
 
 export default function MeetupCreateForm() {
   const searchParams = useSearchParams();

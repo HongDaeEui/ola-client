@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-export const runtime = "edge";
-export const revalidate = 300;
 
 interface Props {
   title: string;

@@ -2,8 +2,6 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import { useChat } from '@ai-sdk/react';
-export const runtime = "edge";
-export const revalidate = 300;
 
 const QUICK_QUESTIONS = [
   '요즘 핫한 AI 도구 추천해줘',

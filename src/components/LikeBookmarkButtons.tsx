@@ -5,8 +5,6 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { createClient } from '@/lib/supabase/client';
-export const runtime = "edge";
-export const revalidate = 300;
 
 const supabase = createClient();
 

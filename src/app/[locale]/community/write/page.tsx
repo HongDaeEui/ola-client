@@ -8,7 +8,6 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from '@/i18n/routing';
 import { Link } from '@/i18n/routing';
 import { ImageUpload } from '@/components/ImageUpload';
-export const revalidate = 300;
 
 const DRAFT_KEY = 'ola_post_draft';
 

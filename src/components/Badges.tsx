@@ -1,8 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-export const runtime = "edge";
-export const revalidate = 300;
 
 export function OlaVerifiedBadge() {
   return (

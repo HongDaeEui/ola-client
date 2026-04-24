@@ -4,8 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from '@/i18n/routing';
 import { API_BASE } from '@/lib/api';
-export const runtime = "edge";
-export const revalidate = 300;
 
 interface SearchResult {
   title: string;

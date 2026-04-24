@@ -2,8 +2,6 @@
 
 import { motion, type Variants } from 'framer-motion';
 import { type ReactNode } from 'react';
-export const runtime = "edge";
-export const revalidate = 300;
 
 interface ScrollRevealProps {
   children: ReactNode;
