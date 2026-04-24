@@ -4,7 +4,7 @@ import { API_BASE } from '@/lib/api';
 
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from '@/i18n/routing';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from '@/i18n/routing';
 import { createClient } from '@/lib/supabase/client';
 export const revalidate = 300;
@@ -81,6 +81,13 @@ export default function ProfilePage() {
   const [prompts, setPrompts] = useState<MyPrompt[]>([]);
   const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
+  const [tabErrors, setTabErrors] = useState<Record<Tab, string | null>>({
+    overview: null,
+    posts: null,
+    prompts: null,
+    bookmarks: null,
+  });
+  const fetchedTabs = useRef<Set<Tab>>(new Set());
 
   useEffect(() => {
     if (!loading && !user) router.push('/');
@@ -88,24 +95,46 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!user) return;
-    if (tab === 'posts' && posts.length === 0) {
+    if (fetchedTabs.current.has(tab)) return;
+
+    if (tab === 'posts') {
+      fetchedTabs.current.add('posts');
       setDataLoading(true);
+      setTabErrors(prev => ({ ...prev, posts: null }));
       fetch(`${API_BASE}/posts?userEmail=${encodeURIComponent(user.email!)}`)
-        .then(r => r.json())
+        .then(r => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          return r.json();
+        })
         .then(d => setPosts(d))
-        .catch(() => {})
+        .catch(err => {
+          console.error('[profile] posts fetch failed:', err);
+          fetchedTabs.current.delete('posts');
+          setTabErrors(prev => ({ ...prev, posts: '불러오기 실패' }));
+        })
         .finally(() => setDataLoading(false));
     }
-    if (tab === 'prompts' && prompts.length === 0) {
+    if (tab === 'prompts') {
+      fetchedTabs.current.add('prompts');
       setDataLoading(true);
+      setTabErrors(prev => ({ ...prev, prompts: null }));
       fetch(`${API_BASE}/prompts?userEmail=${encodeURIComponent(user.email!)}`)
-        .then(r => r.json())
+        .then(r => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          return r.json();
+        })
         .then(d => setPrompts(d))
-        .catch(() => {})
+        .catch(err => {
+          console.error('[profile] prompts fetch failed:', err);
+          fetchedTabs.current.delete('prompts');
+          setTabErrors(prev => ({ ...prev, prompts: '불러오기 실패' }));
+        })
         .finally(() => setDataLoading(false));
     }
-    if (tab === 'bookmarks' && bookmarks.length === 0) {
+    if (tab === 'bookmarks') {
+      fetchedTabs.current.add('bookmarks');
       setDataLoading(true);
+      setTabErrors(prev => ({ ...prev, bookmarks: null }));
       (async () => {
         try {
           const { data: { session } } = await supabase.auth.getSession();
@@ -117,9 +146,13 @@ export default function ProfilePage() {
           const res = await fetch(`${API_BASE}/bookmarks`, {
             headers: { Authorization: `Bearer ${token}` },
           });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
           const d = await res.json();
           setBookmarks(d);
-        } catch {
+        } catch (err) {
+          console.error('[profile] bookmarks fetch failed:', err);
+          fetchedTabs.current.delete('bookmarks');
+          setTabErrors(prev => ({ ...prev, bookmarks: '불러오기 실패' }));
           setBookmarks([]);
         } finally {
           setDataLoading(false);
@@ -255,6 +288,12 @@ export default function ProfilePage() {
               <div className="py-16 flex justify-center">
                 <div className="w-6 h-6 border-2 border-sky-500 border-t-transparent rounded-full animate-spin" />
               </div>
+            ) : tabErrors.posts ? (
+              <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700">
+                <span className="material-symbols-outlined text-[40px] text-rose-300 block mb-3">error_outline</span>
+                <p className="text-rose-500 font-bold mb-1">{tabErrors.posts}</p>
+                <p className="text-xs text-slate-400">잠시 후 다시 시도해주세요.</p>
+              </div>
             ) : posts.length === 0 ? (
               <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700">
                 <span className="material-symbols-outlined text-[40px] text-slate-200 block mb-3">edit_note</span>
@@ -306,6 +345,12 @@ export default function ProfilePage() {
               <div className="py-16 flex justify-center">
                 <div className="w-6 h-6 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
               </div>
+            ) : tabErrors.prompts ? (
+              <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700">
+                <span className="material-symbols-outlined text-[40px] text-rose-300 block mb-3">error_outline</span>
+                <p className="text-rose-500 font-bold mb-1">{tabErrors.prompts}</p>
+                <p className="text-xs text-slate-400">잠시 후 다시 시도해주세요.</p>
+              </div>
             ) : prompts.length === 0 ? (
               <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700">
                 <span className="material-symbols-outlined text-[40px] text-slate-200 block mb-3">auto_awesome</span>
@@ -349,6 +394,12 @@ export default function ProfilePage() {
             {dataLoading ? (
               <div className="py-16 flex justify-center">
                 <div className="w-6 h-6 border-2 border-sky-500 border-t-transparent rounded-full animate-spin" />
+              </div>
+            ) : tabErrors.bookmarks ? (
+              <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700">
+                <span className="material-symbols-outlined text-[40px] text-rose-300 block mb-3">error_outline</span>
+                <p className="text-rose-500 font-bold mb-1">{tabErrors.bookmarks}</p>
+                <p className="text-xs text-slate-400">잠시 후 다시 시도해주세요.</p>
               </div>
             ) : bookmarks.length === 0 ? (
               <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700">

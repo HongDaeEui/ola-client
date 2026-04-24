@@ -87,18 +87,28 @@ export function NotificationBell() {
     });
     socketRef.current = socket;
 
-    socket.on('notification', (n: Notification) => {
+    const handleNotification = (n: Notification) => {
       setUnread(prev => prev + 1);
       setNotifications(prev => [n, ...prev]);
-    });
-
-    socket.on('connect_error', (err) => {
+    };
+    const handleConnect = () => {
+      // 연결 성공 시점 hook (현재는 별도 처리 없음)
+    };
+    const handleConnectError = (err: Error) => {
       console.warn('[NotificationBell] WS connect error:', err.message);
-    });
+    };
+
+    socket.on('notification', handleNotification);
+    socket.on('connect', handleConnect);
+    socket.on('connect_error', handleConnectError);
 
     return () => {
-      socket.off('connect_error');
-      socket.disconnect();
+      const current = socketRef.current;
+      if (!current) return;
+      current.off('notification', handleNotification);
+      current.off('connect', handleConnect);
+      current.off('connect_error', handleConnectError);
+      current.disconnect();
       socketRef.current = null;
     };
   }, [user?.email]);
