@@ -4,8 +4,11 @@ import { API_BASE } from '@/lib/api';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
+import { createClient } from '@/lib/supabase/client';
 export const runtime = "edge";
 export const revalidate = 300;
+
+const supabase = createClient();
 
 
 interface Props {
@@ -26,13 +29,20 @@ export function LikeBookmarkButtons({ targetType, targetId, initialLikes, varian
   useEffect(() => {
     if (!user) return;
     const uid = user.id;
-    Promise.all([
-      fetch(`${API_BASE}/likes/status?userId=${uid}&targetType=${targetType}&targetId=${targetId}`).then(r => r.json()),
-      fetch(`${API_BASE}/bookmarks/status?userId=${uid}&targetType=${targetType}&targetId=${targetId}`).then(r => r.json()),
-    ]).then(([l, b]) => {
-      setLiked(l.liked);
-      setBookmarked(b.bookmarked);
-    }).catch(() => {});
+    (async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const token = session?.access_token;
+        if (!token) return;
+        const authHeaders = { Authorization: `Bearer ${token}` };
+        const [l, b] = await Promise.all([
+          fetch(`${API_BASE}/likes/status?userId=${uid}&targetType=${targetType}&targetId=${targetId}`, { headers: authHeaders }).then(r => r.json()),
+          fetch(`${API_BASE}/bookmarks/status?targetType=${targetType}&targetId=${targetId}`, { headers: authHeaders }).then(r => r.json()),
+        ]);
+        setLiked(l.liked);
+        setBookmarked(b.bookmarked);
+      } catch { /* ignore */ }
+    })();
   }, [user, targetType, targetId]);
 
   function requireLogin() {
@@ -63,10 +73,16 @@ export function LikeBookmarkButtons({ targetType, targetId, initialLikes, varian
     if (loading) return;
     setLoading(true);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) return;
       const res = await fetch(`${API_BASE}/bookmarks/toggle`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id, targetType, targetId }),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ targetType, targetId }),
       });
       const data = await res.json();
       setBookmarked(data.bookmarked);

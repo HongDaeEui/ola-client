@@ -6,7 +6,10 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from '@/i18n/routing';
 import { useEffect, useState } from 'react';
 import { Link } from '@/i18n/routing';
+import { createClient } from '@/lib/supabase/client';
 export const revalidate = 300;
+
+const supabase = createClient();
 
 
 type Tab = 'overview' | 'posts' | 'prompts' | 'bookmarks';
@@ -103,11 +106,25 @@ export default function ProfilePage() {
     }
     if (tab === 'bookmarks' && bookmarks.length === 0) {
       setDataLoading(true);
-      fetch(`${API_BASE}/bookmarks?userId=${user.id}`)
-        .then(r => r.json())
-        .then(d => setBookmarks(d))
-        .catch(() => {})
-        .finally(() => setDataLoading(false));
+      (async () => {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          const token = session?.access_token;
+          if (!token) {
+            setBookmarks([]);
+            return;
+          }
+          const res = await fetch(`${API_BASE}/bookmarks`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const d = await res.json();
+          setBookmarks(d);
+        } catch {
+          setBookmarks([]);
+        } finally {
+          setDataLoading(false);
+        }
+      })();
     }
   }, [tab, user]);
 

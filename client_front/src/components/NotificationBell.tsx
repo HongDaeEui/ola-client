@@ -5,10 +5,12 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from '@/i18n/routing';
 import { io, Socket } from 'socket.io-client';
 import { useAuth } from '@/context/AuthContext';
+import { createClient } from '@/lib/supabase/client';
 export const runtime = "edge";
 export const revalidate = 300;
 
 const WS_URL = API_BASE.replace(/\/api$/, '');
+const supabase = createClient();
 
 interface Notification {
   id: string;
@@ -49,7 +51,12 @@ export function NotificationBell() {
   const fetchAll = useCallback(async () => {
     if (!user?.email) return;
     try {
-      const res = await fetch(`${API_BASE}/notifications?userEmail=${encodeURIComponent(user.email)}`);
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) return;
+      const res = await fetch(`${API_BASE}/notifications`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await res.json();
       setNotifications(data);
       setUnread(data.filter((n: Notification) => !n.read).length);
@@ -62,10 +69,18 @@ export function NotificationBell() {
     if (!user?.email) return;
 
     // Initial fetch for unread count
-    fetch(`${API_BASE}/notifications/unread-count?userEmail=${encodeURIComponent(user.email)}`)
-      .then(r => r.json())
-      .then(d => setUnread(d.count ?? 0))
-      .catch(() => {});
+    (async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const token = session?.access_token;
+        if (!token) return;
+        const res = await fetch(`${API_BASE}/notifications/unread-count`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const d = await res.json();
+        setUnread(d.count ?? 0);
+      } catch { /* ignore */ }
+    })();
 
     const socket = io(`${WS_URL}/notifications`, {
       query: { userEmail: user.email },
@@ -107,13 +122,25 @@ export function NotificationBell() {
 
   async function handleMarkAllRead() {
     if (!user?.email) return;
-    await fetch(`${API_BASE}/notifications/read-all?userEmail=${encodeURIComponent(user.email)}`, { method: 'PATCH' });
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
+    if (!token) return;
+    await fetch(`${API_BASE}/notifications/read-all`, {
+      method: 'PATCH',
+      headers: { Authorization: `Bearer ${token}` },
+    });
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
     setUnread(0);
   }
 
   async function handleClickNotification(id: string) {
-    await fetch(`${API_BASE}/notifications/${id}/read`, { method: 'PATCH' });
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
+    if (!token) return;
+    await fetch(`${API_BASE}/notifications/${id}/read`, {
+      method: 'PATCH',
+      headers: { Authorization: `Bearer ${token}` },
+    });
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
     setUnread(prev => Math.max(0, prev - 1));
     setOpen(false);
