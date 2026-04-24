@@ -33,11 +33,17 @@ export class CommentsController {
     body: {
       content: string;
       postId: string;
-      userEmail: string;
       userName: string;
     },
+    @Headers('authorization') authorization?: string,
   ) {
-    return this.commentsService.create(body);
+    const email = this.requireEmailFromAuthHeader(authorization);
+    return this.commentsService.create({
+      content: body.content,
+      postId: body.postId,
+      userEmail: email,
+      userName: body.userName,
+    });
   }
 
   @Delete(':id')
@@ -45,6 +51,23 @@ export class CommentsController {
     @Param('id') id: string,
     @Headers('authorization') authorization?: string,
   ) {
+    const email = this.requireEmailFromAuthHeader(authorization);
+
+    const result = await this.commentsService.remove(id, email);
+    if (!result) {
+      // Either comment does not exist or the requester is not the author
+      throw new ForbiddenException(
+        'You are not allowed to delete this comment.',
+      );
+    }
+    return result;
+  }
+
+  /**
+   * Authorization 헤더에서 Bearer 토큰을 추출하고 email 클레임을 반환한다.
+   * 실패 시 401 UnauthorizedException 을 throw 한다.
+   */
+  private requireEmailFromAuthHeader(authorization?: string): string {
     if (!authorization || !authorization.toLowerCase().startsWith('bearer ')) {
       throw new UnauthorizedException('Missing Bearer token.');
     }
@@ -58,35 +81,27 @@ export class CommentsController {
     if (!email) {
       throw new UnauthorizedException('Token does not contain an email claim.');
     }
-
-    const result = await this.commentsService.remove(id, email);
-    if (!result) {
-      // Either comment does not exist or the requester is not the author
-      throw new ForbiddenException(
-        'You are not allowed to delete this comment.',
-      );
-    }
-    return result;
+    return email;
   }
 
   /**
    * Supabase JWT 에서 email 클레임을 추출한다.
-   * - SUPABASE_JWT_SECRET 이 있으면 verify (서명 검증)
-   * - 없으면 decode 만 수행 (개발 환경 대비)
+   * SUPABASE_JWT_SECRET 이 설정되어 있지 않으면 즉시 401 을 throw 한다.
+   * (서명 검증 없는 decode 폴백은 보안상 허용하지 않는다.)
    */
   private extractEmailFromToken(token: string): string | null {
     const secret = process.env.SUPABASE_JWT_SECRET;
-    try {
-      let payload: jwt.JwtPayload | string | null = null;
-      if (secret && secret.trim().length > 0) {
-        payload = jwt.verify(token, secret) as jwt.JwtPayload;
-      } else {
-        this.logger.warn(
-          'SUPABASE_JWT_SECRET is not configured. Falling back to unsafe decode().',
-        );
-        payload = jwt.decode(token);
-      }
+    if (!secret || secret.trim().length === 0) {
+      this.logger.error(
+        'SUPABASE_JWT_SECRET is not configured. Refusing to accept JWT without signature verification.',
+      );
+      throw new UnauthorizedException(
+        'Server authentication is not configured.',
+      );
+    }
 
+    try {
+      const payload = jwt.verify(token, secret) as jwt.JwtPayload;
       if (!payload || typeof payload === 'string') return null;
 
       const candidate =
