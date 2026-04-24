@@ -1,4 +1,4 @@
-import { API_BASE } from '@/lib/api';
+import { API_BASE, apiFetch } from '@/lib/api';
 import Image from "next/image";
 import { Link } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
@@ -10,7 +10,7 @@ export const revalidate = 300;
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   try {
-    const res = await fetch(`${API_BASE}/tools/${id}`, { cache: 'no-store' });
+    const res = await apiFetch(`${API_BASE}/tools/${id}`, { cache: 'no-store' });
     if (!res.ok) return { title: 'Tool Not Found — Ola' };
     const tool = await res.json();
     return {
@@ -63,7 +63,7 @@ interface Tool {
 
 async function getTool(id: string): Promise<Tool | null> {
   try {
-    const res = await fetch(`${API_BASE}/tools/${id}`, { cache: 'no-store' });
+    const res = await apiFetch(`${API_BASE}/tools/${id}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return await res.json();
   } catch {
@@ -73,7 +73,7 @@ async function getTool(id: string): Promise<Tool | null> {
 
 async function getRelatedTools(currentId: string): Promise<Tool[]> {
   try {
-    const res = await fetch(`${API_BASE}/tools`, { next: { revalidate: 60 } });
+    const res = await apiFetch(`${API_BASE}/tools`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     const all: Tool[] = await res.json();
     return all.filter(t => t.id !== currentId).slice(0, 4);

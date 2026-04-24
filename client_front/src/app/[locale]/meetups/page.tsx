@@ -1,12 +1,12 @@
 import { RsvpButton } from '@/components/RsvpButton';
 import { SuggestTopicModal } from '@/components/SuggestTopicModal';
-import { API_BASE } from '@/lib/api';
+import { API_BASE, apiFetch } from '@/lib/api';
 import { LivePulseBadge } from '@/components/Badges';
 export const revalidate = 300;
 
 async function getUpcomingMeetups() {
   try {
-    const res = await fetch(`${API_BASE}/meetups/upcoming`, {
+    const res = await apiFetch(`${API_BASE}/meetups/upcoming`, {
       next: { revalidate: 3600 },
     });
     if (!res.ok) return [];

@@ -6,3 +6,12 @@
  */
 export const API_BASE =
   process.env.NEXT_PUBLIC_API_URL ?? 'https://ola-backend-9f03.onrender.com/api';
+
+export async function apiFetch(url: string, init: RequestInit & { next?: object } = {}): Promise<Response> {
+  const { next, ...rest } = init as RequestInit & { next?: object };
+  return fetch(url, {
+    ...rest,
+    ...(next ? { next } : {}),
+    signal: AbortSignal.timeout(5000),
+  });
+}

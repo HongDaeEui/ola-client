@@ -1,4 +1,4 @@
-import { API_BASE } from '@/lib/api';
+import { API_BASE, apiFetch } from '@/lib/api';
 import { Link } from '@/i18n/routing';
 import PromptShareButton from './PromptShareButton';
 import { PromptFeed, type Prompt } from '@/components/PromptFeed';
@@ -12,7 +12,7 @@ async function getPrompts(category?: string): Promise<Prompt[]> {
   try {
     const qs = new URLSearchParams({ page: '1', limit: String(LIMIT) });
     if (category) qs.set('category', category);
-    const res = await fetch(`${API_BASE}/prompts?${qs}`, { next: { revalidate: 60 } });
+    const res = await apiFetch(`${API_BASE}/prompts?${qs}`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     return res.json();
   } catch {
