@@ -1,4 +1,6 @@
 "use client";
+"use client";
+import Image from "next/image";
 import { API_BASE } from '@/lib/api';
 
 import { Link } from '@/i18n/routing';
@@ -9,6 +11,8 @@ import { useAuth } from '@/context/AuthContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { NotificationBell } from '@/components/NotificationBell';
 import { CommandPalette } from '@/components/CommandPalette';
+export const runtime = "edge";
+export const revalidate = 300;
 
 
 interface Suggestions {
@@ -31,7 +35,7 @@ function SearchDropdown({ suggestions, onClose }: { suggestions: Suggestions; on
             <Link key={t.id} href={`/tools/${t.id}`} onClick={onClose}
               className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 dark:hover:bg-slate-700 transition-colors">
               {t.iconUrl
-                ? <img src={t.iconUrl} alt={t.name} className="w-6 h-6 rounded-lg object-cover flex-shrink-0" />
+                ? <Image src={t.iconUrl} alt={t.name} width={24} height={24} className="w-6 h-6 rounded-lg object-cover flex-shrink-0" />
                 : <span className="material-symbols-outlined text-[18px] text-slate-400 flex-shrink-0">extension</span>}
               <div className="min-w-0">
                 <p className="text-sm font-bold text-slate-800 dark:text-slate-200 truncate">{t.name}</p>

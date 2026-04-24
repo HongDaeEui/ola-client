@@ -3,6 +3,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import type { User } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
+export const runtime = "edge";
+export const revalidate = 300;
 
 interface AuthContextType {
   user: User | null;

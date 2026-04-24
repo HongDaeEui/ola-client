@@ -1,6 +1,8 @@
 "use client";
 
 import { Link } from '@/i18n/routing';
+export const runtime = "edge";
+export const revalidate = 300;
 
 export function WriteFAB() {
   return (
