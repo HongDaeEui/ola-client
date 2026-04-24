@@ -1,6 +1,4 @@
 "use client";
-"use client";
-"use client";
 import { API_BASE } from '@/lib/api';
 
 import { useState, useEffect } from 'react';
@@ -8,6 +6,9 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from '@/i18n/routing';
 import { Link } from '@/i18n/routing';
 import { ImageUpload } from '@/components/ImageUpload';
+import { createClient } from '@/lib/supabase/client';
+
+const supabase = createClient();
 
 const DRAFT_KEY = 'ola_post_draft';
 
@@ -60,15 +61,24 @@ export default function WritePage() {
     if (!validate()) return;
     setSubmitting(true);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        setErrors({ submit: '로그인이 만료되었습니다. 다시 로그인해주세요.' });
+        setSubmitting(false);
+        return;
+      }
       const res = await fetch(`${API_BASE}/posts`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
           title: title.trim(),
           content: content.trim(),
           category,
           ...(imageUrl ? { imageUrl } : {}),
-          userEmail: user!.email,
           userName: user!.user_metadata?.name ?? user!.user_metadata?.full_name ?? user!.email,
         }),
       });
@@ -129,7 +139,7 @@ export default function WritePage() {
           <div className="bg-white rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50 overflow-hidden">
 
             <div className="flex items-center gap-3 px-8 pt-8 pb-6 border-b border-slate-100">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold">
+              <div className="w-10 h-10 rounded-full bg-linear-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold">
                 {(user.user_metadata?.name ?? user.email ?? 'U').charAt(0).toUpperCase()}
               </div>
               <div>
