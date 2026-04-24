@@ -21,6 +21,11 @@ const nextConfig: NextConfig = {
         hostname: '*.supabase.co',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'logo.clearbit.com',
+        pathname: '/**',
+      },
     ],
     formats: ['image/avif', 'image/webp'],
   },
