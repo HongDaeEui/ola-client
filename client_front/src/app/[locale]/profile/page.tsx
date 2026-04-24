@@ -7,7 +7,6 @@ import { useRouter } from '@/i18n/routing';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from '@/i18n/routing';
 import { createClient } from '@/lib/supabase/client';
-export const revalidate = 300;
 
 const supabase = createClient();
 

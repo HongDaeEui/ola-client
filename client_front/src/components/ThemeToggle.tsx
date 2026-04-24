@@ -1,8 +1,6 @@
 "use client";
 
 import { useTheme } from './ThemeProvider';
-export const runtime = "edge";
-export const revalidate = 300;
 
 export function ThemeToggle() {
   const { theme, toggle } = useTheme();

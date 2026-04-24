@@ -3,7 +3,6 @@
 'use client';
 
 import { useState } from 'react';
-export const revalidate = 300;
 
 interface Props {
   text: string;

@@ -3,8 +3,6 @@ import { API_BASE } from '@/lib/api';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from '@/i18n/routing';
-export const runtime = "edge";
-export const revalidate = 300;
 
 const LIMIT = 10;
 

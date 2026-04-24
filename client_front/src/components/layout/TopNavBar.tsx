@@ -11,8 +11,6 @@ import { useAuth } from '@/context/AuthContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { NotificationBell } from '@/components/NotificationBell';
 import { CommandPalette } from '@/components/CommandPalette';
-export const runtime = "edge";
-export const revalidate = 300;
 
 
 interface Suggestions {

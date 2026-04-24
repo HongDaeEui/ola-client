@@ -3,8 +3,6 @@ import { API_BASE } from '@/lib/api';
 
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-export const runtime = "edge";
-export const revalidate = 300;
 
 
 export function SuggestTopicModal() {
