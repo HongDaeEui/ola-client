@@ -166,7 +166,7 @@ export function TopNavBar() { const t = useTranslations('Nav');
             </Link>
           </div>
 
-          <div className="hidden lg:flex items-center gap-10 font-['Noto_Sans_KR'] font-bold text-[15px] tracking-wide ml-8">
+          <div className="hidden lg:flex items-center gap-4 xl:gap-6 2xl:gap-10 font-['Noto_Sans_KR'] font-bold text-sm xl:text-[15px] tracking-wide lg:ml-4 2xl:ml-8 whitespace-nowrap">
             <Link href="/tools" className="text-slate-600 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-400 hover:-translate-y-0.5 transition-all duration-300">
               {t('tools')}
             </Link>
