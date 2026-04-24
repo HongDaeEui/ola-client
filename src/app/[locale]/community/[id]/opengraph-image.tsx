@@ -1,4 +1,4 @@
-import { API_BASE } from '@/lib/api';
+import { API_BASE, apiFetch } from '@/lib/api';
 import { ImageResponse } from 'next/og';
 import { getFonts } from '@/lib/fonts';
 export const revalidate = 300;
@@ -13,7 +13,7 @@ export const contentType = 'image/png';
 
 async function getPost(id: string) {
   try {
-    const res = await fetch(`${API_BASE}/posts/${id}`);
+    const res = await apiFetch(`${API_BASE}/posts/${id}`);
     if (!res.ok) return null;
     return await res.json();
   } catch {

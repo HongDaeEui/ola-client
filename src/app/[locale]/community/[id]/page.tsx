@@ -1,4 +1,4 @@
-import { API_BASE } from '@/lib/api';
+import { API_BASE, apiFetch } from '@/lib/api';
 import Image from "next/image";
 import { Link } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
@@ -28,7 +28,7 @@ interface Post {
 
 async function getPost(id: string): Promise<Post | null> {
   try {
-    const res = await fetch(`${API_BASE}/posts/${id}`, { cache: 'no-store' });
+    const res = await apiFetch(`${API_BASE}/posts/${id}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return res.json();
   } catch {

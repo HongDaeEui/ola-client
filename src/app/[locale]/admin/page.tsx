@@ -1,7 +1,7 @@
 'use client';
 'use client';
 'use client';
-import { API_BASE } from '@/lib/api';
+import { API_BASE, apiFetch } from '@/lib/api';
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
@@ -48,7 +48,7 @@ export default function AdminPage() {
   async function handleAction(id: string, action: 'approve' | 'reject') {
     setActionLoading(prev => ({ ...prev, [id]: action }));
     try {
-      await fetch(`${API_BASE}/tools/${id}/${action}`, { method: 'PATCH' });
+      await apiFetch(`${API_BASE}/tools/${id}/${action}`, { method: 'PATCH' });
       setDone(prev => ({ ...prev, [id]: action === 'approve' ? 'approved' : 'rejected' }));
     } finally {
       setActionLoading(prev => ({ ...prev, [id]: null }));

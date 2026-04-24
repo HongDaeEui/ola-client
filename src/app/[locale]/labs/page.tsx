@@ -1,6 +1,6 @@
 import { Link } from '@/i18n/routing';
 import Image from "next/image";
-import { API_BASE } from '@/lib/api';
+import { API_BASE, apiFetch } from '@/lib/api';
 export const revalidate = 300;
 
 interface Experiment {
@@ -22,7 +22,7 @@ async function getExperiments(category?: string): Promise<Experiment[]> {
     const params = new URLSearchParams();
     if (category && category !== '전체 레시피') params.set('category', category);
     const qs = params.toString();
-    const res = await fetch(`${API_BASE}/labs${qs ? `?${qs}` : ''}`, { next: { revalidate: 60 } });
+    const res = await apiFetch(`${API_BASE}/labs${qs ? `?${qs}` : ''}`, { next: { revalidate: 60 } });
     if (!res.ok) throw new Error('Failed to fetch data');
     return await res.json();
   } catch (error) {

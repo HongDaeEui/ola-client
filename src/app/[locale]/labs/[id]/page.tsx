@@ -1,4 +1,4 @@
-import { API_BASE } from '@/lib/api';
+import { API_BASE, apiFetch } from '@/lib/api';
 import { Link } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
@@ -9,7 +9,7 @@ export const revalidate = 300;
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   try {
-    const res = await fetch(`${API_BASE}/labs/${id}`, { cache: 'no-store' });
+    const res = await apiFetch(`${API_BASE}/labs/${id}`, { cache: 'no-store' });
     if (!res.ok) return { title: 'Lab Not Found — Ola' };
     const lab = await res.json();
     const title = `${lab.emoji ? lab.emoji + ' ' : ''}${lab.title} — Ola Labs`;
@@ -51,7 +51,7 @@ interface Lab {
 
 async function getLab(id: string): Promise<Lab | null> {
   try {
-    const res = await fetch(`${API_BASE}/labs/${id}`, { cache: 'no-store' });
+    const res = await apiFetch(`${API_BASE}/labs/${id}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return await res.json();
   } catch {
@@ -61,7 +61,7 @@ async function getLab(id: string): Promise<Lab | null> {
 
 async function getRelatedLabs(currentId: string, category: string): Promise<Lab[]> {
   try {
-    const res = await fetch(`${API_BASE}/labs`, { next: { revalidate: 60 } });
+    const res = await apiFetch(`${API_BASE}/labs`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     const all: Lab[] = await res.json();
     const same = all.filter(l => l.id !== currentId && l.category === category);

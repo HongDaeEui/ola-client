@@ -1,4 +1,4 @@
-import { API_BASE } from '@/lib/api';
+import { API_BASE, apiFetch } from '@/lib/api';
 import Image from "next/image";
 import { Link } from '@/i18n/routing';
 export const revalidate = 300;
@@ -38,7 +38,7 @@ async function getTools(filters: { category?: string; pricing?: string; sort?: s
   if (filters.sort) params.set('sort', filters.sort);
   const qs = params.toString();
   try {
-    const res = await fetch(`${API_BASE}/tools${qs ? `?${qs}` : ''}`, { next: { revalidate: 60 } });
+    const res = await apiFetch(`${API_BASE}/tools${qs ? `?${qs}` : ''}`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
     return res.json();
   } catch { return []; }
@@ -46,7 +46,7 @@ async function getTools(filters: { category?: string; pricing?: string; sort?: s
 
 async function getCategories(): Promise<string[]> {
   try {
-    const res = await fetch(`${API_BASE}/tools/categories`, { next: { revalidate: 300 } });
+    const res = await apiFetch(`${API_BASE}/tools/categories`, { next: { revalidate: 300 } });
     if (!res.ok) return [];
     const data: { category: string }[] = await res.json();
     return data.map(d => d.category);

@@ -1,4 +1,4 @@
-import { API_BASE } from '@/lib/api';
+import { API_BASE, apiFetch } from '@/lib/api';
 import HomeClient from '@/components/HomeClient';
 export const revalidate = 300;
 

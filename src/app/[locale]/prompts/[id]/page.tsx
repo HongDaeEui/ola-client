@@ -1,5 +1,5 @@
 import { Link } from '@/i18n/routing';
-import { API_BASE } from '@/lib/api';
+import { API_BASE, apiFetch } from '@/lib/api';
 import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
 import { ShareButton } from '@/components/ShareButton';
@@ -24,7 +24,7 @@ interface Prompt {
 
 async function getPrompt(id: string): Promise<Prompt | null> {
   try {
-    const res = await fetch(`${API_BASE}/prompts/${id}`, { cache: 'no-store' });
+    const res = await apiFetch(`${API_BASE}/prompts/${id}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return await res.json();
   } catch {

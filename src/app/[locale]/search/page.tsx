@@ -1,7 +1,7 @@
 'use client';
 import Image from "next/image";
 
-import { API_BASE } from '@/lib/api';
+import { API_BASE, apiFetch } from '@/lib/api';
 
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from '@/i18n/routing';
