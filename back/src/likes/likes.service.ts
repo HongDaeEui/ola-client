@@ -37,29 +37,49 @@ export class LikesService {
   }
 
   private async createLikeNotification(targetType: string, targetId: string) {
-    let authorId: string | null = null;
-    let title: string | null = null;
+    // targetType → (조회 함수, 한국어 라벨) 매핑
+    // Tool 은 authorId 가 없어(외부 도구) 알림 대상 제외
+    type TargetRow = { authorId: string; title: string } | null;
+    const fetchers: Record<string, { fetch: () => Promise<TargetRow>; label: string }> = {
+      POST: {
+        fetch: () =>
+          this.prisma.post.findUnique({
+            where: { id: targetId },
+            select: { authorId: true, title: true },
+          }),
+        label: '게시글',
+      },
+      PROMPT: {
+        fetch: () =>
+          this.prisma.prompt.findUnique({
+            where: { id: targetId },
+            select: { authorId: true, title: true },
+          }),
+        label: '프롬프트',
+      },
+      LAB: {
+        fetch: () =>
+          this.prisma.experiment.findUnique({
+            where: { id: targetId },
+            select: { authorId: true, title: true },
+          }),
+        label: '실험실',
+      },
+    };
 
-    if (targetType === 'POST') {
-      const post = await this.prisma.post.findUnique({ where: { id: targetId }, select: { authorId: true, title: true } });
-      authorId = post?.authorId ?? null;
-      title = post?.title ?? null;
-    } else if (targetType === 'PROMPT') {
-      const prompt = await this.prisma.prompt.findUnique({ where: { id: targetId }, select: { authorId: true, title: true } });
-      authorId = prompt?.authorId ?? null;
-      title = prompt?.title ?? null;
-    }
+    const entry = fetchers[targetType];
+    if (!entry) return;
 
-    if (!authorId) return;
+    const target = await entry.fetch();
+    if (!target?.authorId) return;
 
-    const label = targetType === 'POST' ? '게시글' : '프롬프트';
     await this.notifications.create({
-      recipientId: authorId,
+      recipientId: target.authorId,
       type: 'LIKE',
-      message: `누군가 회원님의 ${label}에 좋아요를 눌렀어요`,
+      message: `누군가 회원님의 ${entry.label}에 좋아요를 눌렀어요`,
       targetType,
       targetId,
-      targetTitle: title ?? undefined,
+      targetTitle: target.title,
     });
   }
 
