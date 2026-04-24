@@ -1,6 +1,7 @@
 import { Link } from '@/i18n/routing';
 import Image from "next/image";
 import { API_BASE, apiFetch } from '@/lib/api';
+import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
 export const revalidate = 300;
 
 interface Experiment {
@@ -110,88 +111,88 @@ export default async function LabsPage({
             <p className="text-slate-400 font-bold">해당 카테고리의 실험이 없습니다.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+          <div className="flex flex-col gap-5 max-w-4xl mx-auto w-full">
             {experiments.map((exp) => {
               const diff = exp.difficulty ? DIFFICULTY_STYLE[exp.difficulty] : null;
-              const imgKeywords = CATEGORY_KEYWORDS[exp.category] || 'technology,ai';
               const seed = parseInt((exp.id || '1').split('-')[0], 16) % 10000 || exp.likes || 1;
+              const bgGradient = [
+                'from-sky-500 to-indigo-600',
+                'from-rose-500 to-fuchsia-600',
+                'from-emerald-400 to-teal-600',
+                'from-amber-400 to-orange-500',
+                'from-violet-500 to-purple-700',
+                'from-pink-500 to-rose-500'
+              ][seed % 6];
               
               return (
                 <Link key={exp.id} href={`/labs/${exp.id}`}
-                  className="group flex flex-col bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-2xl hover:shadow-slate-200/50 dark:hover:shadow-sky-900/20 hover:border-sky-200 dark:hover:border-sky-800 transition-all duration-300 h-full">
-
-                  {/* Banner */}
-                  <div className={`h-48 relative p-6 flex flex-col justify-between overflow-hidden bg-gradient-to-br ${
-                    [
-                      'from-sky-500 to-indigo-600',
-                      'from-rose-500 to-fuchsia-600',
-                      'from-emerald-400 to-teal-600',
-                      'from-amber-400 to-orange-500',
-                      'from-violet-500 to-purple-700',
-                      'from-pink-500 to-rose-500'
-                    ][seed % 6]
-                  } group-hover:shadow-[inset_0_0_80px_rgba(0,0,0,0.3)] transition-shadow duration-700`}>
-                    {/* Dynamic AI Abstract Illustration via DiceBear */}
+                  className="group flex flex-col sm:flex-row bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-sky-900/10 hover:border-sky-200 dark:hover:border-sky-800 transition-all duration-300 p-3 sm:p-5 gap-5 items-center relative overflow-hidden">
+                  
+                  {/* Left: Thumbnail (Avatar format) */}
+                  <div className={`w-full sm:w-28 h-32 sm:h-28 rounded-2xl shrink-0 overflow-hidden relative bg-gradient-to-br ${bgGradient} flex items-center justify-center shadow-inner`}>
                     <img 
                       src={`https://api.dicebear.com/9.x/shapes/svg?seed=${exp.title}&backgroundColor=transparent`} 
                       alt={exp.title}
                       loading="lazy"
-                      className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-60 group-hover:scale-110 group-hover:opacity-80 transition-all duration-700 ease-in-out"
+                      className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-60 group-hover:scale-110 transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
-                    <div className="relative z-10 flex justify-between items-start">
-                      <span className="bg-white/20 backdrop-blur-md text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider">
-                        {exp.category}
-                      </span>
+                    <div className="relative z-10 text-4xl group-hover:scale-110 transition-transform duration-300 drop-shadow-lg">
+                      {exp.emoji || '🔬'}
+                    </div>
+                  </div>
+
+                  {/* Center: Contents */}
+                  <div className="flex-1 min-w-0 flex flex-col justify-center py-1">
+                    <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                      <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{exp.category}</span>
+                      <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700" />
+                      <span className="text-[11px] font-bold text-slate-500">@{exp.author?.username || 'Unknown'}</span>
+                    </div>
+
+                    <h3 className="text-xl font-extrabold text-slate-900 dark:text-white truncate mb-2 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
+                      {exp.title}
+                    </h3>
+                    
+                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400 line-clamp-1 mb-3 pr-4">
+                      {exp.description}
+                    </p>
+
+                    <div className="flex items-center gap-2 flex-wrap">
                       {diff && (
-                        <span className={`text-xs font-black px-2.5 py-1 rounded-full ${diff.bg} ${diff.text}`}>
+                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-md ${diff.bg} ${diff.text}`}>
                           {diff.label}
                         </span>
                       )}
-                    </div>
-                    <div className="relative z-10">
-                      <h3 className="text-white text-xl font-extrabold leading-tight tracking-tight drop-shadow-md">
-                        {exp.emoji && <span className="mr-2">{exp.emoji}</span>}
-                        {exp.title}
-                      </h3>
-                    </div>
-                    <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 flex-1 flex flex-col">
-                    <p className="text-slate-600 dark:text-slate-300 text-sm font-medium leading-relaxed mb-6 flex-1">{exp.description}</p>
-
-                    <div className="mb-6">
-                      <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-3">Tech Stack Used</p>
-                      <div className="flex flex-wrap gap-2">
-                        {exp.stack.map((tool: string, j: number) => (
-                          <span key={j} className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-bold px-3 py-1.5 rounded-lg">
-                            <span className="w-2 h-2 rounded-full bg-sky-400 dark:bg-sky-500" />
+                      <span className="flex items-center gap-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[10px] font-black px-2 py-0.5 rounded-md border border-emerald-100 dark:border-emerald-800/50">
+                        <span className="material-symbols-outlined text-[12px]">bolt</span>
+                        {exp.metric}
+                      </span>
+                      <div className="w-px h-3 bg-slate-200 dark:bg-slate-700 mx-1 hidden sm:block" />
+                      <div className="flex gap-1.5 overflow-hidden">
+                        {exp.stack.slice(0, 3).map((tool, j) => (
+                          <span key={j} className="text-[10px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md truncate max-w-[80px] shadow-sm">
                             {tool}
                           </span>
                         ))}
-                      </div>
-                    </div>
-
-                    <div className="bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl p-4 mb-6 border border-emerald-100 dark:border-emerald-800/50 flex items-center gap-2 text-emerald-700 dark:text-emerald-400 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-900/50 transition-colors">
-                      <span className="material-symbols-outlined font-light">bolt</span>
-                      <span className="font-extrabold text-sm">{exp.metric}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800 mt-auto">
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 border-2 border-white dark:border-slate-800 shadow-sm flex items-center justify-center text-slate-400 dark:text-slate-300 text-xs font-bold uppercase">
-                          {exp.author?.username?.charAt(0) || '?'}
-                        </div>
-                        <span className="text-sm font-bold text-slate-700 dark:text-slate-300">@{exp.author?.username || 'Unknown'}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-slate-400 dark:text-slate-500 text-sm font-bold">
-                        <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>favorite</span>
-                        {exp.likes.toLocaleString()}
+                        {exp.stack.length > 3 && (
+                          <span className="text-[10px] font-bold text-slate-400 bg-slate-50 dark:bg-slate-800/50 px-1.5 py-0.5 rounded-md">
+                            +{exp.stack.length - 3}
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
+
+                  {/* Right: Upvote Box */}
+                  <div className="w-full sm:w-auto shrink-0 border-t sm:border-t-0 sm:border-l border-slate-100 dark:border-slate-800 pt-4 sm:pt-0 sm:pl-5 flex justify-end sm:justify-center z-20">
+                    <LikeBookmarkButtons 
+                      targetType="LAB" 
+                      targetId={exp.id} 
+                      initialLikes={exp.likes} 
+                      variant="product-hunt" 
+                    />
+                  </div>
+
                 </Link>
               );
             })}

@@ -15,7 +15,7 @@ interface Props {
   targetType: 'POST' | 'PROMPT' | 'LAB' | 'TOOL';
   targetId: string;
   initialLikes: number;
-  variant?: 'row' | 'column';
+  variant?: 'row' | 'column' | 'product-hunt';
 }
 
 export function LikeBookmarkButtons({ targetType, targetId, initialLikes, variant = 'row' }: Props) {
@@ -50,7 +50,11 @@ export function LikeBookmarkButtons({ targetType, targetId, initialLikes, varian
     setTimeout(() => setShowLoginHint(false), 3000);
   }
 
-  async function toggleLike() {
+  async function toggleLike(e?: React.MouseEvent) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     if (!user) { requireLogin(); return; }
     if (loading) return;
     setLoading(true);
@@ -68,7 +72,11 @@ export function LikeBookmarkButtons({ targetType, targetId, initialLikes, varian
     }
   }
 
-  async function toggleBookmark() {
+  async function toggleBookmark(e?: React.MouseEvent) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     if (!user) { requireLogin(); return; }
     if (loading) return;
     setLoading(true);
@@ -92,6 +100,39 @@ export function LikeBookmarkButtons({ targetType, targetId, initialLikes, varian
   }
 
   const isColumn = variant === 'column';
+  const isProductHunt = variant === 'product-hunt';
+
+  if (isProductHunt) {
+    return (
+      <div className="relative">
+        <motion.button
+          onClick={toggleLike}
+          disabled={loading}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className={`flex flex-col items-center justify-center w-14 h-16 rounded-xl border ${
+            liked 
+              ? 'bg-sky-50 dark:bg-sky-900/30 border-sky-200 dark:border-sky-800 text-sky-600 dark:text-sky-400' 
+              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700 hover:text-slate-700 dark:hover:text-slate-300'
+          } shadow-sm transition-colors`}
+        >
+          <motion.span
+            className="material-symbols-outlined text-[24px] mb-0.5"
+            style={{ fontVariationSettings: liked ? "'FILL' 1" : "'FILL' 0" }}
+          >
+            arrow_drop_up
+          </motion.span>
+          <span className="text-[11px] font-black">{likes}</span>
+        </motion.button>
+        {showLoginHint && (
+          <div className="absolute right-0 top-full mt-2 w-max bg-slate-800 text-white text-xs font-bold px-3 py-2 rounded-lg flex items-center gap-2 animate-in fade-in slide-in-from-top-1 z-10">
+            <span>로그인이 필요해요</span>
+            <button onClick={signInWithGoogle} className="bg-white text-slate-900 px-2 py-0.5 rounded text-[10px] hover:bg-slate-100">로그인</button>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className={`flex ${isColumn ? 'flex-col' : 'items-center'} gap-3`}>
