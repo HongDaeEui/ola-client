@@ -73,10 +73,9 @@ async function getTool(id: string): Promise<Tool | null> {
 
 async function getRelatedTools(currentId: string): Promise<Tool[]> {
   try {
-    const res = await apiFetch(`${API_BASE}/tools`, { next: { revalidate: 60 } });
+    const res = await apiFetch(`${API_BASE}/tools/${currentId}/related`, { next: { revalidate: 300 } });
     if (!res.ok) return [];
-    const all: Tool[] = await res.json();
-    return all.filter(t => t.id !== currentId).slice(0, 4);
+    return await res.json();
   } catch {
     return [];
   }

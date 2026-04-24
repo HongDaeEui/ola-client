@@ -86,6 +86,7 @@ export function NotificationBell() {
       query: { userEmail: user.email },
       transports: ['websocket', 'polling'],
       reconnectionDelay: 2000,
+      reconnectionDelayMax: 30000,
     });
     socketRef.current = socket;
 
@@ -94,7 +95,12 @@ export function NotificationBell() {
       setNotifications(prev => [n, ...prev]);
     });
 
+    socket.on('connect_error', (err) => {
+      console.warn('[NotificationBell] WS connect error:', err.message);
+    });
+
     return () => {
+      socket.off('connect_error');
       socket.disconnect();
       socketRef.current = null;
     };
