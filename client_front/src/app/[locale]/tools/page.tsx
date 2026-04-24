@@ -23,6 +23,7 @@ const SORT_OPTIONS = [
   { value: 'rating', label: '평점순' },
   { value: 'popular', label: '인기순' },
 ];
+const POPULAR_TAGS = ['Mac', '오픈소스', '노코드', 'IDE', '생산성', 'CRM', 'Web', 'Creative', 'Bot'];
 
 const PRICING_COLOR: Record<string, string> = {
   Free: 'bg-emerald-50 text-emerald-600',
@@ -31,10 +32,11 @@ const PRICING_COLOR: Record<string, string> = {
   Paid: 'bg-slate-100 text-slate-500',
 };
 
-async function getTools(filters: { category?: string; pricing?: string; sort?: string }): Promise<Tool[]> {
+async function getTools(filters: { category?: string; pricing?: string; tags?: string; sort?: string }): Promise<Tool[]> {
   const params = new URLSearchParams();
   if (filters.category) params.set('category', filters.category);
   if (filters.pricing) params.set('pricing', filters.pricing);
+  if (filters.tags) params.set('tags', filters.tags);
   if (filters.sort) params.set('sort', filters.sort);
   const qs = params.toString();
   try {
@@ -53,13 +55,31 @@ async function getCategories(): Promise<string[]> {
   } catch { return []; }
 }
 
-function buildHref(current: URLSearchParams, key: string, value: string | null) {
+function buildMultiSelectHref(current: URLSearchParams, key: string, value: string) {
   const p = new URLSearchParams(current);
-  if (value === null || p.get(key) === value) {
-    p.delete(key);
+  const existingStr = p.get(key);
+  let existing = existingStr ? existingStr.split(',').filter(Boolean) : [];
+  
+  if (existing.includes(value)) {
+    existing = existing.filter(v => v !== value);
   } else {
-    p.set(key, value);
+    existing.push(value);
   }
+  
+  if (existing.length > 0) {
+    p.set(key, existing.join(','));
+  } else {
+    p.delete(key);
+  }
+  
+  const s = p.toString();
+  return `/tools${s ? `?${s}` : ''}`;
+}
+
+function buildSortHref(current: URLSearchParams, value: string) {
+  const p = new URLSearchParams(current);
+  if (value) p.set('sort', value);
+  else p.delete('sort');
   const s = p.toString();
   return `/tools${s ? `?${s}` : ''}`;
 }
@@ -67,7 +87,7 @@ function buildHref(current: URLSearchParams, key: string, value: string | null) 
 export default async function ToolsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string; pricing?: string; sort?: string }>;
+  searchParams: Promise<{ category?: string; pricing?: string; tags?: string; sort?: string }>;
 }) {
   const filters = await searchParams;
   const [toolsList, categories] = await Promise.all([getTools(filters), getCategories()]);
@@ -75,9 +95,14 @@ export default async function ToolsPage({
   const currentParams = new URLSearchParams();
   if (filters.category) currentParams.set('category', filters.category);
   if (filters.pricing) currentParams.set('pricing', filters.pricing);
+  if (filters.tags) currentParams.set('tags', filters.tags);
   if (filters.sort) currentParams.set('sort', filters.sort);
 
-  const hasFilters = !!(filters.category || filters.pricing);
+  const hasFilters = !!(filters.category || filters.pricing || filters.tags);
+  
+  const activePricings = filters.pricing ? filters.pricing.split(',') : [];
+  const activeCategories = filters.category ? filters.category.split(',') : [];
+  const activeTags = filters.tags ? filters.tags.split(',') : [];
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-28 lg:pt-32 pb-20 font-['Noto_Sans_KR']">
@@ -103,11 +128,11 @@ export default async function ToolsPage({
               <p className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">프라이싱</p>
               <div className="space-y-1">
                 {PRICING_OPTIONS.map(p => {
-                  const isActive = filters.pricing === p;
+                  const isActive = activePricings.includes(p);
                   return (
                     <Link
                       key={p}
-                      href={buildHref(currentParams, 'pricing', p)}
+                      href={buildMultiSelectHref(currentParams, 'pricing', p)}
                       className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
                         isActive
                           ? 'bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-400 font-bold'
@@ -125,15 +150,15 @@ export default async function ToolsPage({
             </div>
 
             {/* Category */}
-            <div>
+            <div className="mb-6">
               <p className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">카테고리</p>
               <div className="space-y-1">
                 {categories.map(cat => {
-                  const isActive = filters.category === cat;
+                  const isActive = activeCategories.includes(cat);
                   return (
                     <Link
                       key={cat}
-                      href={buildHref(currentParams, 'category', cat)}
+                      href={buildMultiSelectHref(currentParams, 'category', cat)}
                       className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
                         isActive
                           ? 'bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-400 font-bold'
@@ -149,35 +174,71 @@ export default async function ToolsPage({
                 })}
               </div>
             </div>
+
+            {/* Popular Tags */}
+            <div>
+              <p className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">인기 태그</p>
+              <div className="flex flex-wrap gap-2">
+                {POPULAR_TAGS.map(tag => {
+                  const isActive = activeTags.includes(tag);
+                  return (
+                    <Link
+                      key={tag}
+                      href={buildMultiSelectHref(currentParams, 'tags', tag)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                        isActive
+                          ? 'bg-sky-500 text-white shadow-md shadow-sky-500/20'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+                      }`}
+                    >
+                      {tag}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           </aside>
 
           {/* Main */}
-          <main className="flex-1">
+          <main className="flex-1 min-w-0">
             {/* Header row */}
-            <div className="flex flex-wrap justify-between items-end gap-3 mb-6">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-6">
               <div>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">
-                  {filters.category ? filters.category : '모든 AI 도구 탐색'}
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
+                  {activeCategories.length === 1 ? activeCategories[0] : activeCategories.length > 1 ? `${activeCategories.length}개 카테고리 복합 탐색` : '모든 AI 도구 탐색'}
                 </h2>
-                <p className="text-slate-500 text-sm">
-                  {hasFilters && (
-                    <span className="mr-2">
-                      {filters.pricing && (
-                        <span className="inline-flex items-center gap-1 bg-sky-100 text-sky-700 text-xs font-bold px-2 py-0.5 rounded-full mr-1">
-                          {filters.pricing}
-                          <Link href={buildHref(currentParams, 'pricing', filters.pricing!)} className="ml-0.5 hover:text-sky-900">×</Link>
-                        </span>
-                      )}
+                
+                <div className="flex flex-wrap items-center gap-2">
+                  {activeCategories.map(c => (
+                    <span key={c} className="inline-flex items-center gap-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold px-2 py-1 rounded-full border border-slate-200 dark:border-slate-700">
+                      <span className="max-w-[100px] truncate">{c}</span>
+                      <Link href={buildMultiSelectHref(currentParams, 'category', c)} className="ml-0.5 hover:text-slate-900 dark:hover:text-white">×</Link>
                     </span>
-                  )}
-                  총 <span className="font-bold text-slate-700">{toolsList.length}</span>개 도구
-                </p>
+                  ))}
+                  {activePricings.map(p => (
+                    <span key={p} className="inline-flex items-center gap-1 bg-sky-50 dark:bg-sky-900/40 text-sky-600 dark:text-sky-400 text-xs font-bold px-2 py-1 rounded-full border border-sky-100 dark:border-sky-800">
+                      {p}
+                      <Link href={buildMultiSelectHref(currentParams, 'pricing', p)} className="ml-0.5 hover:text-sky-900 dark:hover:text-sky-200">×</Link>
+                    </span>
+                  ))}
+                  {activeTags.map(t => (
+                    <span key={t} className="inline-flex items-center gap-1 bg-violet-50 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400 text-xs font-bold px-2 py-1 rounded-full border border-violet-100 dark:border-violet-800">
+                      {t}
+                      <Link href={buildMultiSelectHref(currentParams, 'tags', t)} className="ml-0.5 hover:text-violet-900 dark:hover:text-violet-200">×</Link>
+                    </span>
+                  ))}
+                  
+                  <p className="text-slate-500 text-sm ml-1">
+                    총 <span className="font-bold text-slate-700 dark:text-slate-300">{toolsList.length}</span>개 도구
+                  </p>
+                </div>
               </div>
-              <div className="flex gap-2">
+
+              <div className="flex gap-2 shrink-0">
                 {SORT_OPTIONS.map(opt => (
                   <Link
                     key={opt.value}
-                    href={buildHref(currentParams, 'sort', opt.value || null)}
+                    href={buildSortHref(currentParams, opt.value)}
                     className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-all ${
                       (filters.sort ?? '') === opt.value
                         ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900 dark:border-white'
@@ -189,16 +250,6 @@ export default async function ToolsPage({
                 ))}
               </div>
             </div>
-
-            {/* Active category pill */}
-            {filters.category && (
-              <div className="flex flex-wrap gap-2 mb-4">
-                <span className="inline-flex items-center gap-1.5 bg-sky-100 text-sky-700 text-sm font-bold px-3 py-1 rounded-full">
-                  {filters.category}
-                  <Link href={buildHref(currentParams, 'category', filters.category)} className="hover:text-sky-900 text-base leading-none">×</Link>
-                </span>
-              </div>
-            )}
 
             {/* Grid */}
             {toolsList.length > 0 ? (

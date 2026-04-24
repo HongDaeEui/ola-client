@@ -20,9 +20,10 @@ export class ToolsController {
   findAll(
     @Query('category') category?: string,
     @Query('pricing') pricing?: string,
+    @Query('tags') tags?: string,
     @Query('sort') sort?: string,
   ) {
-    return this.toolsService.findAll({ category, pricing, sort });
+    return this.toolsService.findAll({ category, pricing, tags, sort });
   }
 
   @Get('featured')

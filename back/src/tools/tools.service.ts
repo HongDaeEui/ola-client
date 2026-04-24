@@ -23,10 +23,18 @@ const TOOL_LIST_SELECT = {
 export class ToolsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(filters?: { category?: string; pricing?: string; sort?: string }) {
+  async findAll(filters?: { category?: string; pricing?: string; tags?: string; sort?: string }) {
     const where: Record<string, unknown> = { status: 'ACTIVE' };
-    if (filters?.category) where.category = filters.category;
-    if (filters?.pricing) where.pricingModel = filters.pricing;
+    
+    if (filters?.category) {
+      where.category = { in: filters.category.split(',').map(s => s.trim()) };
+    }
+    if (filters?.pricing) {
+      where.pricingModel = { in: filters.pricing.split(',').map(s => s.trim()) };
+    }
+    if (filters?.tags) {
+      where.tags = { hasSome: filters.tags.split(',').map(s => s.trim()) };
+    }
 
     const orderBy =
       filters?.sort === 'rating' ? { rating: 'desc' as const }
