@@ -6,9 +6,6 @@ import { Link } from '@/i18n/routing';
 import { io, Socket } from 'socket.io-client';
 import { useAuth } from '@/context/AuthContext';
 import { createClient } from '@/lib/supabase/client';
-export const runtime = "edge";
-export const revalidate = 300;
-
 const WS_URL = API_BASE.replace(/\/api$/, '');
 const supabase = createClient();
 
