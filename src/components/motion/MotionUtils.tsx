@@ -2,6 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { type ReactNode } from 'react';
+export const runtime = "edge";
+export const revalidate = 300;
 
 interface FadeInProps {
   children: ReactNode;

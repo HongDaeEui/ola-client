@@ -4,6 +4,8 @@ import { API_BASE } from '@/lib/api';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
+export const runtime = "edge";
+export const revalidate = 300;
 
 
 interface Props {

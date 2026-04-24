@@ -1,5 +1,8 @@
 import { Link } from '@/i18n/routing';
+import Image from "next/image";
 import { useTranslations } from 'next-intl';
+export const runtime = "edge";
+export const revalidate = 300;
 
 export function Footer() {
   const t = useTranslations('Footer');

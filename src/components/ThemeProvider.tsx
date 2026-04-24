@@ -1,6 +1,8 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from 'react';
+export const runtime = "edge";
+export const revalidate = 300;
 
 type Theme = 'light' | 'dark';
 

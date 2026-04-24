@@ -1,7 +1,11 @@
 "use client";
+"use client";
+import Image from "next/image";
 
 import { useRef, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
+export const runtime = "edge";
+export const revalidate = 300;
 
 interface Props {
   onUpload: (url: string) => void;
