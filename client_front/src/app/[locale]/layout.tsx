@@ -6,7 +6,12 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import { ChatWidget } from '@/components/ChatWidget';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import { routing } from '@/i18n/routing';
 export const revalidate = 300;
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
 export const metadata: Metadata = {
   title: 'Ola AI Community - The Luminous Horizon',

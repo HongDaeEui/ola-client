@@ -19,7 +19,7 @@ export default function Loading() {
               className="bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl p-5 animate-pulse"
             >
               <div className="flex gap-4 mb-4">
-                <div className="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-700 flex-shrink-0" />
+                <div className="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-700 shrink-0" />
                 <div className="flex-1 space-y-2">
                   <div className="h-4 bg-slate-100 dark:bg-slate-700 rounded w-3/4" />
                   <div className="h-3 bg-slate-100 dark:bg-slate-700 rounded w-1/2" />
