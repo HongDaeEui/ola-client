@@ -5,6 +5,9 @@ import { API_BASE } from '@/lib/api';
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { createClient } from '@/lib/supabase/client';
+
+const supabase = createClient();
 
 
 interface Props {
@@ -21,11 +24,19 @@ export function RsvpButton({ meetupId, initialCount, variant = 'card' }: Props) 
   const [showLoginHint, setShowLoginHint] = useState(false);
 
   useEffect(() => {
-    if (!user?.email) return;
-    fetch(`${API_BASE}/meetups/${meetupId}/status?userEmail=${encodeURIComponent(user.email)}`)
-      .then(r => r.json())
-      .then(d => setAttending(d.attending))
-      .catch(() => {});
+    if (!user) return;
+    (async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const token = session?.access_token;
+        if (!token) return;
+        const res = await fetch(`${API_BASE}/meetups/${meetupId}/status`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const d = await res.json();
+        setAttending(d.attending);
+      } catch { /* ignore */ }
+    })();
   }, [user, meetupId]);
 
   async function toggle() {
@@ -37,11 +48,16 @@ export function RsvpButton({ meetupId, initialCount, variant = 'card' }: Props) 
     if (loading) return;
     setLoading(true);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) return;
       const res = await fetch(`${API_BASE}/meetups/${meetupId}/rsvp`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
-          userEmail: user.email,
           userName: user.user_metadata?.name ?? user.email?.split('@')[0] ?? 'Ola User',
         }),
       });
