@@ -170,7 +170,7 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
               <div className="absolute -inset-2 bg-sky-400/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative w-28 h-28 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-2xl">
                 {tool.iconUrl ? (
-                  <Image src={tool.iconUrl} alt={tool.name} width={24} height={24} className="w-20 h-20 rounded-xl object-cover" />
+                  <Image src={tool.iconUrl} alt={tool.name} width={80} height={80} className="w-20 h-20 rounded-xl object-contain p-2" />
                 ) : (
                   <span className="text-white font-black text-4xl uppercase tracking-tighter">
                     {tool.name.substring(0, 2)}
@@ -280,8 +280,10 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
                       href={`/tools/${rt.id}`}
                       className="flex items-start gap-4 p-4 rounded-2xl border border-slate-100 hover:border-sky-200 hover:shadow-md hover:shadow-sky-50 transition-all group"
                     >
-                      <div className="w-12 h-12 rounded-xl bg-slate-100 flex-shrink-0 flex items-center justify-center text-slate-600 font-bold text-base uppercase group-hover:bg-slate-900 group-hover:text-white transition-all duration-300">
-                        {rt.name.substring(0, 2)}
+                      <div className="w-12 h-12 rounded-xl bg-slate-100 shrink-0 flex items-center justify-center text-slate-600 font-bold text-base uppercase group-hover:bg-slate-900 group-hover:text-white transition-all duration-300 overflow-hidden">
+                        {rt.iconUrl
+                          ? <Image src={rt.iconUrl} alt={rt.name} width={48} height={48} className="w-full h-full object-contain p-1" />
+                          : rt.name.substring(0, 2)}
                       </div>
                       <div className="min-w-0 flex-1">
                         <h3 className="font-bold text-sm text-slate-800 group-hover:text-sky-600 transition-colors truncate">

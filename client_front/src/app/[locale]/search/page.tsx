@@ -216,7 +216,7 @@ function SearchContent() {
                     >
                       <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-sky-100 to-indigo-100 dark:from-sky-900/40 dark:to-indigo-900/40 flex items-center justify-center flex-shrink-0 overflow-hidden">
                         {tool.iconUrl
-                          ? <Image src={tool.iconUrl} alt={tool.name} width={24} height={24} className="w-full h-full object-cover" />
+                          ? <Image src={tool.iconUrl} alt={tool.name} width={48} height={48} className="w-full h-full object-contain p-1" />
                           : <span className="material-symbols-outlined text-sky-500 text-2xl">extension</span>
                         }
                       </div>
