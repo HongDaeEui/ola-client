@@ -41,35 +41,47 @@ let BookmarksService = class BookmarksService {
             where: { userId },
             orderBy: { createdAt: 'desc' },
         });
-        const resolved = await Promise.all(bookmarks.map(async (b) => {
-            let item = null;
-            if (b.targetType === 'POST') {
-                item = await this.prisma.post.findUnique({
-                    where: { id: b.targetId },
-                    select: { id: true, title: true, category: true, createdAt: true },
-                });
-            }
-            else if (b.targetType === 'PROMPT') {
-                item = await this.prisma.prompt.findUnique({
-                    where: { id: b.targetId },
-                    select: { id: true, title: true, category: true, toolName: true },
-                });
-            }
-            else if (b.targetType === 'TOOL') {
-                item = await this.prisma.tool.findUnique({
-                    where: { id: b.targetId },
-                    select: { id: true, name: true, category: true, shortDesc: true },
-                });
-            }
-            else if (b.targetType === 'LAB') {
-                item = await this.prisma.experiment.findUnique({
-                    where: { id: b.targetId },
-                    select: { id: true, title: true, category: true },
-                });
-            }
+        if (bookmarks.length === 0)
+            return [];
+        const idsByType = {};
+        for (const b of bookmarks) {
+            (idsByType[b.targetType] ??= []).push(b.targetId);
+        }
+        const itemMap = new Map();
+        if (idsByType['POST']?.length) {
+            const posts = await this.prisma.post.findMany({
+                where: { id: { in: idsByType['POST'] } },
+                select: { id: true, title: true, category: true, createdAt: true },
+            });
+            posts.forEach((p) => itemMap.set(`POST:${p.id}`, p));
+        }
+        if (idsByType['PROMPT']?.length) {
+            const prompts = await this.prisma.prompt.findMany({
+                where: { id: { in: idsByType['PROMPT'] } },
+                select: { id: true, title: true, category: true, toolName: true },
+            });
+            prompts.forEach((p) => itemMap.set(`PROMPT:${p.id}`, p));
+        }
+        if (idsByType['TOOL']?.length) {
+            const tools = await this.prisma.tool.findMany({
+                where: { id: { in: idsByType['TOOL'] } },
+                select: { id: true, name: true, category: true, shortDesc: true },
+            });
+            tools.forEach((t) => itemMap.set(`TOOL:${t.id}`, t));
+        }
+        if (idsByType['LAB']?.length) {
+            const labs = await this.prisma.experiment.findMany({
+                where: { id: { in: idsByType['LAB'] } },
+                select: { id: true, title: true, category: true },
+            });
+            labs.forEach((l) => itemMap.set(`LAB:${l.id}`, l));
+        }
+        return bookmarks
+            .map((b) => {
+            const item = itemMap.get(`${b.targetType}:${b.targetId}`);
             return item ? { ...b, item } : null;
-        }));
-        return resolved.filter(Boolean);
+        })
+            .filter(Boolean);
     }
 };
 exports.BookmarksService = BookmarksService;

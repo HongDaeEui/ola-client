@@ -8,6 +8,9 @@ import ProtectedRoute from '@/components/auth/ProtectedRoute'
 
 // Pages
 import LoginPage from '@/pages/login/LoginPage'
+import { lazy, Suspense } from 'react'
+
+const DashboardPage = lazy(() => import('@/pages/dashboard/DashboardPage'));
 
 // Route Modules
 import { userRoutes } from './routes/userRoutes'
@@ -42,9 +45,15 @@ export const routes: RouteWithMeta[] = [
         path: '',
         element: <AdminLayout />,
         children: [
-          // 메인 페이지 (/) - 도구 관리 페이지로 우선 리다이렉트 (대시보드가 아직 없으므로)
+          // 대시보드 (메인 페이지)
           {
-            element: <Navigate to="/tools" replace />
+            index: true,
+            element: <Suspense fallback={<div className="p-8 text-slate-400">로딩 중...</div>}><DashboardPage /></Suspense>,
+            meta: {
+              label: '대시보드',
+              icon: '📊',
+              showInMenu: true,
+            }
           },
 
           // 도메인별 관리 라우트 목록

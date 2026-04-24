@@ -21,20 +21,22 @@ let LikesService = class LikesService {
         this.notifications = notifications;
     }
     async toggle(userId, targetType, targetId) {
-        const existing = await this.prisma.like.findUnique({
-            where: { userId_targetType_targetId: { userId, targetType, targetId } },
+        return this.prisma.$transaction(async (tx) => {
+            const existing = await tx.like.findUnique({
+                where: { userId_targetType_targetId: { userId, targetType, targetId } },
+            });
+            if (existing) {
+                await tx.like.delete({ where: { id: existing.id } });
+                await this.decrementLikesInTx(tx, targetType, targetId);
+                return { liked: false };
+            }
+            else {
+                await tx.like.create({ data: { userId, targetType, targetId } });
+                await this.incrementLikesInTx(tx, targetType, targetId);
+                this.createLikeNotification(targetType, targetId).catch(() => { });
+                return { liked: true };
+            }
         });
-        if (existing) {
-            await this.prisma.like.delete({ where: { id: existing.id } });
-            await this.decrementLikes(targetType, targetId);
-            return { liked: false };
-        }
-        else {
-            await this.prisma.like.create({ data: { userId, targetType, targetId } });
-            await this.incrementLikes(targetType, targetId);
-            await this.createLikeNotification(targetType, targetId).catch(() => { });
-            return { liked: true };
-        }
     }
     async getStatus(userId, targetType, targetId) {
         const existing = await this.prisma.like.findUnique({
@@ -67,32 +69,32 @@ let LikesService = class LikesService {
             targetTitle: title ?? undefined,
         });
     }
-    async incrementLikes(targetType, targetId) {
+    async incrementLikesInTx(tx, targetType, targetId) {
         if (targetType === 'POST') {
-            await this.prisma.post.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
+            await tx.post.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
         }
         else if (targetType === 'PROMPT') {
-            await this.prisma.prompt.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
+            await tx.prompt.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
         }
         else if (targetType === 'LAB') {
-            await this.prisma.experiment.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
+            await tx.experiment.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
         }
         else if (targetType === 'TOOL') {
-            await this.prisma.tool.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
+            await tx.tool.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
         }
     }
-    async decrementLikes(targetType, targetId) {
+    async decrementLikesInTx(tx, targetType, targetId) {
         if (targetType === 'POST') {
-            await this.prisma.post.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
+            await tx.post.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
         }
         else if (targetType === 'PROMPT') {
-            await this.prisma.prompt.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
+            await tx.prompt.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
         }
         else if (targetType === 'LAB') {
-            await this.prisma.experiment.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
+            await tx.experiment.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
         }
         else if (targetType === 'TOOL') {
-            await this.prisma.tool.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
+            await tx.tool.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
         }
     }
 };

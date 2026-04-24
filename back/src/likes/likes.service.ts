@@ -10,20 +10,23 @@ export class LikesService {
   ) {}
 
   async toggle(userId: string, targetType: string, targetId: string) {
-    const existing = await this.prisma.like.findUnique({
-      where: { userId_targetType_targetId: { userId, targetType, targetId } },
-    });
+    return this.prisma.$transaction(async (tx) => {
+      const existing = await tx.like.findUnique({
+        where: { userId_targetType_targetId: { userId, targetType, targetId } },
+      });
 
-    if (existing) {
-      await this.prisma.like.delete({ where: { id: existing.id } });
-      await this.decrementLikes(targetType, targetId);
-      return { liked: false };
-    } else {
-      await this.prisma.like.create({ data: { userId, targetType, targetId } });
-      await this.incrementLikes(targetType, targetId);
-      await this.createLikeNotification(targetType, targetId).catch(() => {});
-      return { liked: true };
-    }
+      if (existing) {
+        await tx.like.delete({ where: { id: existing.id } });
+        await this.decrementLikesInTx(tx, targetType, targetId);
+        return { liked: false };
+      } else {
+        await tx.like.create({ data: { userId, targetType, targetId } });
+        await this.incrementLikesInTx(tx, targetType, targetId);
+        // 알림은 트랜잭션 외부에서 비동기 처리
+        this.createLikeNotification(targetType, targetId).catch(() => {});
+        return { liked: true };
+      }
+    });
   }
 
   async getStatus(userId: string, targetType: string, targetId: string) {
@@ -60,27 +63,27 @@ export class LikesService {
     });
   }
 
-  private async incrementLikes(targetType: string, targetId: string) {
+  private async incrementLikesInTx(tx: any, targetType: string, targetId: string) {
     if (targetType === 'POST') {
-      await this.prisma.post.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
+      await tx.post.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
     } else if (targetType === 'PROMPT') {
-      await this.prisma.prompt.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
+      await tx.prompt.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
     } else if (targetType === 'LAB') {
-      await this.prisma.experiment.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
+      await tx.experiment.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
     } else if (targetType === 'TOOL') {
-      await this.prisma.tool.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
+      await tx.tool.update({ where: { id: targetId }, data: { likes: { increment: 1 } } });
     }
   }
 
-  private async decrementLikes(targetType: string, targetId: string) {
+  private async decrementLikesInTx(tx: any, targetType: string, targetId: string) {
     if (targetType === 'POST') {
-      await this.prisma.post.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
+      await tx.post.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
     } else if (targetType === 'PROMPT') {
-      await this.prisma.prompt.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
+      await tx.prompt.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
     } else if (targetType === 'LAB') {
-      await this.prisma.experiment.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
+      await tx.experiment.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
     } else if (targetType === 'TOOL') {
-      await this.prisma.tool.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
+      await tx.tool.update({ where: { id: targetId }, data: { likes: { decrement: 1 } } });
     }
   }
 }

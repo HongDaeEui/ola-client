@@ -42,6 +42,19 @@ __decorate([
     __metadata("design:type", socket_io_1.Server)
 ], NotificationsGateway.prototype, "server", void 0);
 exports.NotificationsGateway = NotificationsGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({ cors: { origin: '*' }, namespace: '/notifications' })
+    (0, websockets_1.WebSocketGateway)({
+        cors: {
+            origin: [
+                'http://localhost:3000',
+                'http://localhost:3001',
+                'https://olalab.kr',
+                /\.olalab\.kr$/,
+                /ola-.*\.vercel\.app$/,
+                /\.onrender\.com$/,
+            ],
+            credentials: true,
+        },
+        namespace: '/notifications',
+    })
 ], NotificationsGateway);
 //# sourceMappingURL=notifications.gateway.js.map

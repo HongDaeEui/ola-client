@@ -11,6 +11,6 @@ export declare class LikesService {
         liked: boolean;
     }>;
     private createLikeNotification;
-    private incrementLikes;
-    private decrementLikes;
+    private incrementLikesInTx;
+    private decrementLikesInTx;
 }

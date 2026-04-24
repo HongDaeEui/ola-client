@@ -23,35 +23,36 @@ export const AUTH_API = {
 // Tools API
 export const TOOLS_API = {
   PREFIX: API_PREFIX.TOOLS,
-  ID: (id: number) => `${API_PREFIX.TOOLS}/${id}`,
+  ID: (id: string) => `${API_PREFIX.TOOLS}/${id}`,
 } as const
 
 // Labs API
 export const LABS_API = {
   PREFIX: API_PREFIX.LABS,
-  ID: (id: number) => `${API_PREFIX.LABS}/${id}`,
+  ID: (id: string) => `${API_PREFIX.LABS}/${id}`,
 } as const
 
 // Prompts API
 export const PROMPTS_API = {
   PREFIX: API_PREFIX.PROMPTS,
-  ID: (id: number) => `${API_PREFIX.PROMPTS}/${id}`,
+  ID: (id: string) => `${API_PREFIX.PROMPTS}/${id}`,
 } as const
 
 // Posts API
 export const POSTS_API = {
   PREFIX: API_PREFIX.POSTS,
-  ID: (id: number) => `${API_PREFIX.POSTS}/${id}`,
+  ID: (id: string) => `${API_PREFIX.POSTS}/${id}`,
 } as const
 
 // User API
 export const USER_API = {
   PREFIX: API_PREFIX.USER,
-  ID: (id: number) => `${API_PREFIX.USER}/${id}`,
+  ID: (id: string) => `${API_PREFIX.USER}/${id}`,
 } as const
 
 // Category API
 export const CATEGORY_API = {
   PREFIX: API_PREFIX.CATEGORY,
-  ID: (id: number) => `${API_PREFIX.CATEGORY}/${id}`,
+  ID: (id: string) => `${API_PREFIX.CATEGORY}/${id}`,
 } as const
+
