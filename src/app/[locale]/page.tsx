@@ -13,7 +13,7 @@ interface Post {
 }
 interface CategoryCount { category: string; count: number; }
 
-const TIMEOUT_MS = 5000;
+const TIMEOUT_MS = 8000;
 
 function fetchWithTimeout(url: string, options: RequestInit & { next?: object } = {}): Promise<Response> {
   return Promise.race([

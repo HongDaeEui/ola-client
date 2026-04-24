@@ -12,6 +12,6 @@ export async function apiFetch(url: string, init: RequestInit & { next?: object 
   return fetch(url, {
     ...rest,
     ...(next ? { next } : {}),
-    signal: AbortSignal.timeout(5000),
+    signal: AbortSignal.timeout(8000),
   });
 }
