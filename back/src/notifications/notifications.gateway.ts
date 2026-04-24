@@ -6,7 +6,20 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway({ cors: { origin: '*' }, namespace: '/notifications' })
+@WebSocketGateway({
+  cors: {
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://olalab.kr',
+      /\.olalab\.kr$/,
+      /ola-.*\.vercel\.app$/,
+      /\.onrender\.com$/,
+    ],
+    credentials: true,
+  },
+  namespace: '/notifications',
+})
 export class NotificationsGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {

@@ -14,7 +14,9 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ToolsController = void 0;
 const common_1 = require("@nestjs/common");
+const throttler_1 = require("@nestjs/throttler");
 const tools_service_1 = require("./tools.service");
+const admin_guard_1 = require("../common/admin.guard");
 let ToolsController = class ToolsController {
     toolsService;
     constructor(toolsService) {
@@ -77,6 +79,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ToolsController.prototype, "getCategoryCounts", null);
 __decorate([
+    (0, common_1.UseGuards)(admin_guard_1.AdminGuard),
     (0, common_1.Get)('pending'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
@@ -90,6 +93,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ToolsController.prototype, "findOne", null);
 __decorate([
+    (0, common_1.UseGuards)(admin_guard_1.AdminGuard),
     (0, common_1.Patch)(':id/approve'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
@@ -97,6 +101,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ToolsController.prototype, "approve", null);
 __decorate([
+    (0, common_1.UseGuards)(admin_guard_1.AdminGuard),
     (0, common_1.Patch)(':id/reject'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
@@ -104,6 +109,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ToolsController.prototype, "reject", null);
 __decorate([
+    (0, throttler_1.Throttle)({ default: { limit: 5, ttl: 60000 } }),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),

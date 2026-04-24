@@ -5,6 +5,8 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from '@/i18n/routing';
 import { io, Socket } from 'socket.io-client';
 import { useAuth } from '@/context/AuthContext';
+export const runtime = "edge";
+export const revalidate = 300;
 
 const WS_URL = API_BASE.replace(/\/api$/, '');
 

@@ -28,7 +28,7 @@ class ToolService {
    */
   async approveTool(id: string): Promise<{ success: boolean; data?: any; error?: string }> {
     return await apiService.callWithErrorHandling(
-      () => apiService.patch(`${TOOLS_API.ID(Number(id) as any).replace('NaN', id.toString())}/approve`),
+      () => apiService.patch(`${TOOLS_API.ID(id)}/approve`),
       '도구 승인 처리에 실패했습니다.'
     ) as any;
   }
@@ -38,10 +38,11 @@ class ToolService {
    */
   async rejectTool(id: string): Promise<{ success: boolean; data?: any; error?: string }> {
     return await apiService.callWithErrorHandling(
-      () => apiService.patch(`${TOOLS_API.ID(Number(id) as any).replace('NaN', id.toString())}/reject`),
+      () => apiService.patch(`${TOOLS_API.ID(id)}/reject`),
       '도구 반려 처리에 실패했습니다.'
     ) as any;
   }
 }
 
 export const toolService = new ToolService();
+

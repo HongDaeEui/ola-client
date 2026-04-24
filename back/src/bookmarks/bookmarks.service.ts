@@ -32,34 +32,54 @@ export class BookmarksService {
       orderBy: { createdAt: 'desc' },
     });
 
-    const resolved = await Promise.all(
-      bookmarks.map(async (b) => {
-        let item: Record<string, unknown> | null = null;
-        if (b.targetType === 'POST') {
-          item = await this.prisma.post.findUnique({
-            where: { id: b.targetId },
-            select: { id: true, title: true, category: true, createdAt: true },
-          });
-        } else if (b.targetType === 'PROMPT') {
-          item = await this.prisma.prompt.findUnique({
-            where: { id: b.targetId },
-            select: { id: true, title: true, category: true, toolName: true },
-          });
-        } else if (b.targetType === 'TOOL') {
-          item = await this.prisma.tool.findUnique({
-            where: { id: b.targetId },
-            select: { id: true, name: true, category: true, shortDesc: true },
-          });
-        } else if (b.targetType === 'LAB') {
-          item = await this.prisma.experiment.findUnique({
-            where: { id: b.targetId },
-            select: { id: true, title: true, category: true },
-          });
-        }
-        return item ? { ...b, item } : null;
-      }),
-    );
+    if (bookmarks.length === 0) return [];
 
-    return resolved.filter(Boolean);
+    // 타입별로 ID를 그룹화
+    const idsByType: Record<string, string[]> = {};
+    for (const b of bookmarks) {
+      (idsByType[b.targetType] ??= []).push(b.targetId);
+    }
+
+    // 타입별 batch 조회 (N+1 → 최대 4 쿼리)
+    const itemMap = new Map<string, Record<string, unknown>>();
+
+    if (idsByType['POST']?.length) {
+      const posts = await this.prisma.post.findMany({
+        where: { id: { in: idsByType['POST'] } },
+        select: { id: true, title: true, category: true, createdAt: true },
+      });
+      posts.forEach((p) => itemMap.set(`POST:${p.id}`, p));
+    }
+
+    if (idsByType['PROMPT']?.length) {
+      const prompts = await this.prisma.prompt.findMany({
+        where: { id: { in: idsByType['PROMPT'] } },
+        select: { id: true, title: true, category: true, toolName: true },
+      });
+      prompts.forEach((p) => itemMap.set(`PROMPT:${p.id}`, p));
+    }
+
+    if (idsByType['TOOL']?.length) {
+      const tools = await this.prisma.tool.findMany({
+        where: { id: { in: idsByType['TOOL'] } },
+        select: { id: true, name: true, category: true, shortDesc: true },
+      });
+      tools.forEach((t) => itemMap.set(`TOOL:${t.id}`, t));
+    }
+
+    if (idsByType['LAB']?.length) {
+      const labs = await this.prisma.experiment.findMany({
+        where: { id: { in: idsByType['LAB'] } },
+        select: { id: true, title: true, category: true },
+      });
+      labs.forEach((l) => itemMap.set(`LAB:${l.id}`, l));
+    }
+
+    return bookmarks
+      .map((b) => {
+        const item = itemMap.get(`${b.targetType}:${b.targetId}`);
+        return item ? { ...b, item } : null;
+      })
+      .filter(Boolean);
   }
 }

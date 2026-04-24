@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LikesController = void 0;
 const common_1 = require("@nestjs/common");
+const throttler_1 = require("@nestjs/throttler");
 const likes_service_1 = require("./likes.service");
 let LikesController = class LikesController {
     likesService;
@@ -29,6 +30,7 @@ let LikesController = class LikesController {
 };
 exports.LikesController = LikesController;
 __decorate([
+    (0, throttler_1.Throttle)({ default: { limit: 30, ttl: 60000 } }),
     (0, common_1.Post)('toggle'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),

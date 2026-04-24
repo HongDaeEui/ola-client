@@ -19,6 +19,7 @@ let PrismaService = class PrismaService extends client_1.PrismaClient {
     static { PrismaService_1 = this; }
     static pool;
     static adapter;
+    logger = new common_1.Logger(PrismaService_1.name);
     constructor() {
         if (!PrismaService_1.pool) {
             PrismaService_1.pool = new pg_1.Pool({
@@ -30,10 +31,13 @@ let PrismaService = class PrismaService extends client_1.PrismaClient {
     }
     async onModuleInit() {
         await this.$connect();
+        this.logger.log('Database connection established');
     }
     async onModuleDestroy() {
+        this.logger.log('Disconnecting from database...');
         await this.$disconnect();
         await PrismaService_1.pool.end();
+        this.logger.log('Database connection pool closed');
     }
 };
 exports.PrismaService = PrismaService;

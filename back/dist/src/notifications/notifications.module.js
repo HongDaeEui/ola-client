@@ -11,14 +11,15 @@ const common_1 = require("@nestjs/common");
 const notifications_controller_1 = require("./notifications.controller");
 const notifications_service_1 = require("./notifications.service");
 const notifications_gateway_1 = require("./notifications.gateway");
-const gatewayProviders = process.env.VERCEL ? [] : [notifications_gateway_1.NotificationsGateway];
+const prisma_module_1 = require("../prisma/prisma.module");
 let NotificationsModule = class NotificationsModule {
 };
 exports.NotificationsModule = NotificationsModule;
 exports.NotificationsModule = NotificationsModule = __decorate([
     (0, common_1.Module)({
+        imports: [prisma_module_1.PrismaModule],
         controllers: [notifications_controller_1.NotificationsController],
-        providers: [notifications_service_1.NotificationsService, ...gatewayProviders],
+        providers: [notifications_service_1.NotificationsService, notifications_gateway_1.NotificationsGateway],
         exports: [notifications_service_1.NotificationsService],
     })
 ], NotificationsModule);
