@@ -19,6 +19,19 @@ const TOOL_LIST_SELECT = {
   createdAt: true,
 } as const;
 
+const LOGO_TOKEN = 'pk_HqFdbQC2T_GqjA12c910QQ';
+
+function toLogoDevUrl(iconUrl: string | null): string | null {
+  if (!iconUrl) return null;
+  const m = iconUrl.match(/logo\.clearbit\.com\/([^?#]+)/);
+  if (m) return `https://img.logo.dev/${m[1]}?token=${LOGO_TOKEN}`;
+  return iconUrl;
+}
+
+function applyLogoUrl<T extends { iconUrl?: string | null }>(tool: T): T {
+  return { ...tool, iconUrl: toLogoDevUrl(tool.iconUrl ?? null) ?? undefined };
+}
+
 @Injectable()
 export class ToolsService {
   constructor(private prisma: PrismaService) {}
@@ -41,28 +54,27 @@ export class ToolsService {
       : filters?.sort === 'popular' ? { isFeatured: 'desc' as const }
       : { createdAt: 'desc' as const };
 
-    return this.prisma.tool.findMany({
-      where,
-      orderBy,
-      select: TOOL_LIST_SELECT,
-    });
+    const tools = await this.prisma.tool.findMany({ where, orderBy, select: TOOL_LIST_SELECT });
+    return tools.map(applyLogoUrl);
   }
 
   async findFeatured() {
-    return this.prisma.tool.findMany({
+    const tools = await this.prisma.tool.findMany({
       where: { isFeatured: true },
       take: 5,
       select: TOOL_LIST_SELECT,
     });
+    return tools.map(applyLogoUrl);
   }
 
   async findTopByRating(limit = 10) {
-    return this.prisma.tool.findMany({
+    const tools = await this.prisma.tool.findMany({
       where: { status: 'ACTIVE' },
       orderBy: { rating: 'desc' },
       take: limit,
       select: TOOL_LIST_SELECT,
     });
+    return tools.map(applyLogoUrl);
   }
 
   async getCategoryCounts() {
@@ -112,7 +124,7 @@ export class ToolsService {
       take: 4,
     });
 
-    return { ...tool, relatedLabs };
+    return { ...applyLogoUrl(tool), relatedLabs };
   }
 
   async findRelated(id: string) {
@@ -123,7 +135,7 @@ export class ToolsService {
 
     if (!tool) throw new NotFoundException(`도구(${id})를 찾을 수 없습니다.`);
 
-    return this.prisma.tool.findMany({
+    const related = await this.prisma.tool.findMany({
       where: {
         category: tool.category,
         status: 'ACTIVE',
@@ -133,6 +145,7 @@ export class ToolsService {
       take: 4,
       select: TOOL_LIST_SELECT,
     });
+    return related.map(applyLogoUrl);
   }
 
   async create(data: {
