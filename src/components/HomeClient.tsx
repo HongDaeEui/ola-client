@@ -122,7 +122,7 @@ function ToolCard({ tool }: { tool: Tool }) {
         <div className="flex gap-4 mb-4">
           <div className="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-700 flex-shrink-0 overflow-hidden border border-slate-100 dark:border-slate-600 group-hover:scale-105 transition-transform duration-300">
             {tool.coverUrl || getLogoUrl(tool.iconUrl) ? (
-              <Image src={(tool.coverUrl || getLogoUrl(tool.iconUrl))!} alt={tool.name} width={56} height={56} className="object-contain w-full h-full p-1" />
+              <Image src={(tool.coverUrl || getLogoUrl(tool.iconUrl))!} alt={tool.name} width={56} height={56} className="object-contain w-full h-full p-1" unoptimized />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-slate-700 to-slate-900 group-hover:from-sky-600 group-hover:to-indigo-700 flex items-center justify-center text-white font-bold text-xl uppercase tracking-tighter transition-all duration-300">
                 {tool.name.substring(0, 2)}
