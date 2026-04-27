@@ -30,8 +30,8 @@ export function ChatWidget() {
     },
   };
 
-  const { messages, input: _input, handleInputChange, handleSubmit, status, append } = useChat(chatConfig) as any;
-  const input = _input ?? '';
+  const { messages, status, append } = useChat(chatConfig) as any;
+  const [input, setInput] = useState('');
 
   const isLoading = status === 'streaming' || status === 'submitted';
 
@@ -39,11 +39,19 @@ export function ChatWidget() {
     if (isOpen) endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isOpen, isLoading]);
 
+  function handleLocalSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const text = input.trim();
+    if (!text || isLoading) return;
+    setInput('');
+    append({ role: 'user', content: text });
+  }
+
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.nativeEvent.isComposing) return;
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSubmit(e as unknown as React.FormEvent);
+      handleLocalSubmit(e as unknown as React.FormEvent);
     }
   }
 
@@ -152,13 +160,13 @@ export function ChatWidget() {
           {/* Input */}
           <div className="p-4 bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700 flex-shrink-0">
             <form
-              onSubmit={handleSubmit}
+              onSubmit={handleLocalSubmit}
               className="flex items-center gap-2 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-2xl pl-4 pr-2 py-2 focus-within:border-sky-400 focus-within:ring-2 focus-within:ring-sky-100 dark:focus-within:ring-sky-900 transition-all"
             >
               <input
                 type="text"
                 value={input}
-                onChange={handleInputChange}
+                onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="어떤 AI가 필요하신가요?"
                 className="flex-1 bg-transparent text-sm text-slate-700 dark:text-slate-200 outline-none placeholder:text-slate-400"
