@@ -22,3 +22,6 @@ _workspace_prev/
 
 # TypeScript incremental build cache
 back/dist/tsconfig.tsbuildinfo
+
+# one-time seed/upsert scripts
+back/prisma/upsert-tools.ts
