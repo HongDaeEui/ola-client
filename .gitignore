@@ -15,3 +15,10 @@ node_modules/
 # harness — do not track runtime state
 .agents/state.json
 .agents/.stop
+
+# ola-dev orchestrator workspace
+_workspace/
+_workspace_prev/
+
+# TypeScript incremental build cache
+back/dist/tsconfig.tsbuildinfo
