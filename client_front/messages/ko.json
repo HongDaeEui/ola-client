@@ -32,5 +32,13 @@
     "terms": "이용약관",
     "privacy": "개인정보보호",
     "quickLinks": "빠른링크"
+  },
+  "Footer": {
+    "privacy": "개인정보보호",
+    "terms": "이용약관",
+    "contact": "문의하기",
+    "careers": "채용",
+    "press": "프레스",
+    "support": "고객지원"
   }
 }
