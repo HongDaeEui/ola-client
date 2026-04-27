@@ -1,7 +1,12 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from 'react';
-import { useChat } from '@ai-sdk/react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+
+interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+}
 
 const QUICK_QUESTIONS = [
   '요즘 핫한 AI 도구 추천해줘',
@@ -9,42 +14,74 @@ const QUICK_QUESTIONS = [
   'AI로 이미지 만들기',
 ];
 
+const WELCOME_MSG: ChatMessage = {
+  id: 'welcome',
+  role: 'assistant',
+  content: '안녕하세요! Ola AI 비서입니다. 🙌\n어떤 AI 도구나 노하우를 찾고 계신가요?',
+};
+
 export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const endRef = useRef<HTMLDivElement>(null);
-
-  const chatConfig: any = {
-    api: '/api/chat',
-    streamProtocol: 'text',
-    initialMessages: [
-      {
-        id: 'welcome',
-        role: 'assistant',
-        content: '안녕하세요! Ola AI 비서입니다. 🙌\n어떤 AI 도구나 노하우를 찾고 계신가요?',
-        createdAt: new Date(),
-      },
-    ],
-    onError: (error: Error) => {
-      console.error('Chat error:', error);
-    },
-  };
-
-  const { messages, status, append } = useChat(chatConfig) as any;
+  const [messages, setMessages] = useState<ChatMessage[]>([WELCOME_MSG]);
   const [input, setInput] = useState('');
-
-  const isLoading = status === 'streaming' || status === 'submitted';
+  const [isLoading, setIsLoading] = useState(false);
+  const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen) endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isOpen, isLoading]);
+
+  const sendMessage = useCallback(async (text: string) => {
+    const userMsg: ChatMessage = { id: `u-${Date.now()}`, role: 'user', content: text };
+    const newMessages = [...messages, userMsg];
+    setMessages(newMessages);
+    setIsLoading(true);
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: newMessages.filter(m => m.id !== 'welcome').map(({ role, content }) => ({ role, content })),
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: '서버 오류가 발생했습니다.' }));
+        setMessages(prev => [...prev, { id: `a-${Date.now()}`, role: 'assistant', content: `⚠️ ${err.error || '오류가 발생했습니다.'}` }]);
+        return;
+      }
+
+      // Streaming response
+      const reader = res.body?.getReader();
+      const decoder = new TextDecoder();
+      const assistantId = `a-${Date.now()}`;
+      setMessages(prev => [...prev, { id: assistantId, role: 'assistant', content: '' }]);
+
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value, { stream: true });
+          setMessages(prev =>
+            prev.map(m => m.id === assistantId ? { ...m, content: m.content + chunk } : m)
+          );
+        }
+      }
+    } catch {
+      setMessages(prev => [...prev, { id: `a-${Date.now()}`, role: 'assistant', content: '⚠️ 네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.' }]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [messages]);
 
   function handleLocalSubmit(e: React.FormEvent) {
     e.preventDefault();
     const text = input.trim();
     if (!text || isLoading) return;
     setInput('');
-    append({ role: 'user', content: text });
+    sendMessage(text);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -132,7 +169,7 @@ export function ChatWidget() {
                 {QUICK_QUESTIONS.map(q => (
                   <button
                     key={q}
-                    onClick={() => append({ role: 'user', content: q })}
+                    onClick={() => sendMessage(q)}
                     className="text-left text-xs text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-900/30 border border-sky-100 dark:border-sky-800 rounded-xl px-3 py-2 hover:bg-sky-100 dark:hover:bg-sky-900/50 transition-colors"
                   >
                     💬 {q}
