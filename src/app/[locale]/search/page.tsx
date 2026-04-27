@@ -1,5 +1,6 @@
 'use client';
 import Image from "next/image";
+import { getLogoUrl } from '@/lib/logo';
 
 import { API_BASE, apiFetch } from '@/lib/api';
 
@@ -215,8 +216,8 @@ function SearchContent() {
                       className="flex items-center gap-4 bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-100 dark:border-slate-700 hover:border-sky-200 dark:hover:border-sky-700 hover:shadow-md transition-all group"
                     >
                       <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-sky-100 to-indigo-100 dark:from-sky-900/40 dark:to-indigo-900/40 flex items-center justify-center flex-shrink-0 overflow-hidden">
-                        {tool.iconUrl
-                          ? <Image src={tool.iconUrl} alt={tool.name} width={48} height={48} className="w-full h-full object-contain p-1" />
+                        {getLogoUrl(tool.iconUrl)
+                          ? <Image src={getLogoUrl(tool.iconUrl)!} alt={tool.name} width={48} height={48} className="w-full h-full object-contain p-1" />
                           : <span className="material-symbols-outlined text-sky-500 text-2xl">extension</span>
                         }
                       </div>
