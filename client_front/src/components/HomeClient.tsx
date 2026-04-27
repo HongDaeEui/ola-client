@@ -1,6 +1,6 @@
 'use client';
-'use client';
 import Image from "next/image";
+import { getLogoUrl } from '@/lib/logo';
 
 import { Link } from '@/i18n/routing';
 import { motion } from 'framer-motion';
@@ -121,8 +121,8 @@ function ToolCard({ tool }: { tool: Tool }) {
         className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 hover:border-sky-300 dark:hover:border-sky-600 hover:shadow-lg hover:shadow-sky-100 dark:hover:shadow-sky-900/20 transition-all group flex flex-col h-full">
         <div className="flex gap-4 mb-4">
           <div className="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-700 flex-shrink-0 overflow-hidden border border-slate-100 dark:border-slate-600 group-hover:scale-105 transition-transform duration-300">
-            {tool.coverUrl || tool.iconUrl ? (
-              <Image src={(tool.coverUrl || tool.iconUrl)!} alt={tool.name} width={24} height={24} className="object-cover w-full h-full" />
+            {tool.coverUrl || getLogoUrl(tool.iconUrl) ? (
+              <Image src={(tool.coverUrl || getLogoUrl(tool.iconUrl))!} alt={tool.name} width={56} height={56} className="object-contain w-full h-full p-1" />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-slate-700 to-slate-900 group-hover:from-sky-600 group-hover:to-indigo-700 flex items-center justify-center text-white font-bold text-xl uppercase tracking-tighter transition-all duration-300">
                 {tool.name.substring(0, 2)}
