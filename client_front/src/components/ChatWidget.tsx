@@ -30,7 +30,8 @@ export function ChatWidget() {
     },
   };
 
-  const { messages, input, handleInputChange, handleSubmit, status, append } = useChat(chatConfig) as any;
+  const { messages, input: _input, handleInputChange, handleSubmit, status, append } = useChat(chatConfig) as any;
+  const input = _input ?? '';
 
   const isLoading = status === 'streaming' || status === 'submitted';
 
