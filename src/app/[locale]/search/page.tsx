@@ -8,10 +8,6 @@ import { useRouter } from '@/i18n/routing';
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { Link } from '@/i18n/routing';
 import { OlaVerifiedBadge } from '@/components/Badges';
-export const revalidate = 300;
-
-
-
 type Tool = { id: string; name: string; shortDesc: string; category: string; iconUrl?: string; pricingModel?: string; rating?: number };
 type Prompt = { id: string; title: string; category: string; toolName: string; likes: number };
 type Post = { id: string; title: string; category: string; likes: number; views: number; createdAt: string };
