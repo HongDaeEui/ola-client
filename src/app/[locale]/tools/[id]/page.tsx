@@ -171,7 +171,8 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
               <div className="absolute -inset-2 bg-sky-400/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative w-28 h-28 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-2xl">
                 {getLogoUrl(tool.iconUrl) ? (
-                  <Image src={getLogoUrl(tool.iconUrl)!} alt={tool.name} width={80} height={80} className="w-20 h-20 rounded-xl object-contain p-2" unoptimized />
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={getLogoUrl(tool.iconUrl)} alt={tool.name} width={80} height={80} className="w-20 h-20 rounded-xl object-contain p-2" />
                 ) : (
                   <span className="text-white font-black text-4xl uppercase tracking-tighter">
                     {tool.name.substring(0, 2)}
@@ -283,7 +284,8 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
                     >
                       <div className="w-12 h-12 rounded-xl bg-slate-100 shrink-0 flex items-center justify-center text-slate-600 font-bold text-base uppercase group-hover:bg-slate-900 group-hover:text-white transition-all duration-300 overflow-hidden">
                         {getLogoUrl(rt.iconUrl)
-                          ? <Image src={getLogoUrl(rt.iconUrl)!} alt={rt.name} width={48} height={48} className="w-full h-full object-contain p-1" unoptimized />
+                          // eslint-disable-next-line @next/next/no-img-element
+                          ? <img src={getLogoUrl(rt.iconUrl)} alt={rt.name} width={48} height={48} className="w-full h-full object-contain p-1" />
                           : rt.name.substring(0, 2)}
                       </div>
                       <div className="min-w-0 flex-1">

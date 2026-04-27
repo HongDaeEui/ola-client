@@ -1,5 +1,4 @@
 import { API_BASE, apiFetch } from '@/lib/api';
-import Image from "next/image";
 import { Link } from '@/i18n/routing';
 import { getLogoUrl } from '@/lib/logo';
 export const revalidate = 300;
@@ -261,7 +260,8 @@ export default async function ToolsPage({
                     <div className="flex gap-4 mb-4">
                       <div className="w-14 h-14 rounded-xl bg-slate-100 flex-shrink-0 flex items-center justify-center text-slate-500 font-bold text-lg uppercase tracking-tighter border border-slate-100 group-hover:bg-slate-900 group-hover:text-white transition-all duration-300 overflow-hidden">
                         {getLogoUrl(tool.iconUrl)
-                          ? <Image src={getLogoUrl(tool.iconUrl)!} alt={tool.name} width={56} height={56} className="w-full h-full object-contain p-1" unoptimized />
+                          // eslint-disable-next-line @next/next/no-img-element
+                          ? <img src={getLogoUrl(tool.iconUrl)} alt={tool.name} width={56} height={56} className="w-full h-full object-contain p-1" />
                           : tool.name.substring(0, 2)
                         }
                       </div>

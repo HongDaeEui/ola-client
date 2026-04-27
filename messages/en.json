@@ -32,5 +32,13 @@
     "terms": "Terms",
     "privacy": "Privacy",
     "quickLinks": "Links"
+  },
+  "Footer": {
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "contact": "Contact",
+    "careers": "Careers",
+    "press": "Press",
+    "support": "Support"
   }
 }
