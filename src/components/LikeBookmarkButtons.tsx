@@ -67,6 +67,7 @@ export function LikeBookmarkButtons({ targetType, targetId, initialLikes, varian
         },
         body: JSON.stringify({ targetType, targetId }),
       });
+      if (!res.ok) return;
       const data = await res.json();
       setLiked(data.liked);
       setLikes(prev => data.liked ? prev + 1 : prev - 1);
@@ -95,6 +96,7 @@ export function LikeBookmarkButtons({ targetType, targetId, initialLikes, varian
         },
         body: JSON.stringify({ targetType, targetId }),
       });
+      if (!res.ok) return;
       const data = await res.json();
       setBookmarked(data.bookmarked);
     } finally {
