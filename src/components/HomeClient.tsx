@@ -32,6 +32,7 @@ interface HomeClientProps {
   tools: Tool[];
   posts: Post[];
   categories: CategoryCount[];
+  marqueeTools?: { name: string; iconUrl?: string }[];
 }
 
 /* ── Animated Hero Section ── */
@@ -148,7 +149,7 @@ function ToolCard({ tool }: { tool: Tool }) {
               // eslint-disable-next-line @next/next/no-img-element
               <img src={tool.coverUrl || getLogoUrl(tool.iconUrl)} alt={tool.name} width={56} height={56} className="object-contain w-full h-full p-1" />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-slate-700 to-slate-900 group-hover:from-sky-600 group-hover:to-indigo-700 flex items-center justify-center text-white font-bold text-xl uppercase tracking-tighter transition-all duration-300">
+              <div className="w-full h-full bg-linear-to-br from-slate-700 to-slate-900 group-hover:from-sky-600 group-hover:to-indigo-700 flex items-center justify-center text-white font-bold text-xl uppercase tracking-tighter transition-all duration-300">
                 {tool.name.substring(0, 2)}
               </div>
             )}
@@ -185,14 +186,14 @@ function ToolCard({ tool }: { tool: Tool }) {
 
 
 /* ── Main Exported Client Component ── */
-export default function HomeClient({ tools, posts, categories }: HomeClientProps) {
+export default function HomeClient({ tools, posts, categories, marqueeTools }: HomeClientProps) {
   const gridTools = tools.slice(0, 9);
   const trendTools = tools.slice(0, 5);
 
   return (
     <main className="pt-20 lg:pt-24 min-h-screen bg-slate-50 dark:bg-slate-950 font-['Noto_Sans_KR']">
       {/* Hero */}
-      <HeroSection tools={tools} />
+      <HeroSection tools={marqueeTools ?? tools} />
 
       {/* Main Content */}
       <section className="max-w-[1400px] mx-auto px-6 py-10 flex flex-col lg:flex-row gap-8">
@@ -284,7 +285,7 @@ export default function HomeClient({ tools, posts, categories }: HomeClientProps
 
           {/* CTA */}
           <ScrollReveal direction="right" delay={0.35}>
-            <div className="bg-gradient-to-br from-sky-600 to-indigo-700 rounded-2xl p-6 text-white shadow-lg shadow-sky-200 dark:shadow-sky-900/30 relative overflow-hidden">
+            <div className="bg-linear-to-br from-sky-600 to-indigo-700 rounded-2xl p-6 text-white shadow-lg shadow-sky-200 dark:shadow-sky-900/30 relative overflow-hidden">
               <motion.div
                 className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"
                 animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
