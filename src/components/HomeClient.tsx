@@ -111,13 +111,14 @@ function HeroSection({ tools }: { tools: { name: string; iconUrl?: string }[] })
         </motion.form>
 
         <motion.div variants={fadeUp} className="relative w-full overflow-hidden mt-6" style={{ WebkitMaskImage: 'linear-gradient(to right, transparent, black 12%, black 88%, transparent)', maskImage: 'linear-gradient(to right, transparent, black 12%, black 88%, transparent)' }}>
-          <div className="flex gap-6 items-center animate-marquee">
-            {[...tools.slice(0, 12), ...tools.slice(0, 12)].map((tool, i) =>
-              tool.iconUrl ? (
+          <div className="flex gap-8 items-center animate-marquee">
+            {(() => {
+              const logos = tools.filter(t => t.iconUrl).slice(0, 20);
+              return [...logos, ...logos, ...logos, ...logos].map((tool, i) => (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img key={i} src={tool.iconUrl} alt={tool.name} width={32} height={32} className="w-8 h-8 rounded-lg object-contain shrink-0 opacity-70 hover:opacity-100 transition-opacity" />
-              ) : null
-            )}
+                <img key={i} src={tool.iconUrl} alt={tool.name} width={36} height={36} className="w-9 h-9 rounded-xl object-contain shrink-0 opacity-60 hover:opacity-100 transition-opacity" />
+              ));
+            })()}
           </div>
         </motion.div>
 
@@ -362,7 +363,7 @@ export default function HomeClient({ tools, posts, categories }: HomeClientProps
           to   { transform: translateX(-50%); }
         }
         .animate-marquee {
-          animation: marquee 30s linear infinite;
+          animation: marquee 50s linear infinite;
           width: max-content;
         }
       ` }} />
