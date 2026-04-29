@@ -181,7 +181,7 @@ export default function ProfilePage() {
   ];
 
   return (
-    <main className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-24 pb-16 font-['Noto_Sans_KR']">
+    <main className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-32 pb-16 font-['Noto_Sans_KR']">
       <div className="max-w-2xl mx-auto px-4">
 
         {/* Profile Card */}

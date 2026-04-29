@@ -124,7 +124,7 @@ export default function PromptWritePage() {
   const charCount = content.trim().length;
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-24 pb-20 font-['Noto_Sans_KR']">
+    <div className="min-h-screen bg-slate-50 pt-32 pb-20 font-['Noto_Sans_KR']">
       <div className="max-w-3xl mx-auto px-4">
 
         {/* Top bar */}

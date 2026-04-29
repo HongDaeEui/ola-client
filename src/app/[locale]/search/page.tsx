@@ -86,7 +86,7 @@ function SearchContent() {
   const showLabs = tab === 'all' || tab === 'labs';
 
   return (
-    <main className="min-h-screen pt-24 pb-20 bg-slate-50 dark:bg-slate-900">
+    <main className="min-h-screen pt-28 pb-20 bg-slate-50 dark:bg-slate-900">
       {/* Search hero */}
       <div className="bg-white dark:bg-slate-800 border-b border-slate-100 dark:border-slate-700 py-10">
         <div className="max-w-3xl mx-auto px-4">
