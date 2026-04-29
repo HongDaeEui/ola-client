@@ -58,6 +58,7 @@ class ApiService {
           const token = localStorage.getItem('access_token');
           if (token && config.headers) {
             config.headers.Authorization = `Bearer ${token}`;
+            config.headers['x-admin-secret'] = token;
           }
         }
         if (ADMIN_SECRET && config.headers) {

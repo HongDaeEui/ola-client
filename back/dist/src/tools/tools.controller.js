@@ -22,8 +22,8 @@ let ToolsController = class ToolsController {
     constructor(toolsService) {
         this.toolsService = toolsService;
     }
-    findAll(category, pricing, sort) {
-        return this.toolsService.findAll({ category, pricing, sort });
+    findAll(category, pricing, tags, sort) {
+        return this.toolsService.findAll({ category, pricing, tags, sort });
     }
     findFeatured() {
         return this.toolsService.findFeatured();
@@ -36,6 +36,9 @@ let ToolsController = class ToolsController {
     }
     findPending() {
         return this.toolsService.findPending();
+    }
+    findRelated(id) {
+        return this.toolsService.findRelated(id);
     }
     findOne(id) {
         return this.toolsService.findOne(id);
@@ -55,9 +58,10 @@ __decorate([
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)('category')),
     __param(1, (0, common_1.Query)('pricing')),
-    __param(2, (0, common_1.Query)('sort')),
+    __param(2, (0, common_1.Query)('tags')),
+    __param(3, (0, common_1.Query)('sort')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:paramtypes", [String, String, String, String]),
     __metadata("design:returntype", void 0)
 ], ToolsController.prototype, "findAll", null);
 __decorate([
@@ -85,6 +89,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], ToolsController.prototype, "findPending", null);
+__decorate([
+    (0, common_1.Get)(':id/related'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], ToolsController.prototype, "findRelated", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),

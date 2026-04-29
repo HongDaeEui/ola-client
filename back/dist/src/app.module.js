@@ -25,6 +25,7 @@ const bookmarks_module_1 = require("./bookmarks/bookmarks.module");
 const search_module_1 = require("./search/search.module");
 const comments_module_1 = require("./comments/comments.module");
 const notifications_module_1 = require("./notifications/notifications.module");
+const users_module_1 = require("./users/users.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -51,6 +52,7 @@ exports.AppModule = AppModule = __decorate([
             search_module_1.SearchModule,
             comments_module_1.CommentsModule,
             notifications_module_1.NotificationsModule,
+            users_module_1.UsersModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [

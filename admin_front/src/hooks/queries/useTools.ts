@@ -18,8 +18,8 @@ export function useToolsList(params: GetToolsParams = {}) {
       const res = await toolService.getTools(params);
       if (!res.success) throw new Error(res.error || 'Failed to fetch tools');
       // NestJS res => { success: true, response: { data: { success: true, data: [...] } } }
-      // The service call result wraps response in 'response' or 'data'.
-      return (res as any).response?.data?.data || (res as any).data?.data || [];
+      const responseData = (res as any).response?.data || (res as any).data;
+      return Array.isArray(responseData) ? responseData : (responseData?.data || []);
     },
   });
 }
@@ -31,7 +31,8 @@ export function usePendingTools() {
     queryFn: async () => {
       const res = await toolService.getPendingTools();
       if (!res.success) throw new Error(res.error || 'Failed to fetch pending tools');
-      return (res as any).response?.data?.data || (res as any).data?.data || [];
+      const responseData = (res as any).response?.data || (res as any).data;
+      return Array.isArray(responseData) ? responseData : (responseData?.data || []);
     },
   });
 }

@@ -45,28 +45,42 @@ let LikesService = class LikesService {
         return { liked: !!existing };
     }
     async createLikeNotification(targetType, targetId) {
-        let authorId = null;
-        let title = null;
-        if (targetType === 'POST') {
-            const post = await this.prisma.post.findUnique({ where: { id: targetId }, select: { authorId: true, title: true } });
-            authorId = post?.authorId ?? null;
-            title = post?.title ?? null;
-        }
-        else if (targetType === 'PROMPT') {
-            const prompt = await this.prisma.prompt.findUnique({ where: { id: targetId }, select: { authorId: true, title: true } });
-            authorId = prompt?.authorId ?? null;
-            title = prompt?.title ?? null;
-        }
-        if (!authorId)
+        const fetchers = {
+            POST: {
+                fetch: () => this.prisma.post.findUnique({
+                    where: { id: targetId },
+                    select: { authorId: true, title: true },
+                }),
+                label: '게시글',
+            },
+            PROMPT: {
+                fetch: () => this.prisma.prompt.findUnique({
+                    where: { id: targetId },
+                    select: { authorId: true, title: true },
+                }),
+                label: '프롬프트',
+            },
+            LAB: {
+                fetch: () => this.prisma.experiment.findUnique({
+                    where: { id: targetId },
+                    select: { authorId: true, title: true },
+                }),
+                label: '실험실',
+            },
+        };
+        const entry = fetchers[targetType];
+        if (!entry)
             return;
-        const label = targetType === 'POST' ? '게시글' : '프롬프트';
+        const target = await entry.fetch();
+        if (!target?.authorId)
+            return;
         await this.notifications.create({
-            recipientId: authorId,
+            recipientId: target.authorId,
             type: 'LIKE',
-            message: `누군가 회원님의 ${label}에 좋아요를 눌렀어요`,
+            message: `누군가 회원님의 ${entry.label}에 좋아요를 눌렀어요`,
             targetType,
             targetId,
-            targetTitle: title ?? undefined,
+            targetTitle: target.title,
         });
     }
     async incrementLikesInTx(tx, targetType, targetId) {

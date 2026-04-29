@@ -2,47 +2,53 @@ import { ToolsService } from './tools.service';
 export declare class ToolsController {
     private readonly toolsService;
     constructor(toolsService: ToolsService);
-    findAll(category?: string, pricing?: string, sort?: string): Promise<{
-        category: string;
-        pricingModel: string | null;
-        rating: number;
-        isFeatured: boolean;
-        id: string;
-        name: string;
-        description: string;
-        shortDesc: string;
-        iconUrl: string | null;
-        coverUrl: string | null;
-        tags: string[];
-    }[]>;
-    findFeatured(): Promise<{
+    findAll(category?: string, pricing?: string, tags?: string, sort?: string): Promise<{
         status: string;
         category: string;
         pricingModel: string | null;
+        tags: string[];
         rating: number;
         createdAt: Date;
         isFeatured: boolean;
         id: string;
         name: string;
-        description: string;
         shortDesc: string;
-        developer: string | null;
         iconUrl: string | null;
         coverUrl: string | null;
         launchUrl: string | null;
-        tags: string[];
         likes: number;
-        updatedAt: Date;
     }[]>;
-    findTopByRating(): Promise<{
+    findFeatured(): Promise<{
+        status: string;
         category: string;
         pricingModel: string | null;
+        tags: string[];
         rating: number;
+        createdAt: Date;
         isFeatured: boolean;
         id: string;
         name: string;
         shortDesc: string;
         iconUrl: string | null;
+        coverUrl: string | null;
+        launchUrl: string | null;
+        likes: number;
+    }[]>;
+    findTopByRating(): Promise<{
+        status: string;
+        category: string;
+        pricingModel: string | null;
+        tags: string[];
+        rating: number;
+        createdAt: Date;
+        isFeatured: boolean;
+        id: string;
+        name: string;
+        shortDesc: string;
+        iconUrl: string | null;
+        coverUrl: string | null;
+        launchUrl: string | null;
+        likes: number;
     }[]>;
     getCategoryCounts(): Promise<{
         category: string;
@@ -52,6 +58,7 @@ export declare class ToolsController {
         status: string;
         category: string;
         pricingModel: string | null;
+        tags: string[];
         rating: number;
         createdAt: Date;
         isFeatured: boolean;
@@ -63,9 +70,24 @@ export declare class ToolsController {
         iconUrl: string | null;
         coverUrl: string | null;
         launchUrl: string | null;
-        tags: string[];
         likes: number;
         updatedAt: Date;
+    }[]>;
+    findRelated(id: string): Promise<{
+        status: string;
+        category: string;
+        pricingModel: string | null;
+        tags: string[];
+        rating: number;
+        createdAt: Date;
+        isFeatured: boolean;
+        id: string;
+        name: string;
+        shortDesc: string;
+        iconUrl: string | null;
+        coverUrl: string | null;
+        launchUrl: string | null;
+        likes: number;
     }[]>;
     findOne(id: string): Promise<{
         relatedLabs: ({
@@ -93,6 +115,7 @@ export declare class ToolsController {
         status: string;
         category: string;
         pricingModel: string | null;
+        tags: string[];
         rating: number;
         createdAt: Date;
         isFeatured: boolean;
@@ -104,7 +127,6 @@ export declare class ToolsController {
         iconUrl: string | null;
         coverUrl: string | null;
         launchUrl: string | null;
-        tags: string[];
         likes: number;
         updatedAt: Date;
     }>;
@@ -112,6 +134,7 @@ export declare class ToolsController {
         status: string;
         category: string;
         pricingModel: string | null;
+        tags: string[];
         rating: number;
         createdAt: Date;
         isFeatured: boolean;
@@ -123,7 +146,6 @@ export declare class ToolsController {
         iconUrl: string | null;
         coverUrl: string | null;
         launchUrl: string | null;
-        tags: string[];
         likes: number;
         updatedAt: Date;
     }>;
@@ -131,6 +153,7 @@ export declare class ToolsController {
         status: string;
         category: string;
         pricingModel: string | null;
+        tags: string[];
         rating: number;
         createdAt: Date;
         isFeatured: boolean;
@@ -142,7 +165,6 @@ export declare class ToolsController {
         iconUrl: string | null;
         coverUrl: string | null;
         launchUrl: string | null;
-        tags: string[];
         likes: number;
         updatedAt: Date;
     }>;
@@ -158,6 +180,7 @@ export declare class ToolsController {
         status: string;
         category: string;
         pricingModel: string | null;
+        tags: string[];
         rating: number;
         createdAt: Date;
         isFeatured: boolean;
@@ -169,7 +192,6 @@ export declare class ToolsController {
         iconUrl: string | null;
         coverUrl: string | null;
         launchUrl: string | null;
-        tags: string[];
         likes: number;
         updatedAt: Date;
     }>;

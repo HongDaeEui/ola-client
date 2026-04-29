@@ -35,8 +35,8 @@ function useUsersList() {
         '사용자 목록을 가져오는데 실패했습니다.'
       );
       if (!res.success) throw new Error('Failed to fetch users');
-      const data = (res as any).response?.data?.data || (res as any).response?.data || [];
-      return Array.isArray(data) ? data : [];
+      const responseData = (res as any).response?.data || (res as any).data;
+      return Array.isArray(responseData) ? responseData : (responseData?.data || []);
     },
   });
 }

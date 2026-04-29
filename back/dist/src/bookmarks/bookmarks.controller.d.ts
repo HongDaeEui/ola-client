@@ -1,18 +1,18 @@
 import { BookmarksService } from './bookmarks.service';
 export declare class BookmarksController {
     private readonly bookmarksService;
+    private readonly logger;
     constructor(bookmarksService: BookmarksService);
     toggle(body: {
-        userId: string;
         targetType: string;
         targetId: string;
-    }): Promise<{
+    }, authorization?: string): Promise<{
         bookmarked: boolean;
     }>;
-    getStatus(userId: string, targetType: string, targetId: string): Promise<{
+    getStatus(targetType: string, targetId: string, authorization?: string): Promise<{
         bookmarked: boolean;
     }>;
-    getUserBookmarks(userId: string): Promise<({
+    getUserBookmarks(authorization?: string): Promise<({
         item: Record<string, unknown>;
         createdAt: Date;
         id: string;
@@ -20,4 +20,5 @@ export declare class BookmarksController {
         targetType: string;
         targetId: string;
     } | null)[]>;
+    private requireUserIdFromAuthHeader;
 }

@@ -6,22 +6,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NotificationsModule = void 0;
+exports.UsersModule = void 0;
 const common_1 = require("@nestjs/common");
-const notifications_controller_1 = require("./notifications.controller");
-const notifications_service_1 = require("./notifications.service");
-const notifications_gateway_1 = require("./notifications.gateway");
+const users_service_1 = require("./users.service");
+const users_controller_1 = require("./users.controller");
 const prisma_module_1 = require("../prisma/prisma.module");
-const gatewayProviders = process.env.VERCEL ? [] : [notifications_gateway_1.NotificationsGateway];
-let NotificationsModule = class NotificationsModule {
+let UsersModule = class UsersModule {
 };
-exports.NotificationsModule = NotificationsModule;
-exports.NotificationsModule = NotificationsModule = __decorate([
+exports.UsersModule = UsersModule;
+exports.UsersModule = UsersModule = __decorate([
     (0, common_1.Module)({
         imports: [prisma_module_1.PrismaModule],
-        controllers: [notifications_controller_1.NotificationsController],
-        providers: [notifications_service_1.NotificationsService, ...gatewayProviders],
-        exports: [notifications_service_1.NotificationsService],
+        controllers: [users_controller_1.UsersController],
+        providers: [users_service_1.UsersService],
+        exports: [users_service_1.UsersService],
     })
-], NotificationsModule);
-//# sourceMappingURL=notifications.module.js.map
+], UsersModule);
+//# sourceMappingURL=users.module.js.map

@@ -1,15 +1,16 @@
 import { LikesService } from './likes.service';
 export declare class LikesController {
     private readonly likesService;
+    private readonly logger;
     constructor(likesService: LikesService);
     toggle(body: {
-        userId: string;
         targetType: string;
         targetId: string;
-    }): Promise<{
+    }, authorization?: string): Promise<{
         liked: boolean;
     }>;
-    getStatus(userId: string, targetType: string, targetId: string): Promise<{
+    getStatus(targetType: string, targetId: string, authorization?: string): Promise<{
         liked: boolean;
     }>;
+    private requireUserIdFromAuthHeader;
 }

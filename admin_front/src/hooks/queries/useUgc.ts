@@ -16,8 +16,8 @@ export function usePromptsList(params: GetUgcParams = {}) {
     queryFn: async () => {
       const res = await ugcService.getPrompts(params);
       if (!res.success) throw new Error(res.error || 'Failed to fetch prompts');
-      const data = res.response?.data?.data || res.data?.data;
-      return Array.isArray(data) ? data : (data?.items || []);
+      const data = res.response?.data || res.data;
+      return Array.isArray(data) ? data : (data?.data || data?.items || []);
     },
   });
 }
@@ -29,8 +29,8 @@ export function usePostsList(params: GetUgcParams = {}) {
     queryFn: async () => {
       const res = await ugcService.getPosts(params);
       if (!res.success) throw new Error(res.error || 'Failed to fetch posts');
-      const data = res.response?.data?.data || res.data?.data;
-      return Array.isArray(data) ? data : (data?.items || []);
+      const data = res.response?.data || res.data;
+      return Array.isArray(data) ? data : (data?.data || data?.items || []);
     },
   });
 }
@@ -42,8 +42,8 @@ export function useLabsList(params: { category?: string } = {}) {
     queryFn: async () => {
       const res = await ugcService.getLabs(params);
       if (!res.success) throw new Error(res.error || 'Failed to fetch labs');
-      const data = res.response?.data?.data || res.data?.data;
-      return Array.isArray(data) ? data : (data?.items || []);
+      const data = res.response?.data || res.data;
+      return Array.isArray(data) ? data : (data?.data || data?.items || []);
     },
   });
 }

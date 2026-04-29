@@ -1,6 +1,7 @@
 import { PostsService } from './posts.service';
 export declare class PostsController {
     private readonly postsService;
+    private readonly logger;
     constructor(postsService: PostsService);
     findAll(category?: string, userEmail?: string, page?: string, limit?: string): import("@prisma/client").Prisma.PrismaPromise<{
         category: string;
@@ -50,9 +51,8 @@ export declare class PostsController {
         content: string;
         category: string;
         imageUrl?: string;
-        userEmail: string;
         userName: string;
-    }): Promise<{
+    }, authorization?: string): Promise<{
         author: {
             username: string;
             avatarUrl: string | null;
@@ -81,4 +81,5 @@ export declare class PostsController {
         views: number;
         imageUrl: string | null;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
+    private requireEmailFromAuthHeader;
 }

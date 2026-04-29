@@ -5,48 +5,55 @@ export declare class ToolsService {
     findAll(filters?: {
         category?: string;
         pricing?: string;
+        tags?: string;
         sort?: string;
     }): Promise<{
-        category: string;
-        pricingModel: string | null;
-        rating: number;
-        isFeatured: boolean;
-        id: string;
-        name: string;
-        description: string;
-        shortDesc: string;
-        iconUrl: string | null;
-        coverUrl: string | null;
-        tags: string[];
-    }[]>;
-    findFeatured(): Promise<{
         status: string;
         category: string;
         pricingModel: string | null;
+        tags: string[];
         rating: number;
         createdAt: Date;
         isFeatured: boolean;
         id: string;
         name: string;
-        description: string;
         shortDesc: string;
-        developer: string | null;
         iconUrl: string | null;
         coverUrl: string | null;
         launchUrl: string | null;
-        tags: string[];
         likes: number;
-        updatedAt: Date;
     }[]>;
-    findTopByRating(limit?: number): Promise<{
+    findFeatured(): Promise<{
+        status: string;
         category: string;
         pricingModel: string | null;
+        tags: string[];
         rating: number;
+        createdAt: Date;
         isFeatured: boolean;
         id: string;
         name: string;
         shortDesc: string;
         iconUrl: string | null;
+        coverUrl: string | null;
+        launchUrl: string | null;
+        likes: number;
+    }[]>;
+    findTopByRating(limit?: number): Promise<{
+        status: string;
+        category: string;
+        pricingModel: string | null;
+        tags: string[];
+        rating: number;
+        createdAt: Date;
+        isFeatured: boolean;
+        id: string;
+        name: string;
+        shortDesc: string;
+        iconUrl: string | null;
+        coverUrl: string | null;
+        launchUrl: string | null;
+        likes: number;
     }[]>;
     getCategoryCounts(): Promise<{
         category: string;
@@ -56,6 +63,7 @@ export declare class ToolsService {
         status: string;
         category: string;
         pricingModel: string | null;
+        tags: string[];
         rating: number;
         createdAt: Date;
         isFeatured: boolean;
@@ -67,7 +75,6 @@ export declare class ToolsService {
         iconUrl: string | null;
         coverUrl: string | null;
         launchUrl: string | null;
-        tags: string[];
         likes: number;
         updatedAt: Date;
     }[]>;
@@ -75,6 +82,7 @@ export declare class ToolsService {
         status: string;
         category: string;
         pricingModel: string | null;
+        tags: string[];
         rating: number;
         createdAt: Date;
         isFeatured: boolean;
@@ -86,7 +94,6 @@ export declare class ToolsService {
         iconUrl: string | null;
         coverUrl: string | null;
         launchUrl: string | null;
-        tags: string[];
         likes: number;
         updatedAt: Date;
     }>;
@@ -94,6 +101,7 @@ export declare class ToolsService {
         status: string;
         category: string;
         pricingModel: string | null;
+        tags: string[];
         rating: number;
         createdAt: Date;
         isFeatured: boolean;
@@ -105,7 +113,6 @@ export declare class ToolsService {
         iconUrl: string | null;
         coverUrl: string | null;
         launchUrl: string | null;
-        tags: string[];
         likes: number;
         updatedAt: Date;
     }>;
@@ -135,6 +142,7 @@ export declare class ToolsService {
         status: string;
         category: string;
         pricingModel: string | null;
+        tags: string[];
         rating: number;
         createdAt: Date;
         isFeatured: boolean;
@@ -146,10 +154,25 @@ export declare class ToolsService {
         iconUrl: string | null;
         coverUrl: string | null;
         launchUrl: string | null;
-        tags: string[];
         likes: number;
         updatedAt: Date;
     }>;
+    findRelated(id: string): Promise<{
+        status: string;
+        category: string;
+        pricingModel: string | null;
+        tags: string[];
+        rating: number;
+        createdAt: Date;
+        isFeatured: boolean;
+        id: string;
+        name: string;
+        shortDesc: string;
+        iconUrl: string | null;
+        coverUrl: string | null;
+        launchUrl: string | null;
+        likes: number;
+    }[]>;
     create(data: {
         name: string;
         shortDesc: string;
@@ -162,6 +185,7 @@ export declare class ToolsService {
         status: string;
         category: string;
         pricingModel: string | null;
+        tags: string[];
         rating: number;
         createdAt: Date;
         isFeatured: boolean;
@@ -173,7 +197,6 @@ export declare class ToolsService {
         iconUrl: string | null;
         coverUrl: string | null;
         launchUrl: string | null;
-        tags: string[];
         likes: number;
         updatedAt: Date;
     }>;

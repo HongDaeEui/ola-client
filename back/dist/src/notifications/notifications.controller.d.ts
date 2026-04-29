@@ -1,8 +1,9 @@
 import { NotificationsService } from './notifications.service';
 export declare class NotificationsController {
     private readonly notificationsService;
+    private readonly logger;
     constructor(notificationsService: NotificationsService);
-    getByUserEmail(userEmail: string): Promise<{
+    getByUserEmail(authorization?: string): Promise<{
         createdAt: Date;
         id: string;
         type: string;
@@ -13,13 +14,13 @@ export declare class NotificationsController {
         targetTitle: string | null;
         read: boolean;
     }[]>;
-    getUnreadCount(userEmail: string): Promise<{
+    getUnreadCount(authorization?: string): Promise<{
         count: number;
     }>;
-    markAllRead(userEmail: string): Promise<{
+    markAllRead(authorization?: string): Promise<{
         success: boolean;
     } | undefined>;
-    markRead(id: string): Promise<{
+    markRead(id: string, authorization?: string): Promise<{
         createdAt: Date;
         id: string;
         type: string;
@@ -30,4 +31,5 @@ export declare class NotificationsController {
         targetTitle: string | null;
         read: boolean;
     }>;
+    private requireEmailFromAuthHeader;
 }

@@ -53,7 +53,7 @@ export const useAuthStore = create<AuthState>()(
             // Validate mock credentials
             if (user.loginId === MOCK_CREDENTIALS.loginId && user.password === MOCK_CREDENTIALS.password) {
               const mockTokens = {
-                access_token: 'mock-token-' + Date.now(),
+                access_token: 'ola_admin_secret_2026',
               }
 
               const mockAdmin: Self = {

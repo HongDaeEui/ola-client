@@ -19,9 +19,8 @@ export declare class CommentsController {
     create(body: {
         content: string;
         postId: string;
-        userEmail: string;
         userName: string;
-    }): Promise<{
+    }, authorization?: string): Promise<{
         author: {
             email: string;
             username: string;
@@ -41,5 +40,6 @@ export declare class CommentsController {
         authorId: string;
         postId: string;
     }>;
+    private requireEmailFromAuthHeader;
     private extractEmailFromToken;
 }

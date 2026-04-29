@@ -60,10 +60,24 @@ let CommentsController = CommentsController_1 = class CommentsController {
     findByPost(postId) {
         return this.commentsService.findByPost(postId);
     }
-    create(body) {
-        return this.commentsService.create(body);
+    create(body, authorization) {
+        const email = this.requireEmailFromAuthHeader(authorization);
+        return this.commentsService.create({
+            content: body.content,
+            postId: body.postId,
+            userEmail: email,
+            userName: body.userName,
+        });
     }
     async remove(id, authorization) {
+        const email = this.requireEmailFromAuthHeader(authorization);
+        const result = await this.commentsService.remove(id, email);
+        if (!result) {
+            throw new common_1.ForbiddenException('You are not allowed to delete this comment.');
+        }
+        return result;
+    }
+    requireEmailFromAuthHeader(authorization) {
         if (!authorization || !authorization.toLowerCase().startsWith('bearer ')) {
             throw new common_1.UnauthorizedException('Missing Bearer token.');
         }
@@ -75,23 +89,16 @@ let CommentsController = CommentsController_1 = class CommentsController {
         if (!email) {
             throw new common_1.UnauthorizedException('Token does not contain an email claim.');
         }
-        const result = await this.commentsService.remove(id, email);
-        if (!result) {
-            throw new common_1.ForbiddenException('You are not allowed to delete this comment.');
-        }
-        return result;
+        return email;
     }
     extractEmailFromToken(token) {
         const secret = process.env.SUPABASE_JWT_SECRET;
+        if (!secret || secret.trim().length === 0) {
+            this.logger.error('SUPABASE_JWT_SECRET is not configured. Refusing to accept JWT without signature verification.');
+            throw new common_1.UnauthorizedException('Server authentication is not configured.');
+        }
         try {
-            let payload = null;
-            if (secret && secret.trim().length > 0) {
-                payload = jwt.verify(token, secret);
-            }
-            else {
-                this.logger.warn('SUPABASE_JWT_SECRET is not configured. Falling back to unsafe decode().');
-                payload = jwt.decode(token);
-            }
+            const payload = jwt.verify(token, secret);
             if (!payload || typeof payload === 'string')
                 return null;
             const candidate = payload.email ??
@@ -118,8 +125,9 @@ __decorate([
     (0, throttler_1.Throttle)({ default: { limit: 10, ttl: 60000 } }),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Headers)('authorization')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", void 0)
 ], CommentsController.prototype, "create", null);
 __decorate([

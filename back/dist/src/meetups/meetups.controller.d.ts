@@ -1,6 +1,7 @@
 import { MeetupsService } from './meetups.service';
 export declare class MeetupsController {
     private readonly meetupsService;
+    private readonly logger;
     constructor(meetupsService: MeetupsService);
     findAll(): Promise<({
         _count: {
@@ -35,13 +36,13 @@ export declare class MeetupsController {
         isVirtual: boolean;
     })[]>;
     rsvp(id: string, body: {
-        userEmail: string;
         userName: string;
-    }): Promise<{
+    }, authorization?: string): Promise<{
         attending: boolean;
         attendeeCount: number;
     }>;
-    getStatus(id: string, userEmail: string): Promise<{
+    getStatus(id: string, authorization?: string): Promise<{
         attending: boolean;
     }>;
+    private requireEmailFromAuthHeader;
 }
