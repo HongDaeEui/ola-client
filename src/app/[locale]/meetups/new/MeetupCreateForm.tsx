@@ -1,6 +1,4 @@
 "use client";
-"use client";
-"use client";
 
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from '@/i18n/routing';
