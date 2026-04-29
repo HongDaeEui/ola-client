@@ -35,7 +35,7 @@ interface HomeClientProps {
 }
 
 /* ── Animated Hero Section ── */
-function HeroSection() {
+function HeroSection({ tools }: { tools: { name: string; iconUrl?: string }[] }) {
   const container = {
     hidden: {},
     visible: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
@@ -56,6 +56,18 @@ function HeroSection() {
         <motion.p variants={fadeUp} className="text-sky-600 font-semibold tracking-wider text-sm uppercase">
           일상을 더 창의롭게 만드는 AI 커뮤니티
         </motion.p>
+        <motion.div variants={fadeUp} className="flex flex-wrap justify-center gap-3">
+          {[
+            { icon: 'extension', label: '65+ AI 도구' },
+            { icon: 'people', label: '커뮤니티 활성' },
+            { icon: 'bolt', label: '무료 시작' },
+          ].map(({ icon, label }) => (
+            <span key={label} className="inline-flex items-center gap-1.5 bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300 border border-sky-100 dark:border-sky-800 px-3 py-1 rounded-full text-xs font-bold">
+              <span className="material-symbols-outlined text-[14px]">{icon}</span>
+              {label}
+            </span>
+          ))}
+        </motion.div>
         <motion.h1 variants={fadeUp} className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.15]">
           함께 배우고,<br />직접 만들고,<br />AI로 나의 삶을 풍요롭게
         </motion.h1>
@@ -98,6 +110,17 @@ function HeroSection() {
           </button>
         </motion.form>
 
+        <motion.div variants={fadeUp} className="relative w-full overflow-hidden mt-6" style={{ WebkitMaskImage: 'linear-gradient(to right, transparent, black 12%, black 88%, transparent)', maskImage: 'linear-gradient(to right, transparent, black 12%, black 88%, transparent)' }}>
+          <div className="flex gap-6 items-center animate-marquee">
+            {[...tools.slice(0, 12), ...tools.slice(0, 12)].map((tool, i) =>
+              tool.iconUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img key={i} src={tool.iconUrl} alt={tool.name} width={32} height={32} className="w-8 h-8 rounded-lg object-contain shrink-0 opacity-70 hover:opacity-100 transition-opacity" />
+              ) : null
+            )}
+          </div>
+        </motion.div>
+
         <motion.div variants={fadeUp} className="flex flex-wrap justify-center gap-2 mt-3 text-sm">
           <span className="text-slate-500 mr-1">추천:</span>
           {HINT_KEYWORDS.map(kw => (
@@ -119,7 +142,7 @@ function ToolCard({ tool }: { tool: Tool }) {
       <Link href={`/tools/${tool.id}`}
         className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 hover:border-sky-300 dark:hover:border-sky-600 hover:shadow-lg hover:shadow-sky-100 dark:hover:shadow-sky-900/20 transition-all group flex flex-col h-full">
         <div className="flex gap-4 mb-4">
-          <div className="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-700 flex-shrink-0 overflow-hidden border border-slate-100 dark:border-slate-600 group-hover:scale-105 transition-transform duration-300">
+          <div className="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-700 shrink-0 overflow-hidden border border-slate-100 dark:border-slate-600 group-hover:scale-105 transition-transform duration-300">
             {tool.coverUrl || getLogoUrl(tool.iconUrl) ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={tool.coverUrl || getLogoUrl(tool.iconUrl)} alt={tool.name} width={56} height={56} className="object-contain w-full h-full p-1" />
@@ -132,7 +155,7 @@ function ToolCard({ tool }: { tool: Tool }) {
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5 mb-1">
               <h3 className="font-bold text-slate-800 dark:text-slate-100 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors truncate">{tool.name}</h3>
-              {tool.isFeatured && <span className="text-[9px] bg-sky-500 text-white px-1.5 py-0.5 rounded font-black uppercase flex-shrink-0">TOP</span>}
+              {tool.isFeatured && <span className="text-[9px] bg-sky-500 text-white px-1.5 py-0.5 rounded font-black uppercase shrink-0">TOP</span>}
               {tool.rating > 4.5 && <OlaVerifiedBadge />}
             </div>
             <div className="flex items-center gap-2 flex-wrap">
@@ -147,7 +170,7 @@ function ToolCard({ tool }: { tool: Tool }) {
           </div>
         </div>
         <p className="text-sm font-bold text-slate-700 dark:text-slate-200 mb-1 line-clamp-1">{tool.shortDesc}</p>
-        <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed flex-grow">{tool.description}</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed grow">{tool.description}</p>
         <div className="mt-4 flex flex-wrap gap-1.5 pt-4 border-t border-slate-50 dark:border-slate-700">
           <span className="text-[10px] font-medium text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-900/40 px-2 py-0.5 rounded">{tool.category}</span>
           {(tool.tags ?? []).slice(0, 2).map(t => (
@@ -168,7 +191,7 @@ export default function HomeClient({ tools, posts, categories }: HomeClientProps
   return (
     <main className="pt-20 lg:pt-24 min-h-screen bg-slate-50 dark:bg-slate-950 font-['Noto_Sans_KR']">
       {/* Hero */}
-      <HeroSection />
+      <HeroSection tools={tools} />
 
       {/* Main Content */}
       <section className="max-w-[1400px] mx-auto px-6 py-10 flex flex-col lg:flex-row gap-8">
@@ -218,7 +241,7 @@ export default function HomeClient({ tools, posts, categories }: HomeClientProps
         </div>
 
         {/* Right Sidebar */}
-        <div className="hidden lg:block w-80 flex-shrink-0 space-y-6">
+        <div className="hidden lg:block w-80 shrink-0 space-y-6">
 
           {/* Hot Trends */}
           <ScrollReveal direction="right" delay={0.2}>
@@ -237,14 +260,14 @@ export default function HomeClient({ tools, posts, categories }: HomeClientProps
                     transition={{ delay: 0.3 + idx * 0.08, duration: 0.4, ease: 'easeOut' }}
                   >
                     <Link href={`/tools/${tool.id}`} className="flex items-center gap-3 group">
-                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs flex-shrink-0 transition-colors ${idx < 3 ? 'bg-sky-100 text-sky-700 group-hover:bg-sky-600 group-hover:text-white' : 'bg-slate-100 text-slate-500 group-hover:bg-slate-900 group-hover:text-white'}`}>
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 transition-colors ${idx < 3 ? 'bg-sky-100 text-sky-700 group-hover:bg-sky-600 group-hover:text-white' : 'bg-slate-100 text-slate-500 group-hover:bg-slate-900 group-hover:text-white'}`}>
                         {idx + 1}
                       </div>
                       <div className="min-w-0">
                         <p className="font-bold text-sm text-slate-700 dark:text-slate-200 group-hover:text-sky-600 transition-colors truncate">{tool.name}</p>
                         <p className="text-xs text-slate-400 truncate">{tool.shortDesc}</p>
                       </div>
-                      <div className="flex items-center gap-0.5 text-xs font-black text-amber-500 flex-shrink-0 ml-auto">
+                      <div className="flex items-center gap-0.5 text-xs font-black text-amber-500 shrink-0 ml-auto">
                         <span className="material-symbols-outlined text-sm">star</span>
                         {tool.rating.toFixed(1)}
                       </div>
@@ -332,6 +355,17 @@ export default function HomeClient({ tools, posts, categories }: HomeClientProps
 
         </div>
       </section>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes marquee {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+          animation: marquee 30s linear infinite;
+          width: max-content;
+        }
+      ` }} />
     </main>
   );
 }
