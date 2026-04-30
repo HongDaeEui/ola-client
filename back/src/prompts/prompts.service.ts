@@ -77,4 +77,10 @@ export class PromptsService {
       },
     });
   }
+
+  async remove(id: string) {
+    return this.prisma.prompt.delete({
+      where: { id },
+    });
+  }
 }

@@ -37,6 +37,16 @@ let UsersService = class UsersService {
             data: users,
         };
     }
+    async updateRole(id, role) {
+        const user = await this.prisma.user.update({
+            where: { id },
+            data: { role },
+        });
+        return {
+            success: true,
+            data: user,
+        };
+    }
 };
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([

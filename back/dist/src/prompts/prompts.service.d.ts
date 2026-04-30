@@ -11,28 +11,28 @@ export declare class PromptsService {
             avatarUrl: string | null;
         };
     } & {
-        category: string;
-        createdAt: Date;
         id: string;
-        likes: number;
-        updatedAt: Date;
         title: string;
+        toolName: string;
+        category: string;
         content: string;
         authorId: string;
-        toolName: string;
+        likes: number;
         views: number;
+        createdAt: Date;
+        updatedAt: Date;
     })[]>;
     incrementViews(id: string): import("@prisma/client").Prisma.Prisma__PromptClient<{
-        category: string;
-        createdAt: Date;
         id: string;
-        likes: number;
-        updatedAt: Date;
         title: string;
+        toolName: string;
+        category: string;
         content: string;
         authorId: string;
-        toolName: string;
+        likes: number;
         views: number;
+        createdAt: Date;
+        updatedAt: Date;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     findOne(id: string): Promise<{
         author: {
@@ -40,16 +40,16 @@ export declare class PromptsService {
             avatarUrl: string | null;
         };
     } & {
-        category: string;
-        createdAt: Date;
         id: string;
-        likes: number;
-        updatedAt: Date;
         title: string;
+        toolName: string;
+        category: string;
         content: string;
         authorId: string;
-        toolName: string;
+        likes: number;
         views: number;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     create(data: {
         title: string;
@@ -59,15 +59,27 @@ export declare class PromptsService {
         userEmail: string;
         userName: string;
     }): Promise<{
-        category: string;
-        createdAt: Date;
         id: string;
-        likes: number;
-        updatedAt: Date;
         title: string;
+        toolName: string;
+        category: string;
         content: string;
         authorId: string;
-        toolName: string;
+        likes: number;
         views: number;
+        createdAt: Date;
+        updatedAt: Date;
+    }>;
+    remove(id: string): Promise<{
+        id: string;
+        title: string;
+        toolName: string;
+        category: string;
+        content: string;
+        authorId: string;
+        likes: number;
+        views: number;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
 }

@@ -3,15 +3,18 @@ import {
   Get,
   Post,
   Patch,
+  Delete,
   Body,
   Param,
   Query,
   Headers,
   UnauthorizedException,
   Logger,
+  UseGuards,
 } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { PromptsService } from './prompts.service';
+import { AdminGuard } from '../common/admin.guard';
 
 @Controller('prompts')
 export class PromptsController {
@@ -39,6 +42,12 @@ export class PromptsController {
   @Patch(':id/view')
   incrementViews(@Param('id') id: string) {
     return this.promptsService.incrementViews(id);
+  }
+
+  @UseGuards(AdminGuard)
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.promptsService.remove(id);
   }
 
   @Post()

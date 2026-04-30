@@ -3,16 +3,19 @@ import {
   Get,
   Post,
   Patch,
+  Delete,
   Body,
   Param,
   Query,
   Headers,
   UnauthorizedException,
   Logger,
+  UseGuards,
 } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import * as jwt from 'jsonwebtoken';
 import { PostsService } from './posts.service';
+import { AdminGuard } from '../common/admin.guard';
 
 @Controller('posts')
 export class PostsController {
@@ -46,6 +49,12 @@ export class PostsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.postsService.findOne(id);
+  }
+
+  @UseGuards(AdminGuard)
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.postsService.remove(id);
   }
 
   @Throttle({ default: { limit: 10, ttl: 60000 } })

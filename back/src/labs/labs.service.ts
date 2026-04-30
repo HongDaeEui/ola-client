@@ -22,6 +22,7 @@ export class LabsService {
         stack: true,
         color: true,
         likes: true,
+        createdAt: true,
         // content 필드 제외 — 목록에서 본문 수천 자 전송 방지
         author: {
           select: {
@@ -48,5 +49,11 @@ export class LabsService {
     });
     if (!lab) throw new NotFoundException(`실험실(${id})을 찾을 수 없습니다.`);
     return lab;
+  }
+
+  async remove(id: string) {
+    return this.prisma.experiment.delete({
+      where: { id },
+    });
   }
 }

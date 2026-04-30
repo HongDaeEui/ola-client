@@ -129,6 +129,11 @@ let PostsService = class PostsService {
             },
         });
     }
+    async remove(id) {
+        return this.prisma.post.delete({
+            where: { id },
+        });
+    }
 };
 exports.PostsService = PostsService;
 exports.PostsService = PostsService = __decorate([

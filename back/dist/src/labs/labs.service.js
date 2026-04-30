@@ -34,6 +34,7 @@ let LabsService = class LabsService {
                 stack: true,
                 color: true,
                 likes: true,
+                createdAt: true,
                 author: {
                     select: {
                         username: true,
@@ -59,6 +60,11 @@ let LabsService = class LabsService {
         if (!lab)
             throw new common_1.NotFoundException(`실험실(${id})을 찾을 수 없습니다.`);
         return lab;
+    }
+    async remove(id) {
+        return this.prisma.experiment.delete({
+            where: { id },
+        });
     }
 };
 exports.LabsService = LabsService;

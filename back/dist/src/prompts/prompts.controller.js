@@ -50,6 +50,7 @@ exports.PromptsController = void 0;
 const common_1 = require("@nestjs/common");
 const jwt = __importStar(require("jsonwebtoken"));
 const prompts_service_1 = require("./prompts.service");
+const admin_guard_1 = require("../common/admin.guard");
 let PromptsController = PromptsController_1 = class PromptsController {
     promptsService;
     logger = new common_1.Logger(PromptsController_1.name);
@@ -66,6 +67,9 @@ let PromptsController = PromptsController_1 = class PromptsController {
     }
     incrementViews(id) {
         return this.promptsService.incrementViews(id);
+    }
+    remove(id) {
+        return this.promptsService.remove(id);
     }
     create(body, authorization) {
         const email = this.requireEmailFromAuthHeader(authorization);
@@ -138,6 +142,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], PromptsController.prototype, "incrementViews", null);
+__decorate([
+    (0, common_1.UseGuards)(admin_guard_1.AdminGuard),
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], PromptsController.prototype, "remove", null);
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),

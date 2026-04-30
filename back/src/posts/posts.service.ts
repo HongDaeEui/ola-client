@@ -136,4 +136,10 @@ export class PostsService {
       },
     });
   }
+
+  async remove(id: string) {
+    return this.prisma.post.delete({
+      where: { id },
+    });
+  }
 }

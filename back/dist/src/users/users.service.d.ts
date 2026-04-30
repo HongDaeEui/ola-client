@@ -21,4 +21,17 @@ export declare class UsersService {
             updatedAt: Date;
         })[];
     }>;
+    updateRole(id: string, role: any): Promise<{
+        success: boolean;
+        data: {
+            id: string;
+            email: string;
+            username: string;
+            name: string | null;
+            avatarUrl: string | null;
+            role: import("@prisma/client").$Enums.UserRole;
+            createdAt: Date;
+            updatedAt: Date;
+        };
+    }>;
 }

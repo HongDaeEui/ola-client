@@ -51,6 +51,7 @@ const common_1 = require("@nestjs/common");
 const throttler_1 = require("@nestjs/throttler");
 const jwt = __importStar(require("jsonwebtoken"));
 const posts_service_1 = require("./posts.service");
+const admin_guard_1 = require("../common/admin.guard");
 let PostsController = PostsController_1 = class PostsController {
     postsService;
     logger = new common_1.Logger(PostsController_1.name);
@@ -72,6 +73,9 @@ let PostsController = PostsController_1 = class PostsController {
     }
     findOne(id) {
         return this.postsService.findOne(id);
+    }
+    remove(id) {
+        return this.postsService.remove(id);
     }
     create(body, authorization) {
         const email = this.requireEmailFromAuthHeader(authorization);
@@ -152,6 +156,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], PostsController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.UseGuards)(admin_guard_1.AdminGuard),
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], PostsController.prototype, "remove", null);
 __decorate([
     (0, throttler_1.Throttle)({ default: { limit: 10, ttl: 60000 } }),
     (0, common_1.Post)(),

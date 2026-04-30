@@ -4,8 +4,9 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiService } from '@/lib/api';
+import { toast } from 'sonner';
 import { USER_API } from '@/constants/api-paths';
 
 interface User {
@@ -41,8 +42,29 @@ function useUsersList() {
   });
 }
 
+function useUpdateRole() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, role }: { id: string; role: string }) => {
+      const res = await apiService.callWithErrorHandling(
+        () => apiService.patch(`${USER_API.PREFIX}/${id}/role`, { role }),
+        '권한 변경에 실패했습니다.'
+      );
+      return res;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+      toast.success('사용자 권한이 성공적으로 변경되었습니다.');
+    },
+    onError: (err: any) => {
+      toast.error('권한 변경 실패: ' + err.message);
+    }
+  });
+}
+
 export default function UsersListPage() {
   const { data: users, isLoading } = useUsersList();
+  const { mutate: updateRole, isPending } = useUpdateRole();
 
   const columns = [
     columnHelper.accessor('username', {
@@ -98,6 +120,29 @@ export default function UsersListPage() {
     columnHelper.accessor('createdAt', {
       header: '가입일',
       cell: (info) => <span className="text-sm text-slate-500">{new Date(info.getValue()).toLocaleDateString()}</span>
+    }),
+    columnHelper.display({
+      id: 'actions',
+      header: '권한 설정',
+      cell: (info) => {
+        const { id, role } = info.row.original;
+        return (
+          <select
+            value={role}
+            disabled={isPending}
+            onChange={(e) => {
+              if (window.confirm(`이 사용자의 권한을 ${e.target.value}(으)로 변경하시겠습니까?`)) {
+                updateRole({ id, role: e.target.value });
+              }
+            }}
+            className="px-2 py-1 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
+          >
+            <option value="USER">USER</option>
+            <option value="CREATOR">CREATOR</option>
+            <option value="ADMIN">ADMIN</option>
+          </select>
+        );
+      }
     }),
   ];
 

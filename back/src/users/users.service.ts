@@ -26,4 +26,15 @@ export class UsersService {
       data: users,
     };
   }
+
+  async updateRole(id: string, role: any) {
+    const user = await this.prisma.user.update({
+      where: { id },
+      data: { role },
+    });
+    return {
+      success: true,
+      data: user,
+    };
+  }
 }

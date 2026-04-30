@@ -82,6 +82,11 @@ let PromptsService = class PromptsService {
             },
         });
     }
+    async remove(id) {
+        return this.prisma.prompt.delete({
+            where: { id },
+        });
+    }
 };
 exports.PromptsService = PromptsService;
 exports.PromptsService = PromptsService = __decorate([

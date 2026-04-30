@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LabsController = void 0;
 const common_1 = require("@nestjs/common");
 const labs_service_1 = require("./labs.service");
+const admin_guard_1 = require("../common/admin.guard");
 let LabsController = class LabsController {
     labsService;
     constructor(labsService) {
@@ -25,6 +26,9 @@ let LabsController = class LabsController {
     }
     findOne(id) {
         return this.labsService.findOne(id);
+    }
+    remove(id) {
+        return this.labsService.remove(id);
     }
 };
 exports.LabsController = LabsController;
@@ -42,6 +46,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], LabsController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.UseGuards)(admin_guard_1.AdminGuard),
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], LabsController.prototype, "remove", null);
 exports.LabsController = LabsController = __decorate([
     (0, common_1.Controller)('labs'),
     __metadata("design:paramtypes", [labs_service_1.LabsService])

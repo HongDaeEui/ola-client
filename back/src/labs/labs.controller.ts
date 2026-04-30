@@ -1,5 +1,6 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, Delete, UseGuards } from '@nestjs/common';
 import { LabsService } from './labs.service';
+import { AdminGuard } from '../common/admin.guard';
 
 @Controller('labs')
 export class LabsController {
@@ -13,5 +14,11 @@ export class LabsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.labsService.findOne(id);
+  }
+
+  @UseGuards(AdminGuard)
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.labsService.remove(id);
   }
 }
