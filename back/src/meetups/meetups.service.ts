@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateMeetupDto } from './dto/create-meetup.dto';
 
 @Injectable()
 export class MeetupsService {
@@ -28,6 +29,29 @@ export class MeetupsService {
           select: { attendees: true },
         },
       },
+    });
+  }
+
+  async createMeetup(dto: CreateMeetupDto, hostEmail: string) {
+    return this.prisma.meetup.create({
+      data: {
+        title: dto.title,
+        description: dto.description,
+        date: new Date(dto.date),
+        location: dto.location,
+        isVirtual: dto.isVirtual ?? true,
+        referenceLabId: dto.referenceLabId ?? null,
+        maxParticipants: dto.maxParticipants ?? null,
+        hostEmail,
+        status: 'UPCOMING',
+      },
+    });
+  }
+
+  async findById(id: string) {
+    return this.prisma.meetup.findUnique({
+      where: { id },
+      include: { _count: { select: { attendees: true } } },
     });
   }
 

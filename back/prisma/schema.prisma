@@ -52,16 +52,19 @@ model Tool {
 }
 
 model Meetup {
-  id          String   @id @default(uuid())
-  title       String
-  description String
-  date        DateTime
-  location    String
-  isVirtual   Boolean  @default(true)
-  status      String   @default("UPCOMING") // "UPCOMING", "LIVE", "COMPLETED"
-  coverUrl    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id               String   @id @default(uuid())
+  title            String
+  description      String
+  date             DateTime
+  location         String
+  isVirtual        Boolean  @default(true)
+  status           String   @default("UPCOMING") // "UPCOMING", "LIVE", "COMPLETED"
+  coverUrl         String?
+  referenceLabId   String?
+  maxParticipants  Int?
+  hostEmail        String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   attendees MeetupAttendee[]
 }

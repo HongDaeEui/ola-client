@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { MeetupsService } from './meetups.service';
+import { CreateMeetupDto } from './dto/create-meetup.dto';
 
 @Controller('meetups')
 export class MeetupsController {
@@ -17,9 +18,23 @@ export class MeetupsController {
 
   constructor(private readonly meetupsService: MeetupsService) {}
 
+  @Post()
+  create(
+    @Body() dto: CreateMeetupDto,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const email = this.requireEmailFromAuthHeader(authorization);
+    return this.meetupsService.createMeetup(dto, email);
+  }
+
   @Get()
   findAll() {
     return this.meetupsService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.meetupsService.findById(id);
   }
 
   @Get('upcoming')
