@@ -1,5 +1,4 @@
 import { Link } from '@/i18n/routing';
-import Image from "next/image";
 import { API_BASE, apiFetch } from '@/lib/api';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
 export const revalidate = 300;
@@ -32,10 +31,11 @@ async function getExperiments(category?: string): Promise<Experiment[]> {
   }
 }
 
-const DIFFICULTY_STYLE: Record<string, { bg: string; text: string; label: string }> = {
-  '입문': { bg: 'bg-emerald-50', text: 'text-emerald-700', label: '🟢 입문' },
-  '중급': { bg: 'bg-amber-50',   text: 'text-amber-700',   label: '🟡 중급' },
-  '고급': { bg: 'bg-red-50',     text: 'text-red-700',     label: '🔴 고급' },
+const DIFF_LEVEL: Record<string, number> = { '입문': 1, '중급': 2, '고급': 3 };
+const DIFF_COLOR: Record<string, string> = {
+  '입문': 'bg-emerald-400',
+  '중급': 'bg-amber-400',
+  '고급': 'bg-rose-500',
 };
 
 const CATEGORY_KEYWORDS: Record<string, string> = {
@@ -111,9 +111,10 @@ export default async function LabsPage({
             <p className="text-slate-400 font-bold">해당 카테고리의 실험이 없습니다.</p>
           </div>
         ) : (
-          <div className="flex flex-col gap-5 max-w-4xl mx-auto w-full">
-            {experiments.map((exp) => {
-              const diff = exp.difficulty ? DIFFICULTY_STYLE[exp.difficulty] : null;
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {experiments.map((exp, i) => {
+              const diffLevel = exp.difficulty ? (DIFF_LEVEL[exp.difficulty] ?? 0) : 0;
+              const diffColor = exp.difficulty ? (DIFF_COLOR[exp.difficulty] ?? 'bg-slate-300') : 'bg-slate-300';
               const seed = parseInt((exp.id || '1').split('-')[0], 16) % 10000 || exp.likes || 1;
               const bgGradient = [
                 'from-sky-500 to-indigo-600',
@@ -121,76 +122,88 @@ export default async function LabsPage({
                 'from-emerald-400 to-teal-600',
                 'from-amber-400 to-orange-500',
                 'from-violet-500 to-purple-700',
-                'from-pink-500 to-rose-500'
+                'from-pink-500 to-rose-500',
               ][seed % 6];
-              
+
               return (
                 <Link key={exp.id} href={`/labs/${exp.id}`}
-                  className="group flex flex-col sm:flex-row bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-sky-900/10 hover:border-sky-200 dark:hover:border-sky-800 transition-all duration-300 p-3 sm:p-5 gap-5 items-center relative overflow-hidden">
-                  
-                  {/* Left: Thumbnail (Avatar format) */}
-                  <div className={`w-full sm:w-28 h-32 sm:h-28 rounded-2xl shrink-0 overflow-hidden relative bg-gradient-to-br ${bgGradient} flex items-center justify-center shadow-inner`}>
-                    <img 
-                      src={`https://api.dicebear.com/9.x/shapes/svg?seed=${exp.title}&backgroundColor=transparent`} 
+                  className="group bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-sky-900/10 hover:border-sky-200 dark:hover:border-sky-800 transition-all duration-300 overflow-hidden flex flex-col">
+
+                  {/* Thumbnail */}
+                  <div className={`relative h-44 bg-linear-to-br ${bgGradient} overflow-hidden`}>
+                    <img
+                      src={`https://api.dicebear.com/9.x/shapes/svg?seed=${exp.title}&backgroundColor=transparent`}
                       alt={exp.title}
                       loading="lazy"
                       className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-60 group-hover:scale-110 transition-transform duration-700"
                     />
-                    <div className="relative z-10 text-4xl group-hover:scale-110 transition-transform duration-300 drop-shadow-lg">
+                    {/* Experiment Number */}
+                    <div className="absolute top-3 left-3 bg-black/40 backdrop-blur-sm text-white text-[10px] font-black px-2.5 py-1 rounded-lg tracking-[0.15em] font-mono">
+                      EXP #{String(i + 1).padStart(3, '0')}
+                    </div>
+                    {/* Emoji */}
+                    <div className="absolute bottom-3 right-4 text-4xl drop-shadow-lg group-hover:scale-110 transition-transform duration-300">
                       {exp.emoji || '🔬'}
                     </div>
                   </div>
 
-                  {/* Center: Contents */}
-                  <div className="flex-1 min-w-0 flex flex-col justify-center py-1">
-                    <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                      <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{exp.category}</span>
-                      <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700" />
-                      <span className="text-[11px] font-bold text-slate-500">@{exp.author?.username || 'Unknown'}</span>
+                  {/* Content */}
+                  <div className="p-5 flex flex-col flex-1">
+                    {/* Category + Difficulty Gauge */}
+                    <div className="flex items-center justify-between mb-2.5">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{exp.category}</span>
+                        <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700" />
+                        <span className="text-[10px] font-bold text-slate-400">@{exp.author?.username || 'Unknown'}</span>
+                      </div>
+                      {exp.difficulty && (
+                        <div className="flex items-center gap-1">
+                          <span className="text-[9px] font-bold text-slate-400 mr-0.5">{exp.difficulty}</span>
+                          {[1, 2, 3].map(level => (
+                            <div
+                              key={level}
+                              className={`w-3.5 h-2 rounded-sm ${level <= diffLevel ? diffColor : 'bg-slate-100 dark:bg-slate-700'}`}
+                            />
+                          ))}
+                        </div>
+                      )}
                     </div>
 
-                    <h3 className="text-xl font-extrabold text-slate-900 dark:text-white truncate mb-2 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
+                    <h3 className="text-lg font-extrabold text-slate-900 dark:text-white mb-1.5 line-clamp-2 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors leading-snug">
                       {exp.title}
                     </h3>
-                    
-                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400 line-clamp-1 mb-3 pr-4">
+
+                    <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-4 leading-relaxed">
                       {exp.description}
                     </p>
 
-                    <div className="flex items-center gap-2 flex-wrap">
-                      {diff && (
-                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-md ${diff.bg} ${diff.text}`}>
-                          {diff.label}
+                    {/* Footer */}
+                    <div className="mt-auto flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="flex items-center gap-0.5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[10px] font-black px-2 py-0.5 rounded-md border border-emerald-100 dark:border-emerald-800/50">
+                          <span className="material-symbols-outlined text-[11px]">bolt</span>
+                          {exp.metric}
                         </span>
-                      )}
-                      <span className="flex items-center gap-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[10px] font-black px-2 py-0.5 rounded-md border border-emerald-100 dark:border-emerald-800/50">
-                        <span className="material-symbols-outlined text-[12px]">bolt</span>
-                        {exp.metric}
-                      </span>
-                      <div className="w-px h-3 bg-slate-200 dark:bg-slate-700 mx-1 hidden sm:block" />
-                      <div className="flex gap-1.5 overflow-hidden">
-                        {exp.stack.slice(0, 3).map((tool, j) => (
-                          <span key={j} className="text-[10px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md truncate max-w-[80px] shadow-sm">
+                        {exp.stack.slice(0, 2).map((tool, j) => (
+                          <span key={j} className="text-[10px] font-bold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md truncate max-w-[72px]">
                             {tool}
                           </span>
                         ))}
-                        {exp.stack.length > 3 && (
+                        {exp.stack.length > 2 && (
                           <span className="text-[10px] font-bold text-slate-400 bg-slate-50 dark:bg-slate-800/50 px-1.5 py-0.5 rounded-md">
-                            +{exp.stack.length - 3}
+                            +{exp.stack.length - 2}
                           </span>
                         )}
                       </div>
+                      <div className="shrink-0 z-20">
+                        <LikeBookmarkButtons
+                          targetType="LAB"
+                          targetId={exp.id}
+                          initialLikes={exp.likes}
+                          variant="product-hunt"
+                        />
+                      </div>
                     </div>
-                  </div>
-
-                  {/* Right: Upvote Box */}
-                  <div className="w-full sm:w-auto shrink-0 border-t sm:border-t-0 sm:border-l border-slate-100 dark:border-slate-800 pt-4 sm:pt-0 sm:pl-5 flex justify-end sm:justify-center z-20">
-                    <LikeBookmarkButtons 
-                      targetType="LAB" 
-                      targetId={exp.id} 
-                      initialLikes={exp.likes} 
-                      variant="product-hunt" 
-                    />
                   </div>
 
                 </Link>
