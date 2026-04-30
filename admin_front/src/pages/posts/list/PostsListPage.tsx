@@ -4,13 +4,26 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { usePostsList } from '@/hooks/queries/useUgc';
+import { useState } from 'react';
+import { usePostsList, useDeletePost } from '@/hooks/queries/useUgc';
 import { Post } from '@/models/ugc';
+import { toast } from 'sonner';
+import { ContentDetailModal } from '@/components/common/ContentDetailModal';
 
 const columnHelper = createColumnHelper<Post>();
 
 export default function PostsListPage() {
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const { data: posts, isLoading } = usePostsList();
+  const { mutate: deletePost, isPending } = useDeletePost();
+
+  const handleDelete = (id: string) => {
+    if (!window.confirm('정말 이 커뮤니티 글을 삭제하시겠습니까? 복구할 수 없습니다.')) return;
+    deletePost(id, {
+      onSuccess: () => toast.success('성공적으로 삭제되었습니다.'),
+      onError: (err: any) => toast.error('삭제 실패: ' + err.message)
+    });
+  };
 
   const columns = [
     columnHelper.accessor('title', {
@@ -55,8 +68,32 @@ export default function PostsListPage() {
       )
     }),
     columnHelper.accessor('createdAt', {
-      header: '작성일',
+      header: '등록일',
       cell: (info) => <span className="text-sm text-slate-500">{new Date(info.getValue()).toLocaleDateString()}</span>
+    }),
+    columnHelper.display({
+      id: 'actions',
+      header: '관리',
+      cell: (info) => {
+        const row = info.row.original;
+        return (
+          <div className="flex gap-2">
+            <button
+              onClick={() => setSelectedPost(row)}
+              className="px-3 py-1 text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 rounded-lg transition-colors"
+            >
+              보기
+            </button>
+            <button
+              disabled={isPending}
+              onClick={() => handleDelete(row.id)}
+              className="px-3 py-1 text-xs font-semibold bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-900/20 dark:text-rose-400 dark:hover:bg-rose-900/40 rounded-lg transition-colors disabled:opacity-50"
+            >
+              삭제
+            </button>
+          </div>
+        );
+      }
     }),
   ];
 
@@ -115,6 +152,16 @@ export default function PostsListPage() {
           </table>
         </div>
       </div>
+
+      {selectedPost && (
+        <ContentDetailModal
+          isOpen={!!selectedPost}
+          onClose={() => setSelectedPost(null)}
+          title={selectedPost.title}
+          category={selectedPost.category}
+          content={selectedPost.content}
+        />
+      )}
     </div>
   );
 }

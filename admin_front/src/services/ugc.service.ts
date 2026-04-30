@@ -32,6 +32,27 @@ class UgcService {
       '실험실 목록을 가져오는데 실패했습니다.'
     ) as any;
   }
+
+  async deletePrompt(id: string) {
+    return apiService.callWithErrorHandling(
+      () => apiService.delete(`${PROMPTS_API.PREFIX}/${id}`),
+      '프롬프트 삭제에 실패했습니다.'
+    );
+  }
+
+  async deletePost(id: string) {
+    return apiService.callWithErrorHandling(
+      () => apiService.delete(`${POSTS_API.PREFIX}/${id}`),
+      '게시글 삭제에 실패했습니다.'
+    );
+  }
+
+  async deleteLab(id: string) {
+    return apiService.callWithErrorHandling(
+      () => apiService.delete(`${LABS_API.PREFIX}/${id}`),
+      '실험실 콘텐츠 삭제에 실패했습니다.'
+    );
+  }
 }
 
 export const ugcService = new UgcService();
