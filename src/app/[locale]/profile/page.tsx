@@ -1,15 +1,13 @@
 "use client";
-import Image from "next/image";
 import { API_BASE } from '@/lib/api';
 
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from '@/i18n/routing';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from '@/i18n/routing';
 import { createClient } from '@/lib/supabase/client';
 
 const supabase = createClient();
-
 
 type Tab = 'overview' | 'posts' | 'prompts' | 'bookmarks';
 
@@ -80,85 +78,37 @@ export default function ProfilePage() {
   const [prompts, setPrompts] = useState<MyPrompt[]>([]);
   const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
-  const [tabErrors, setTabErrors] = useState<Record<Tab, string | null>>({
-    overview: null,
-    posts: null,
-    prompts: null,
-    bookmarks: null,
-  });
-  const fetchedTabs = useRef<Set<Tab>>(new Set());
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) router.push('/');
   }, [user, loading, router]);
 
   useEffect(() => {
-    if (!user) return;
-    if (fetchedTabs.current.has(tab)) return;
-
-    if (tab === 'posts') {
-      fetchedTabs.current.add('posts');
-      setDataLoading(true);
-      setTabErrors(prev => ({ ...prev, posts: null }));
-      fetch(`${API_BASE}/posts?userEmail=${encodeURIComponent(user.email!)}`)
-        .then(r => {
-          if (!r.ok) throw new Error(`HTTP ${r.status}`);
-          return r.json();
-        })
-        .then(d => setPosts(d))
-        .catch(err => {
-          console.error('[profile] posts fetch failed:', err);
-          fetchedTabs.current.delete('posts');
-          setTabErrors(prev => ({ ...prev, posts: '불러오기 실패' }));
-        })
-        .finally(() => setDataLoading(false));
-    }
-    if (tab === 'prompts') {
-      fetchedTabs.current.add('prompts');
-      setDataLoading(true);
-      setTabErrors(prev => ({ ...prev, prompts: null }));
-      fetch(`${API_BASE}/prompts?userEmail=${encodeURIComponent(user.email!)}`)
-        .then(r => {
-          if (!r.ok) throw new Error(`HTTP ${r.status}`);
-          return r.json();
-        })
-        .then(d => setPrompts(d))
-        .catch(err => {
-          console.error('[profile] prompts fetch failed:', err);
-          fetchedTabs.current.delete('prompts');
-          setTabErrors(prev => ({ ...prev, prompts: '불러오기 실패' }));
-        })
-        .finally(() => setDataLoading(false));
-    }
-    if (tab === 'bookmarks') {
-      fetchedTabs.current.add('bookmarks');
-      setDataLoading(true);
-      setTabErrors(prev => ({ ...prev, bookmarks: null }));
-      (async () => {
-        try {
-          const { data: { session } } = await supabase.auth.getSession();
-          const token = session?.access_token;
-          if (!token) {
-            setBookmarks([]);
-            return;
-          }
-          const res = await fetch(`${API_BASE}/bookmarks`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          const d = await res.json();
-          setBookmarks(d);
-        } catch (err) {
-          console.error('[profile] bookmarks fetch failed:', err);
-          fetchedTabs.current.delete('bookmarks');
-          setTabErrors(prev => ({ ...prev, bookmarks: '불러오기 실패' }));
-          setBookmarks([]);
-        } finally {
-          setDataLoading(false);
-        }
-      })();
-    }
-  }, [tab, user]);
+    if (!user || dataLoaded) return;
+    setDataLoading(true);
+    (async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const token = session?.access_token;
+        const [postsRes, promptsRes, bookmarksRes] = await Promise.all([
+          fetch(`${API_BASE}/posts?userEmail=${encodeURIComponent(user.email!)}`),
+          fetch(`${API_BASE}/prompts?userEmail=${encodeURIComponent(user.email!)}`),
+          token
+            ? fetch(`${API_BASE}/bookmarks`, { headers: { Authorization: `Bearer ${token}` } })
+            : Promise.resolve(null),
+        ]);
+        if (postsRes.ok) setPosts(await postsRes.json());
+        if (promptsRes.ok) setPrompts(await promptsRes.json());
+        if (bookmarksRes?.ok) setBookmarks(await bookmarksRes.json());
+        setDataLoaded(true);
+      } catch (e) {
+        console.error('[profile] data fetch failed:', e);
+      } finally {
+        setDataLoading(false);
+      }
+    })();
+  }, [user, dataLoaded]);
 
   if (loading) {
     return (
@@ -172,21 +122,29 @@ export default function ProfilePage() {
   const displayName = user.user_metadata?.name ?? user.user_metadata?.full_name ?? '사용자';
   const avatarUrl = user.user_metadata?.avatar_url;
   const initial = displayName.charAt(0).toUpperCase();
+  const totalLikes = [...posts, ...prompts].reduce((sum, item) => sum + (item.likes || 0), 0);
+
+  const TAB_COUNTS: Record<Tab, number> = {
+    overview: 0,
+    posts: posts.length,
+    prompts: prompts.length,
+    bookmarks: bookmarks.length,
+  };
 
   const TABS: { key: Tab; label: string; icon: string }[] = [
-    { key: 'overview',   label: '프로필',     icon: 'person' },
-    { key: 'posts',      label: '내 글',      icon: 'edit_note' },
-    { key: 'prompts',    label: '내 프롬프트', icon: 'auto_awesome' },
-    { key: 'bookmarks',  label: '북마크',     icon: 'bookmark' },
+    { key: 'overview',  label: '프로필',     icon: 'person' },
+    { key: 'posts',     label: '내 글',      icon: 'edit_note' },
+    { key: 'prompts',   label: '프롬프트',   icon: 'auto_awesome' },
+    { key: 'bookmarks', label: '북마크',     icon: 'bookmark' },
   ];
 
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-32 pb-16 font-['Noto_Sans_KR']">
-      <div className="max-w-2xl mx-auto px-4">
+      <div className="max-w-3xl mx-auto px-4">
 
         {/* Profile Card */}
         <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden mb-6">
-          <div className="h-28 bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-500" />
+          <div className="h-28 bg-linear-to-r from-sky-400 via-indigo-500 to-purple-500" />
           <div className="px-6 pb-6">
             <div className="-mt-10 mb-4 flex items-end justify-between">
               {avatarUrl ? (
@@ -204,7 +162,7 @@ export default function ProfilePage() {
             </div>
             <h1 className="text-xl font-extrabold text-slate-900 dark:text-white">{displayName}</h1>
             <p className="text-slate-400 dark:text-slate-500 text-sm mt-0.5">{user.email}</p>
-            <div className="mt-3 flex gap-2">
+            <div className="mt-3 flex gap-2 flex-wrap">
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-sky-50 text-sky-600 text-xs font-bold border border-sky-100">
                 <span className="material-symbols-outlined text-[12px]">verified</span>
                 Google 계정
@@ -218,21 +176,55 @@ export default function ProfilePage() {
         </div>
 
         {/* Tabs */}
-        <div className="flex bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700 p-1 mb-6 shadow-sm">
-          {TABS.map(t => (
-            <button key={t.key} onClick={() => setTab(t.key)}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                tab === t.key ? 'bg-slate-900 dark:bg-slate-700 text-white shadow' : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
-              }`}>
-              <span className="material-symbols-outlined text-[16px]">{t.icon}</span>
-              {t.label}
-            </button>
-          ))}
+        <div className="flex bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700 p-1 mb-6 shadow-sm gap-1">
+          {TABS.map(t => {
+            const count = TAB_COUNTS[t.key];
+            return (
+              <button key={t.key} onClick={() => setTab(t.key)}
+                className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                  tab === t.key ? 'bg-slate-900 dark:bg-slate-700 text-white shadow' : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
+                }`}>
+                <span className="material-symbols-outlined text-[16px]">{t.icon}</span>
+                <span className="hidden sm:inline">{t.label}</span>
+                {count > 0 && !dataLoading && (
+                  <span className={`text-[10px] font-black px-1.5 py-0.5 rounded-full min-w-[18px] text-center leading-none ${
+                    tab === t.key ? 'bg-white/20 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
+                  }`}>
+                    {count}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
 
         {/* ── Overview ── */}
         {tab === 'overview' && (
           <div className="space-y-4">
+
+            {/* Stats */}
+            <div className="grid grid-cols-4 gap-3">
+              {[
+                { label: '작성한 글',   value: posts.length,     icon: 'edit_note',    accent: 'text-sky-600',    bg: 'bg-sky-50 border-sky-100',    tab: 'posts' as Tab },
+                { label: '프롬프트',   value: prompts.length,   icon: 'auto_awesome', accent: 'text-amber-500',  bg: 'bg-amber-50 border-amber-100', tab: 'prompts' as Tab },
+                { label: '북마크',     value: bookmarks.length, icon: 'bookmark',     accent: 'text-indigo-500', bg: 'bg-indigo-50 border-indigo-100', tab: 'bookmarks' as Tab },
+                { label: '받은 좋아요', value: totalLikes,       icon: 'thumb_up',     accent: 'text-rose-500',   bg: 'bg-rose-50 border-rose-100',   tab: null },
+              ].map(({ label, value, icon, accent, bg, tab: targetTab }) => (
+                <button
+                  key={label}
+                  onClick={() => targetTab && setTab(targetTab)}
+                  className={`rounded-2xl border p-4 text-center transition-all ${bg} ${targetTab ? 'hover:scale-105 cursor-pointer' : 'cursor-default'}`}
+                >
+                  <span className={`material-symbols-outlined text-[22px] mb-1 block ${accent}`}>{icon}</span>
+                  <p className={`text-2xl font-extrabold ${accent}`}>
+                    {dataLoading ? <span className="inline-block w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin align-middle" /> : value}
+                  </p>
+                  <p className="text-[11px] font-bold text-slate-500 mt-0.5">{label}</p>
+                </button>
+              ))}
+            </div>
+
+            {/* Account Info */}
             <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700 p-6 shadow-sm">
               <h2 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">계정 정보</h2>
               <div className="space-y-3">
@@ -249,16 +241,17 @@ export default function ProfilePage() {
               </div>
             </div>
 
+            {/* Shortcuts */}
             <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700 p-6 shadow-sm">
               <h2 className="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">바로가기</h2>
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { href: '/tools',     icon: 'build',        label: '도구 탐색',   color: 'text-sky-500' },
-                  { href: '/labs',      icon: 'science',      label: 'AI 실험실',  color: 'text-purple-500' },
-                  { href: '/prompts',   icon: 'auto_awesome', label: '프롬프트',   color: 'text-amber-500' },
-                  { href: '/community', icon: 'forum',        label: '커뮤니티',   color: 'text-emerald-500' },
-                  { href: '/submit',    icon: 'add_circle',   label: '도구 제출',  color: 'text-rose-500' },
-                  { href: '/community/write', icon: 'edit',   label: '글 쓰기',    color: 'text-indigo-500' },
+                  { href: '/tools',           icon: 'build',        label: '도구 탐색',  color: 'text-sky-500' },
+                  { href: '/labs',            icon: 'science',      label: 'AI 실험실', color: 'text-purple-500' },
+                  { href: '/prompts',         icon: 'auto_awesome', label: '프롬프트',  color: 'text-amber-500' },
+                  { href: '/community',       icon: 'forum',        label: '커뮤니티',  color: 'text-emerald-500' },
+                  { href: '/submit',          icon: 'add_circle',   label: '도구 제출', color: 'text-rose-500' },
+                  { href: '/community/write', icon: 'edit',         label: '글 쓰기',   color: 'text-indigo-500' },
                 ].map(({ href, icon, label, color }) => (
                   <Link key={href} href={href}
                     className="flex items-center gap-3 p-3 rounded-xl border border-slate-100 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
@@ -275,7 +268,9 @@ export default function ProfilePage() {
         {tab === 'posts' && (
           <div className="space-y-3">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm font-bold text-slate-500">내가 쓴 글 {posts.length > 0 ? `· ${posts.length}개` : ''}</p>
+              <p className="text-sm font-bold text-slate-500">
+                내가 쓴 글{posts.length > 0 ? ` · ${posts.length}개` : ''}
+              </p>
               <Link href="/community/write"
                 className="flex items-center gap-1 text-xs font-bold text-sky-600 hover:text-sky-700">
                 <span className="material-symbols-outlined text-[14px]">edit</span>
@@ -286,12 +281,6 @@ export default function ProfilePage() {
             {dataLoading ? (
               <div className="py-16 flex justify-center">
                 <div className="w-6 h-6 border-2 border-sky-500 border-t-transparent rounded-full animate-spin" />
-              </div>
-            ) : tabErrors.posts ? (
-              <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700">
-                <span className="material-symbols-outlined text-[40px] text-rose-300 block mb-3">error_outline</span>
-                <p className="text-rose-500 font-bold mb-1">{tabErrors.posts}</p>
-                <p className="text-xs text-slate-400">잠시 후 다시 시도해주세요.</p>
               </div>
             ) : posts.length === 0 ? (
               <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700">
@@ -332,7 +321,9 @@ export default function ProfilePage() {
         {tab === 'prompts' && (
           <div className="space-y-3">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm font-bold text-slate-500">내 프롬프트 {prompts.length > 0 ? `· ${prompts.length}개` : ''}</p>
+              <p className="text-sm font-bold text-slate-500">
+                내 프롬프트{prompts.length > 0 ? ` · ${prompts.length}개` : ''}
+              </p>
               <Link href="/prompts/write"
                 className="flex items-center gap-1 text-xs font-bold text-amber-600 hover:text-amber-700">
                 <span className="material-symbols-outlined text-[14px]">add</span>
@@ -343,12 +334,6 @@ export default function ProfilePage() {
             {dataLoading ? (
               <div className="py-16 flex justify-center">
                 <div className="w-6 h-6 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
-              </div>
-            ) : tabErrors.prompts ? (
-              <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700">
-                <span className="material-symbols-outlined text-[40px] text-rose-300 block mb-3">error_outline</span>
-                <p className="text-rose-500 font-bold mb-1">{tabErrors.prompts}</p>
-                <p className="text-xs text-slate-400">잠시 후 다시 시도해주세요.</p>
               </div>
             ) : prompts.length === 0 ? (
               <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700">
@@ -387,18 +372,12 @@ export default function ProfilePage() {
         {tab === 'bookmarks' && (
           <div className="space-y-3">
             <p className="text-sm font-bold text-slate-500 mb-2">
-              저장한 항목 {bookmarks.length > 0 ? `· ${bookmarks.length}개` : ''}
+              저장한 항목{bookmarks.length > 0 ? ` · ${bookmarks.length}개` : ''}
             </p>
 
             {dataLoading ? (
               <div className="py-16 flex justify-center">
                 <div className="w-6 h-6 border-2 border-sky-500 border-t-transparent rounded-full animate-spin" />
-              </div>
-            ) : tabErrors.bookmarks ? (
-              <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700">
-                <span className="material-symbols-outlined text-[40px] text-rose-300 block mb-3">error_outline</span>
-                <p className="text-rose-500 font-bold mb-1">{tabErrors.bookmarks}</p>
-                <p className="text-xs text-slate-400">잠시 후 다시 시도해주세요.</p>
               </div>
             ) : bookmarks.length === 0 ? (
               <div className="text-center py-16 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-700">
