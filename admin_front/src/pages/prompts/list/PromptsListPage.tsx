@@ -28,16 +28,24 @@ export default function PromptsListPage() {
   const columns = [
     columnHelper.accessor('title', {
       header: '제목 (미리보기)',
-      cell: (info) => (
-        <div>
-          <p className="font-semibold text-slate-900 dark:text-white leading-tight">
-            {info.getValue()}
-          </p>
-          <p className="text-xs text-slate-500 overflow-hidden text-ellipsis line-clamp-1 max-w-[300px] mt-1">
-            {info.row.original.content}
-          </p>
-        </div>
-      )
+      cell: (info) => {
+        const row = info.row.original;
+        return (
+          <div>
+            <p className="font-semibold text-slate-900 dark:text-white leading-tight flex items-center gap-2">
+              {info.getValue()}
+              {row.isFlagged && (
+                <span className="px-1.5 py-0.5 bg-rose-100 text-rose-600 text-[10px] font-bold rounded" title={row.flagReason || '차단됨'}>
+                  차단됨
+                </span>
+              )}
+            </p>
+            <p className="text-xs text-slate-500 overflow-hidden text-ellipsis line-clamp-1 max-w-[300px] mt-1">
+              {info.row.original.content}
+            </p>
+          </div>
+        );
+      }
     }),
     columnHelper.accessor('toolName', {
       header: '관련 도구',

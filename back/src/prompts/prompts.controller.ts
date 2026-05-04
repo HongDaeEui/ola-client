@@ -28,10 +28,12 @@ export class PromptsController {
     @Query('userEmail') userEmail?: string,
     @Query('page') page = '1',
     @Query('limit') limit?: string,
+    @Query('admin') admin?: string,
   ) {
+    const includeFlagged = admin === 'true';
     const take = limit ? parseInt(limit, 10) : undefined;
     const skip = take ? (parseInt(page, 10) - 1) * take : 0;
-    return this.promptsService.findAll({ category, userEmail }, skip, take);
+    return this.promptsService.findAll({ category, userEmail }, skip, take, includeFlagged);
   }
 
   @Get(':id')

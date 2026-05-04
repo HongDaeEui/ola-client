@@ -50,17 +50,25 @@ exports.MeetupsController = void 0;
 const common_1 = require("@nestjs/common");
 const jwt = __importStar(require("jsonwebtoken"));
 const meetups_service_1 = require("./meetups.service");
+const create_meetup_dto_1 = require("./dto/create-meetup.dto");
 let MeetupsController = MeetupsController_1 = class MeetupsController {
     meetupsService;
     logger = new common_1.Logger(MeetupsController_1.name);
     constructor(meetupsService) {
         this.meetupsService = meetupsService;
     }
+    create(dto, authorization) {
+        const email = this.requireEmailFromAuthHeader(authorization);
+        return this.meetupsService.createMeetup(dto, email);
+    }
     findAll() {
         return this.meetupsService.findAll();
     }
     findUpcoming() {
         return this.meetupsService.findUpcoming();
+    }
+    findOne(id) {
+        return this.meetupsService.findById(id);
     }
     rsvp(id, body, authorization) {
         const email = this.requireEmailFromAuthHeader(authorization);
@@ -107,6 +115,14 @@ let MeetupsController = MeetupsController_1 = class MeetupsController {
 };
 exports.MeetupsController = MeetupsController;
 __decorate([
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Headers)('authorization')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_meetup_dto_1.CreateMeetupDto, String]),
+    __metadata("design:returntype", void 0)
+], MeetupsController.prototype, "create", null);
+__decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
@@ -118,6 +134,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], MeetupsController.prototype, "findUpcoming", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], MeetupsController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Post)(':id/rsvp'),
     __param(0, (0, common_1.Param)('id')),

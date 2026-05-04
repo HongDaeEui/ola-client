@@ -17,6 +17,8 @@ export interface Prompt {
   views: number;
   createdAt: string;
   updatedAt: string;
+  isFlagged?: boolean;
+  flagReason?: string;
 }
 
 export interface Post {
@@ -31,6 +33,8 @@ export interface Post {
   views: number;
   createdAt: string;
   updatedAt: string;
+  isFlagged?: boolean;
+  flagReason?: string;
 }
 
 export interface Lab {

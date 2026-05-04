@@ -8,7 +8,7 @@ class UgcService {
    */
   async getPrompts(params?: GetUgcParams): Promise<{ success: boolean; data?: { data: Prompt[], total?: number }; response?: any; error?: string }> {
     return await apiService.callWithErrorHandling(
-      () => apiService.get(PROMPTS_API.PREFIX, params),
+      () => apiService.get(PROMPTS_API.PREFIX, { ...params, admin: true }),
       '프롬프트 목록을 가져오는데 실패했습니다.'
     ) as any;
   }
@@ -18,7 +18,7 @@ class UgcService {
    */
   async getPosts(params?: GetUgcParams): Promise<{ success: boolean; data?: { data: Post[], total?: number }; response?: any; error?: string }> {
     return await apiService.callWithErrorHandling(
-      () => apiService.get(POSTS_API.PREFIX, params),
+      () => apiService.get(POSTS_API.PREFIX, { ...params, admin: true }),
       '게시글 목록을 가져오는데 실패했습니다.'
     ) as any;
   }

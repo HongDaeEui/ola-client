@@ -41,6 +41,27 @@ let MeetupsService = class MeetupsService {
             },
         });
     }
+    async createMeetup(dto, hostEmail) {
+        return this.prisma.meetup.create({
+            data: {
+                title: dto.title,
+                description: dto.description,
+                date: new Date(dto.date),
+                location: dto.location,
+                isVirtual: dto.isVirtual ?? true,
+                referenceLabId: dto.referenceLabId ?? null,
+                maxParticipants: dto.maxParticipants ?? null,
+                hostEmail,
+                status: 'UPCOMING',
+            },
+        });
+    }
+    async findById(id) {
+        return this.prisma.meetup.findUnique({
+            where: { id },
+            include: { _count: { select: { attendees: true } } },
+        });
+    }
     async rsvpToggle(meetupId, userEmail, userName) {
         const base = userName.replace(/\s+/g, '_').toLowerCase();
         const suffix = Math.random().toString(36).slice(2, 6);

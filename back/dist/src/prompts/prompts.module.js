@@ -11,12 +11,13 @@ const common_1 = require("@nestjs/common");
 const prompts_service_1 = require("./prompts.service");
 const prompts_controller_1 = require("./prompts.controller");
 const prisma_module_1 = require("../prisma/prisma.module");
+const moderation_module_1 = require("../moderation/moderation.module");
 let PromptsModule = class PromptsModule {
 };
 exports.PromptsModule = PromptsModule;
 exports.PromptsModule = PromptsModule = __decorate([
     (0, common_1.Module)({
-        imports: [prisma_module_1.PrismaModule],
+        imports: [prisma_module_1.PrismaModule, moderation_module_1.ModerationModule],
         providers: [prompts_service_1.PromptsService],
         controllers: [prompts_controller_1.PromptsController],
     })

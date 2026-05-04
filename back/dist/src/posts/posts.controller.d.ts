@@ -3,25 +3,25 @@ export declare class PostsController {
     private readonly postsService;
     private readonly logger;
     constructor(postsService: PostsService);
-    findAll(category?: string, userEmail?: string, page?: string, limit?: string): import("@prisma/client").Prisma.PrismaPromise<{
-        id: string;
-        title: string;
+    findAll(category?: string, userEmail?: string, page?: string, limit?: string, admin?: string): import("@prisma/client").Prisma.PrismaPromise<{
         category: string;
-        likes: number;
-        views: number;
         createdAt: Date;
+        id: string;
+        likes: number;
+        title: string;
+        views: number;
     }[]>;
     findTopByViews(): import("@prisma/client").Prisma.PrismaPromise<{
-        id: string;
-        title: string;
         category: string;
-        likes: number;
-        views: number;
         createdAt: Date;
+        id: string;
+        likes: number;
+        title: string;
         author: {
             username: string;
             avatarUrl: string | null;
         };
+        views: number;
     }[]>;
     getTagStats(): Promise<{
         category: string;
@@ -35,28 +35,32 @@ export declare class PostsController {
             avatarUrl: string | null;
         };
     } & {
+        category: string;
+        createdAt: Date;
         id: string;
+        likes: number;
+        updatedAt: Date;
         title: string;
         content: string;
-        category: string;
-        imageUrl: string | null;
         authorId: string;
-        likes: number;
+        isFlagged: boolean;
+        imageUrl: string | null;
         views: number;
-        createdAt: Date;
-        updatedAt: Date;
+        flagReason: string | null;
     }>;
     remove(id: string): Promise<{
+        category: string;
+        createdAt: Date;
         id: string;
+        likes: number;
+        updatedAt: Date;
         title: string;
         content: string;
-        category: string;
-        imageUrl: string | null;
         authorId: string;
-        likes: number;
+        isFlagged: boolean;
+        imageUrl: string | null;
         views: number;
-        createdAt: Date;
-        updatedAt: Date;
+        flagReason: string | null;
     }>;
     create(body: {
         title: string;
@@ -70,28 +74,32 @@ export declare class PostsController {
             avatarUrl: string | null;
         };
     } & {
+        category: string;
+        createdAt: Date;
         id: string;
+        likes: number;
+        updatedAt: Date;
         title: string;
         content: string;
-        category: string;
-        imageUrl: string | null;
         authorId: string;
-        likes: number;
+        isFlagged: boolean;
+        imageUrl: string | null;
         views: number;
-        createdAt: Date;
-        updatedAt: Date;
+        flagReason: string | null;
     }>;
     incrementViews(id: string): import("@prisma/client").Prisma.Prisma__PostClient<{
+        category: string;
+        createdAt: Date;
         id: string;
+        likes: number;
+        updatedAt: Date;
         title: string;
         content: string;
-        category: string;
-        imageUrl: string | null;
         authorId: string;
-        likes: number;
+        isFlagged: boolean;
+        imageUrl: string | null;
         views: number;
-        createdAt: Date;
-        updatedAt: Date;
+        flagReason: string | null;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     private requireEmailFromAuthHeader;
 }

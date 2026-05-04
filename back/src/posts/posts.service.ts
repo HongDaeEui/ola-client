@@ -1,17 +1,22 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { ModerationService } from '../moderation/moderation.service';
 
 @Injectable()
 export class PostsService {
   constructor(
     private prisma: PrismaService,
     private notificationsService: NotificationsService,
+    private moderationService: ModerationService,
   ) {}
 
-  findAll(category?: string, skip = 0, take?: number) {
+  findAll(category?: string, skip = 0, take?: number, includeFlagged = false) {
     return this.prisma.post.findMany({
-      where: category ? { category } : undefined,
+      where: {
+        ...(category ? { category } : {}),
+        ...(!includeFlagged ? { isFlagged: false } : {}),
+      },
       include: {
         author: {
           select: {
@@ -81,11 +86,17 @@ export class PostsService {
     //   console.error('Failed to send notification via PostsService', err);
     // });
 
+    // 비동기 AI 모더레이션
+    this.moderationService.moderatePost(newPost.id, newPost.content).catch((err) => {
+      console.error('Failed to run AI moderation', err);
+    });
+
     return newPost;
   }
 
   findTopByViews(limit = 10) {
     return this.prisma.post.findMany({
+      where: { isFlagged: false },
       orderBy: [{ views: 'desc' }, { likes: 'desc' }],
       take: limit,
       select: {
@@ -110,6 +121,7 @@ export class PostsService {
   async getTagStats() {
     const groups = await this.prisma.post.groupBy({
       by: ['category'],
+      where: { isFlagged: false },
       _count: { id: true },
       _sum: { likes: true, views: true },
       orderBy: { _sum: { likes: 'desc' } },
@@ -122,9 +134,12 @@ export class PostsService {
     }));
   }
 
-  findByUserEmail(userEmail: string) {
+  findByUserEmail(userEmail: string, includeFlagged = false) {
     return this.prisma.post.findMany({
-      where: { author: { email: userEmail } },
+      where: { 
+        author: { email: userEmail },
+        ...(!includeFlagged ? { isFlagged: false } : {}),
+      },
       orderBy: { createdAt: 'desc' },
       select: {
         id: true,

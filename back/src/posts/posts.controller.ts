@@ -29,11 +29,13 @@ export class PostsController {
     @Query('userEmail') userEmail?: string,
     @Query('page') page = '1',
     @Query('limit') limit?: string,
+    @Query('admin') admin?: string,
   ) {
-    if (userEmail) return this.postsService.findByUserEmail(userEmail);
+    const includeFlagged = admin === 'true';
+    if (userEmail) return this.postsService.findByUserEmail(userEmail, includeFlagged);
     const take = limit ? parseInt(limit, 10) : undefined;
     const skip = take ? (parseInt(page, 10) - 1) * take : 0;
-    return this.postsService.findAll(category, skip, take);
+    return this.postsService.findAll(category, skip, take, includeFlagged);
   }
 
   @Get('ranking')

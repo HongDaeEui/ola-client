@@ -3,17 +3,17 @@ export declare class LabsController {
     private readonly labsService;
     constructor(labsService: LabsService);
     getExperiments(category?: string): Promise<{
+        category: string;
+        createdAt: Date;
         id: string;
-        title: string;
         description: string;
+        likes: number;
+        title: string;
         difficulty: string | null;
         emoji: string | null;
         metric: string;
-        likes: number;
-        category: string;
         stack: string[];
         color: string | null;
-        createdAt: Date;
         author: {
             username: string;
             avatarUrl: string | null;
@@ -25,37 +25,37 @@ export declare class LabsController {
             avatarUrl: string | null;
         };
     } & {
+        category: string;
+        createdAt: Date;
         id: string;
-        title: string;
         description: string;
+        likes: number;
+        updatedAt: Date;
+        title: string;
         content: string | null;
         difficulty: string | null;
         emoji: string | null;
         thumbnailUrl: string | null;
         metric: string;
         authorId: string;
-        likes: number;
-        category: string;
         stack: string[];
         color: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     remove(id: string): Promise<{
+        category: string;
+        createdAt: Date;
         id: string;
-        title: string;
         description: string;
+        likes: number;
+        updatedAt: Date;
+        title: string;
         content: string | null;
         difficulty: string | null;
         emoji: string | null;
         thumbnailUrl: string | null;
         metric: string;
         authorId: string;
-        likes: number;
-        category: string;
         stack: string[];
         color: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
 }

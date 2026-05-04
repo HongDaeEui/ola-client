@@ -1,12 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { ModerationService } from '../moderation/moderation.service';
 
 @Injectable()
 export class PromptsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private moderationService: ModerationService,
+  ) {}
 
-  async findAll(filters?: { category?: string; userEmail?: string }, skip = 0, take?: number) {
+  async findAll(filters?: { category?: string; userEmail?: string }, skip = 0, take?: number, includeFlagged = false) {
     const where: Record<string, unknown> = {};
+    if (!includeFlagged) where.isFlagged = false;
     if (filters?.category) where.category = filters.category;
     if (filters?.userEmail) where.author = { email: filters.userEmail };
     return this.prisma.prompt.findMany({
@@ -67,7 +72,7 @@ export class PromptsService {
         name: data.userName,
       },
     });
-    return this.prisma.prompt.create({
+    const prompt = await this.prisma.prompt.create({
       data: {
         title: data.title,
         toolName: data.toolName,
@@ -76,6 +81,13 @@ export class PromptsService {
         authorId: author.id,
       },
     });
+
+    // 비동기 AI 모더레이션
+    this.moderationService.moderatePrompt(prompt.id, prompt.content).catch((err) => {
+      console.error('Failed to run AI moderation', err);
+    });
+
+    return prompt;
   }
 
   async remove(id: string) {

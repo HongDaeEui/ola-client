@@ -1,38 +1,44 @@
 import { PrismaService } from '../prisma/prisma.service';
+import { ModerationService } from '../moderation/moderation.service';
 export declare class PromptsService {
     private prisma;
-    constructor(prisma: PrismaService);
+    private moderationService;
+    constructor(prisma: PrismaService, moderationService: ModerationService);
     findAll(filters?: {
         category?: string;
         userEmail?: string;
-    }, skip?: number, take?: number): Promise<({
+    }, skip?: number, take?: number, includeFlagged?: boolean): Promise<({
         author: {
             username: string;
             avatarUrl: string | null;
         };
     } & {
-        id: string;
-        title: string;
-        toolName: string;
         category: string;
+        createdAt: Date;
+        id: string;
+        likes: number;
+        updatedAt: Date;
+        title: string;
         content: string;
         authorId: string;
-        likes: number;
+        isFlagged: boolean;
         views: number;
-        createdAt: Date;
-        updatedAt: Date;
+        flagReason: string | null;
+        toolName: string;
     })[]>;
     incrementViews(id: string): import("@prisma/client").Prisma.Prisma__PromptClient<{
-        id: string;
-        title: string;
-        toolName: string;
         category: string;
+        createdAt: Date;
+        id: string;
+        likes: number;
+        updatedAt: Date;
+        title: string;
         content: string;
         authorId: string;
-        likes: number;
+        isFlagged: boolean;
         views: number;
-        createdAt: Date;
-        updatedAt: Date;
+        flagReason: string | null;
+        toolName: string;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     findOne(id: string): Promise<{
         author: {
@@ -40,16 +46,18 @@ export declare class PromptsService {
             avatarUrl: string | null;
         };
     } & {
-        id: string;
-        title: string;
-        toolName: string;
         category: string;
+        createdAt: Date;
+        id: string;
+        likes: number;
+        updatedAt: Date;
+        title: string;
         content: string;
         authorId: string;
-        likes: number;
+        isFlagged: boolean;
         views: number;
-        createdAt: Date;
-        updatedAt: Date;
+        flagReason: string | null;
+        toolName: string;
     }>;
     create(data: {
         title: string;
@@ -59,27 +67,31 @@ export declare class PromptsService {
         userEmail: string;
         userName: string;
     }): Promise<{
-        id: string;
-        title: string;
-        toolName: string;
         category: string;
+        createdAt: Date;
+        id: string;
+        likes: number;
+        updatedAt: Date;
+        title: string;
         content: string;
         authorId: string;
-        likes: number;
+        isFlagged: boolean;
         views: number;
-        createdAt: Date;
-        updatedAt: Date;
+        flagReason: string | null;
+        toolName: string;
     }>;
     remove(id: string): Promise<{
-        id: string;
-        title: string;
-        toolName: string;
         category: string;
+        createdAt: Date;
+        id: string;
+        likes: number;
+        updatedAt: Date;
+        title: string;
         content: string;
         authorId: string;
-        likes: number;
+        isFlagged: boolean;
         views: number;
-        createdAt: Date;
-        updatedAt: Date;
+        flagReason: string | null;
+        toolName: string;
     }>;
 }

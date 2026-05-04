@@ -28,13 +28,21 @@ export default function PostsListPage() {
   const columns = [
     columnHelper.accessor('title', {
       header: '커뮤니티 글',
-      cell: (info) => (
-        <div>
-          <p className="font-semibold text-slate-900 dark:text-white leading-tight">
-            {info.getValue()}
-          </p>
-        </div>
-      )
+      cell: (info) => {
+        const row = info.row.original;
+        return (
+          <div>
+            <p className="font-semibold text-slate-900 dark:text-white leading-tight flex items-center gap-2">
+              {info.getValue()}
+              {row.isFlagged && (
+                <span className="px-1.5 py-0.5 bg-rose-100 text-rose-600 text-[10px] font-bold rounded" title={row.flagReason || '차단됨'}>
+                  차단됨
+                </span>
+              )}
+            </p>
+          </div>
+        );
+      }
     }),
     columnHelper.accessor('category', {
       header: '카테고리',

@@ -12,13 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PromptsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const moderation_service_1 = require("../moderation/moderation.service");
 let PromptsService = class PromptsService {
     prisma;
-    constructor(prisma) {
+    moderationService;
+    constructor(prisma, moderationService) {
         this.prisma = prisma;
+        this.moderationService = moderationService;
     }
-    async findAll(filters, skip = 0, take) {
+    async findAll(filters, skip = 0, take, includeFlagged = false) {
         const where = {};
+        if (!includeFlagged)
+            where.isFlagged = false;
         if (filters?.category)
             where.category = filters.category;
         if (filters?.userEmail)
@@ -72,7 +77,7 @@ let PromptsService = class PromptsService {
                 name: data.userName,
             },
         });
-        return this.prisma.prompt.create({
+        const prompt = await this.prisma.prompt.create({
             data: {
                 title: data.title,
                 toolName: data.toolName,
@@ -81,6 +86,10 @@ let PromptsService = class PromptsService {
                 authorId: author.id,
             },
         });
+        this.moderationService.moderatePrompt(prompt.id, prompt.content).catch((err) => {
+            console.error('Failed to run AI moderation', err);
+        });
+        return prompt;
     }
     async remove(id) {
         return this.prisma.prompt.delete({
@@ -91,6 +100,7 @@ let PromptsService = class PromptsService {
 exports.PromptsService = PromptsService;
 exports.PromptsService = PromptsService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        moderation_service_1.ModerationService])
 ], PromptsService);
 //# sourceMappingURL=prompts.service.js.map

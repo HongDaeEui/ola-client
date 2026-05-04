@@ -57,10 +57,11 @@ let PromptsController = PromptsController_1 = class PromptsController {
     constructor(promptsService) {
         this.promptsService = promptsService;
     }
-    getPrompts(category, userEmail, page = '1', limit) {
+    getPrompts(category, userEmail, page = '1', limit, admin) {
+        const includeFlagged = admin === 'true';
         const take = limit ? parseInt(limit, 10) : undefined;
         const skip = take ? (parseInt(page, 10) - 1) * take : 0;
-        return this.promptsService.findAll({ category, userEmail }, skip, take);
+        return this.promptsService.findAll({ category, userEmail }, skip, take, includeFlagged);
     }
     findOne(id) {
         return this.promptsService.findOne(id);
@@ -124,8 +125,9 @@ __decorate([
     __param(1, (0, common_1.Query)('userEmail')),
     __param(2, (0, common_1.Query)('page')),
     __param(3, (0, common_1.Query)('limit')),
+    __param(4, (0, common_1.Query)('admin')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, Object, String]),
+    __metadata("design:paramtypes", [String, String, Object, String, String]),
     __metadata("design:returntype", void 0)
 ], PromptsController.prototype, "getPrompts", null);
 __decorate([

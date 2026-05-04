@@ -11,27 +11,27 @@ export declare class UsersService {
                 posts: number;
             };
         } & {
+            createdAt: Date;
             id: string;
+            name: string | null;
+            updatedAt: Date;
             email: string;
             username: string;
-            name: string | null;
             avatarUrl: string | null;
             role: import("@prisma/client").$Enums.UserRole;
-            createdAt: Date;
-            updatedAt: Date;
         })[];
     }>;
     updateRole(id: string, role: any): Promise<{
         success: boolean;
         data: {
+            createdAt: Date;
             id: string;
+            name: string | null;
+            updatedAt: Date;
             email: string;
             username: string;
-            name: string | null;
             avatarUrl: string | null;
             role: import("@prisma/client").$Enums.UserRole;
-            createdAt: Date;
-            updatedAt: Date;
         };
     }>;
 }

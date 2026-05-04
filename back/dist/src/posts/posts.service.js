@@ -13,16 +13,22 @@ exports.PostsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const notifications_service_1 = require("../notifications/notifications.service");
+const moderation_service_1 = require("../moderation/moderation.service");
 let PostsService = class PostsService {
     prisma;
     notificationsService;
-    constructor(prisma, notificationsService) {
+    moderationService;
+    constructor(prisma, notificationsService, moderationService) {
         this.prisma = prisma;
         this.notificationsService = notificationsService;
+        this.moderationService = moderationService;
     }
-    findAll(category, skip = 0, take) {
+    findAll(category, skip = 0, take, includeFlagged = false) {
         return this.prisma.post.findMany({
-            where: category ? { category } : undefined,
+            where: {
+                ...(category ? { category } : {}),
+                ...(!includeFlagged ? { isFlagged: false } : {}),
+            },
             include: {
                 author: {
                     select: {
@@ -78,10 +84,14 @@ let PostsService = class PostsService {
                 },
             },
         });
+        this.moderationService.moderatePost(newPost.id, newPost.content).catch((err) => {
+            console.error('Failed to run AI moderation', err);
+        });
         return newPost;
     }
     findTopByViews(limit = 10) {
         return this.prisma.post.findMany({
+            where: { isFlagged: false },
             orderBy: [{ views: 'desc' }, { likes: 'desc' }],
             take: limit,
             select: {
@@ -104,6 +114,7 @@ let PostsService = class PostsService {
     async getTagStats() {
         const groups = await this.prisma.post.groupBy({
             by: ['category'],
+            where: { isFlagged: false },
             _count: { id: true },
             _sum: { likes: true, views: true },
             orderBy: { _sum: { likes: 'desc' } },
@@ -115,9 +126,12 @@ let PostsService = class PostsService {
             totalViews: g._sum.views ?? 0,
         }));
     }
-    findByUserEmail(userEmail) {
+    findByUserEmail(userEmail, includeFlagged = false) {
         return this.prisma.post.findMany({
-            where: { author: { email: userEmail } },
+            where: {
+                author: { email: userEmail },
+                ...(!includeFlagged ? { isFlagged: false } : {}),
+            },
             orderBy: { createdAt: 'desc' },
             select: {
                 id: true,
@@ -139,6 +153,7 @@ exports.PostsService = PostsService;
 exports.PostsService = PostsService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        notifications_service_1.NotificationsService])
+        notifications_service_1.NotificationsService,
+        moderation_service_1.ModerationService])
 ], PostsService);
 //# sourceMappingURL=posts.service.js.map

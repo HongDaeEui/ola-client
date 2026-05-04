@@ -6,20 +6,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PostsModule = void 0;
+exports.ModerationModule = void 0;
 const common_1 = require("@nestjs/common");
-const posts_service_1 = require("./posts.service");
-const posts_controller_1 = require("./posts.controller");
-const notifications_module_1 = require("../notifications/notifications.module");
-const moderation_module_1 = require("../moderation/moderation.module");
-let PostsModule = class PostsModule {
+const moderation_service_1 = require("./moderation.service");
+const prisma_module_1 = require("../prisma/prisma.module");
+let ModerationModule = class ModerationModule {
 };
-exports.PostsModule = PostsModule;
-exports.PostsModule = PostsModule = __decorate([
+exports.ModerationModule = ModerationModule;
+exports.ModerationModule = ModerationModule = __decorate([
     (0, common_1.Module)({
-        imports: [notifications_module_1.NotificationsModule, moderation_module_1.ModerationModule],
-        providers: [posts_service_1.PostsService],
-        controllers: [posts_controller_1.PostsController],
+        imports: [prisma_module_1.PrismaModule],
+        providers: [moderation_service_1.ModerationService],
+        exports: [moderation_service_1.ModerationService],
     })
-], PostsModule);
-//# sourceMappingURL=posts.module.js.map
+], ModerationModule);
+//# sourceMappingURL=moderation.module.js.map
