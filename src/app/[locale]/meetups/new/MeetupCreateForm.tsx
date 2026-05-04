@@ -43,7 +43,12 @@ export default function MeetupCreateForm() {
     setError('');
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      // getSession()은 캐시된 토큰을 반환하므로 만료됐을 수 있음 — refreshSession()으로 갱신
+      let { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        const refreshed = await supabase.auth.refreshSession();
+        if (refreshed.data.session) session = refreshed.data.session;
+      }
       const token = session?.access_token;
       if (!token) {
         setError('인증 정보를 가져올 수 없습니다. 다시 로그인해 주세요.');
