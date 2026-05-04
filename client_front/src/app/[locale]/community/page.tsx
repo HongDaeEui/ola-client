@@ -1,8 +1,14 @@
+import { Metadata } from 'next';
 import { API_BASE, apiFetch } from '@/lib/api';
 import { Link } from '@/i18n/routing';
 import { WriteFAB } from '@/components/WriteFAB';
 import { PostFeed, type Post } from '@/components/PostFeed';
 export const revalidate = 300;
+
+export const metadata: Metadata = {
+  title: '커뮤니티 | Ola',
+  description: '다양한 실천형 노하우, 작품 공유, 자유로운 의견 교환이 이루어지는 Ola AI 커뮤니티입니다.',
+};
 
 const LIMIT = 10;
 

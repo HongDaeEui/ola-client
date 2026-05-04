@@ -28,6 +28,12 @@ async function getFeaturedTools(): Promise<Tool[]> {
     return res.ok ? res.json() : [];
   } catch { return []; }
 }
+async function getMarqueeTools(): Promise<{ name: string; iconUrl?: string }[]> {
+  try {
+    const res = await fetchWithTimeout(`${API_BASE}/tools?limit=40`, { next: { revalidate: 300 } });
+    return res.ok ? res.json() : [];
+  } catch { return []; }
+}
 async function getRecentPosts(): Promise<Post[]> {
   try {
     const res = await fetchWithTimeout(`${API_BASE}/posts/ranking`, { next: { revalidate: 120 } });
@@ -44,11 +50,12 @@ async function getTopCategories(): Promise<CategoryCount[]> {
 }
 
 export default async function Page() {
-  const [tools, posts, categories] = await Promise.all([
+  const [tools, posts, categories, marqueeTools] = await Promise.all([
     getFeaturedTools(),
     getRecentPosts(),
     getTopCategories(),
+    getMarqueeTools(),
   ]);
 
-  return <HomeClient tools={tools} posts={posts} categories={categories} />;
+  return <HomeClient tools={tools} posts={posts} categories={categories} marqueeTools={marqueeTools} />;
 }

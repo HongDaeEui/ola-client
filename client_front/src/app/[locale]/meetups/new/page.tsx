@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function NewMeetupPage() {
   return (
-    <div className="min-h-screen bg-slate-50 font-['Noto_Sans_KR'] py-12">
+    <div className="min-h-screen bg-slate-50 font-['Noto_Sans_KR'] pt-32 pb-12">
       <div className="max-w-3xl mx-auto px-6">
         <div className="mb-10 text-center">
           <div className="w-16 h-16 bg-violet-100 text-violet-600 rounded-2xl flex items-center justify-center mx-auto mb-4">

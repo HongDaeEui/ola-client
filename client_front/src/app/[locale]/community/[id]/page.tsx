@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import { API_BASE, apiFetch } from '@/lib/api';
 import Image from "next/image";
 import { Link } from '@/i18n/routing';
@@ -53,6 +54,36 @@ const CATEGORY_COLORS: Record<string, string> = {
   '작품 공유': 'bg-rose-50 text-rose-700 border-rose-100',
 };
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const post = await getPost(id);
+  
+  if (!post) {
+    return { title: '게시글을 찾을 수 없습니다 | Ola' };
+  }
+  
+  const description = post.content.slice(0, 160).replace(/\n/g, ' ').trim() + '...';
+  
+  return {
+    title: `${post.title} | Ola 커뮤니티`,
+    description,
+    openGraph: {
+      title: post.title,
+      description,
+      type: 'article',
+      publishedTime: post.createdAt,
+      authors: [post.author?.username || 'Unknown'],
+      images: post.imageUrl ? [{ url: post.imageUrl }] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description,
+      images: post.imageUrl ? [post.imageUrl] : undefined,
+    }
+  };
+}
+
 export default async function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const post = await getPost(id);
@@ -61,8 +92,23 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
 
   const categoryClass = CATEGORY_COLORS[post.category] ?? 'bg-slate-50 text-slate-600 border-slate-200';
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    image: post.imageUrl || 'https://ola.olalab.kr/og-image.jpg',
+    author: {
+      '@type': 'Person',
+      name: post.author?.username || 'Unknown',
+    },
+    datePublished: post.createdAt,
+    dateModified: post.createdAt,
+    description: post.content.slice(0, 150) + '...',
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-28 lg:pt-32 pb-20 font-['Noto_Sans_KR']">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <ViewTracker type="posts" id={post.id} />
       <div className="max-w-3xl mx-auto px-6">
 

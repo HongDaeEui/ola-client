@@ -1,8 +1,14 @@
+import { Metadata } from 'next';
 import { API_BASE, apiFetch } from '@/lib/api';
 import { Link } from '@/i18n/routing';
 import PromptShareButton from './PromptShareButton';
 import { PromptFeed, type Prompt } from '@/components/PromptFeed';
 export const revalidate = 300;
+
+export const metadata: Metadata = {
+  title: '공유 프롬프트 | Ola',
+  description: '성공적인 AI 활용을 위한 베스트 프롬프트 모음입니다. 다른 창작자들의 팁을 참고하고 바로 복사하여 사용해 보세요.',
+};
 
 const LIMIT = 12;
 
