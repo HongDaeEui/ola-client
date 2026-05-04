@@ -1,8 +1,13 @@
+import { Metadata } from 'next';
 import { API_BASE, apiFetch } from '@/lib/api';
 import { Link } from '@/i18n/routing';
 import { getLogoUrl } from '@/lib/logo';
 export const revalidate = 300;
 
+export const metadata: Metadata = {
+  title: 'AI 도구 탐색 | Ola',
+  description: '최신 AI 도구들을 평점, 카테고리별로 필터링하고 탐색하세요. 당신에게 꼭 맞는 AI 툴을 찾을 수 있습니다.',
+};
 
 interface Tool {
   id: string;

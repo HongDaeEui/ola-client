@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import { Link } from '@/i18n/routing';
 import { API_BASE, apiFetch } from '@/lib/api';
 import { notFound } from 'next/navigation';
@@ -32,14 +33,53 @@ async function getPrompt(id: string): Promise<Prompt | null> {
   }
 }
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const prompt = await getPrompt(id);
+  
+  if (!prompt) {
+    return { title: '프롬프트를 찾을 수 없습니다 | Ola' };
+  }
+  
+  const description = prompt.content.slice(0, 160).replace(/\n/g, ' ').trim() + '...';
+  
+  return {
+    title: `[${prompt.toolName}] ${prompt.title} | Ola 프롬프트`,
+    description,
+    openGraph: {
+      title: prompt.title,
+      description,
+      type: 'article',
+      authors: [prompt.author?.username || 'Unknown'],
+    },
+    twitter: {
+      card: 'summary',
+      title: prompt.title,
+      description,
+    }
+  };
+}
+
 export default async function PromptDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const prompt = await getPrompt(id);
 
   if (!prompt) notFound();
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: prompt.title,
+    author: {
+      '@type': 'Person',
+      name: prompt.author?.username || 'Unknown',
+    },
+    description: prompt.content.slice(0, 150) + '...',
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-28 lg:pt-32 pb-20 font-['Noto_Sans_KR']">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <ViewTracker type="prompts" id={prompt.id} />
       <div className="max-w-4xl mx-auto px-6">
 

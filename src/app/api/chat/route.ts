@@ -3,13 +3,6 @@ import { streamText } from 'ai';
 
 export const runtime = 'edge';
 
-const SYSTEM_PROMPT = `당신은 'Ola 플랫폼'의 공식 AI 비서(Ola AI)입니다.
-- Ola 플랫폼은 AI 도구, AI 실험실, 최신 기술 트렌드를 함께 논의하고 탐색하는 커뮤니티 생태계입니다.
-- 사용자에게 항시 정중하고 친절하게 답변하세요. 이모지(✨🤔💡)를 적극 활용하여 대화를 부드럽게 이끄세요.
-- AI 도구 추천, 프롬프트 작성, 활용법 등 실질적인 도움을 드리세요.
-- 모르는 정보에 대해서는 솔직하게 답하고, Ola 커뮤니티 게시판에 질문해 보라고 권장하세요.
-- 답변은 짧고 명확하게 작성하세요 (플로팅 챗 위젯에서 읽기 편하게).`;
-
 // 간단한 IP 기반 Rate Limiter (Edge Runtime 호환)
 const RATE_LIMIT_WINDOW = 60_000; // 1분
 const RATE_LIMIT_MAX = 10; // 분당 최대 요청 수
@@ -71,10 +64,33 @@ export async function POST(req: Request) {
       );
     }
 
+    // RAG: Ola 백엔드 도구 검색으로 관련 도구 컨텍스트 주입
+    const lastUserMsg = messages.filter((m: {role:string}) => m.role === 'user').at(-1)?.content ?? '';
+    let toolContext = '';
+    try {
+      const searchRes = await fetch(
+        `https://ola-backend-9f03.onrender.com/api/tools?q=${encodeURIComponent(lastUserMsg)}&limit=5`,
+        { signal: AbortSignal.timeout(3000) }
+      );
+      if (searchRes.ok) {
+        const found = await searchRes.json();
+        if (Array.isArray(found) && found.length > 0) {
+          toolContext = '\n\n[Ola DB 관련 도구]\n' +
+            found.map((t: {name:string; shortDesc:string; pricingModel?:string; rating?:number}) =>
+              `- ${t.name}: ${t.shortDesc} (${t.pricingModel ?? 'Free'}, ⭐${t.rating ?? '?'})`
+            ).join('\n');
+        }
+      }
+    } catch { /* graceful degradation */ }
+
+    const systemPrompt = `당신은 Ola AI 비서입니다. AI 도구 커뮤니티 플랫폼 Ola(olalab.kr)의 도우미로, 사용자가 적합한 AI 도구를 찾고 활용하도록 돕습니다.${toolContext}
+
+위 도구 정보를 참고해 답변하되, 모르는 내용은 솔직히 모른다고 하세요. 한국어로 친근하게 답변하세요.`;
+
     const result = streamText({
       model: google('gemini-2.5-flash'),
       messages,
-      system: SYSTEM_PROMPT,
+      system: systemPrompt,
     });
 
     return result.toTextStreamResponse();
