@@ -32,14 +32,14 @@ export class MeetupsController {
     return this.meetupsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.meetupsService.findById(id);
-  }
-
   @Get('upcoming')
   findUpcoming() {
     return this.meetupsService.findUpcoming();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.meetupsService.findById(id);
   }
 
   @Post(':id/rsvp')
