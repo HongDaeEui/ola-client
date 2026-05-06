@@ -1,6 +1,4 @@
 'use client';
-'use client';
-'use client';
 import { API_BASE } from '@/lib/api';
 
 import { useEffect, useState } from 'react';
@@ -45,13 +43,18 @@ export default function CommentSection({ postId }: { postId: string }) {
     if (!user || !text.trim()) return;
     setSubmitting(true);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) return;
       const res = await fetch(`${API_BASE}/comments`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
           content: text.trim(),
           postId,
-          userEmail: user.email,
           userName: user.user_metadata?.full_name ?? user.email ?? 'Anonymous',
         }),
       });
@@ -134,7 +137,7 @@ export default function CommentSection({ postId }: { postId: string }) {
       {user ? (
         <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-5">
           <div className="flex items-center gap-2.5 mb-3">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold text-xs uppercase">
+            <div className="w-8 h-8 rounded-full bg-linear-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold text-xs uppercase">
               {(user.user_metadata?.full_name ?? user.email ?? '?').charAt(0)}
             </div>
             <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
