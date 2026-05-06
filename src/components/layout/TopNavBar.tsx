@@ -49,7 +49,7 @@ function SearchDropdown({ suggestions, onClose }: { suggestions: Suggestions; on
           {suggestions.prompts.map(p => (
             <Link key={p.id} href={`/prompts/${p.id}`} onClick={onClose}
               className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 dark:hover:bg-slate-700 transition-colors">
-              <span className="material-symbols-outlined text-[18px] text-violet-400 flex-shrink-0">psychology</span>
+              <span className="material-symbols-outlined text-[18px] text-violet-400 shrink-0">psychology</span>
               <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{p.title}</p>
             </Link>
           ))}
@@ -61,7 +61,7 @@ function SearchDropdown({ suggestions, onClose }: { suggestions: Suggestions; on
           {suggestions.posts.map(p => (
             <Link key={p.id} href={`/community/${p.id}`} onClick={onClose}
               className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 dark:hover:bg-slate-700 transition-colors">
-              <span className="material-symbols-outlined text-[18px] text-emerald-400 flex-shrink-0">forum</span>
+              <span className="material-symbols-outlined text-[18px] text-emerald-400 shrink-0">forum</span>
               <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{p.title}</p>
             </Link>
           ))}
@@ -73,7 +73,7 @@ function SearchDropdown({ suggestions, onClose }: { suggestions: Suggestions; on
           {suggestions.labs.map(l => (
             <Link key={l.id} href={`/labs/${l.id}`} onClick={onClose}
               className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 dark:hover:bg-slate-700 transition-colors">
-              <span className="text-lg flex-shrink-0">{l.emoji}</span>
+              <span className="text-lg shrink-0">{l.emoji}</span>
               <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{l.title}</p>
             </Link>
           ))}
@@ -206,7 +206,7 @@ export function TopNavBar() { const t = useTranslations('Nav');
               user ? (
                 <div className="hidden sm:flex items-center gap-3">
                   <Link href="/profile">
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold text-sm uppercase hover:scale-105 transition-transform cursor-pointer">
+                    <div className="w-9 h-9 rounded-full bg-linear-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold text-sm uppercase hover:scale-105 transition-transform cursor-pointer">
                       {user.user_metadata?.name?.charAt(0) ?? user.email?.charAt(0) ?? 'U'}
                     </div>
                   </Link>
@@ -286,7 +286,7 @@ export function TopNavBar() { const t = useTranslations('Nav');
               <div className="flex flex-col gap-3">
                 <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)}>
                   <div className="flex items-center gap-3 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold uppercase">
+                    <div className="w-10 h-10 rounded-full bg-linear-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold uppercase">
                       {user.user_metadata?.name?.charAt(0) ?? user.email?.charAt(0) ?? 'U'}
                     </div>
                     <div>
