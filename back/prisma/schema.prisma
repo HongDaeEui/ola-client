@@ -157,10 +157,14 @@ model Comment {
   content   String
   postId    String
   authorId  String
+  parentId  String?
+  updatedAt DateTime @updatedAt
   createdAt DateTime @default(now())
 
-  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  post     Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies  Comment[] @relation("CommentReplies")
 }
 
 model Like {

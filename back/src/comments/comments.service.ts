@@ -11,9 +11,15 @@ export class CommentsService {
 
   findByPost(postId: string) {
     return this.prisma.comment.findMany({
-      where: { postId },
+      where: { postId, parentId: null },
       include: {
         author: { select: { username: true, avatarUrl: true, email: true } },
+        replies: {
+          include: {
+            author: { select: { username: true, avatarUrl: true, email: true } },
+          },
+          orderBy: { createdAt: 'asc' },
+        },
       },
       orderBy: { createdAt: 'asc' },
     });
@@ -24,6 +30,7 @@ export class CommentsService {
     postId: string;
     userEmail: string;
     userName: string;
+    parentId?: string;
   }) {
     const base = data.userName.replace(/\s+/g, '_').toLowerCase();
     const suffix = Math.random().toString(36).slice(2, 6);
@@ -38,7 +45,12 @@ export class CommentsService {
     });
 
     const comment = await this.prisma.comment.create({
-      data: { content: data.content, postId: data.postId, authorId: author.id },
+      data: {
+        content: data.content,
+        postId: data.postId,
+        authorId: author.id,
+        parentId: data.parentId ?? null,
+      },
       include: {
         author: { select: { username: true, avatarUrl: true, email: true } },
       },
@@ -61,6 +73,18 @@ export class CommentsService {
     }
 
     return comment;
+  }
+
+  async update(id: string, userEmail: string, content: string) {
+    const user = await this.prisma.user.findUnique({ where: { email: userEmail } });
+    if (!user) return null;
+    const comment = await this.prisma.comment.findUnique({ where: { id } });
+    if (!comment || comment.authorId !== user.id) return null;
+    return this.prisma.comment.update({
+      where: { id },
+      data: { content },
+      include: { author: { select: { username: true, avatarUrl: true, email: true } } },
+    });
   }
 
   async remove(id: string, userEmail: string) {

@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Patch,
   Delete,
   Body,
   Param,
@@ -31,6 +32,7 @@ export class CommentsController {
       content: string;
       postId: string;
       userName: string;
+      parentId?: string;
     },
     @Headers('authorization') authorization?: string,
   ) {
@@ -40,7 +42,20 @@ export class CommentsController {
       postId: body.postId,
       userEmail: email,
       userName: body.userName,
+      parentId: body.parentId,
     });
+  }
+
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() body: { content: string },
+    @Headers('authorization') authorization?: string,
+  ) {
+    const { email } = await this.extractUser(authorization);
+    const result = await this.commentsService.update(id, email, body.content);
+    if (!result) throw new ForbiddenException('You are not allowed to edit this comment.');
+    return result;
   }
 
   @Delete(':id')
