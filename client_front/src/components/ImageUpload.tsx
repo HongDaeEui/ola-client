@@ -1,6 +1,4 @@
-"use client";
-import Image from "next/image";
-
+'use client';
 import { useRef, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 
@@ -32,7 +30,7 @@ export function ImageUpload({ onUpload, onRemove, imageUrl }: Props) {
     const path = `posts/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
     const { error: uploadError } = await supabase.storage
-      .from('post-images')
+      .from('post-image')
       .upload(path, file, { upsert: false });
 
     if (uploadError) {
@@ -41,7 +39,7 @@ export function ImageUpload({ onUpload, onRemove, imageUrl }: Props) {
       return;
     }
 
-    const { data } = supabase.storage.from('post-images').getPublicUrl(path);
+    const { data } = supabase.storage.from('post-image').getPublicUrl(path);
     onUpload(data.publicUrl);
     setUploading(false);
   }
