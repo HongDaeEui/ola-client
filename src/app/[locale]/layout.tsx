@@ -14,8 +14,22 @@ export function generateStaticParams() {
 }
 
 export const metadata: Metadata = {
-  title: 'Ola AI Community - The Luminous Horizon',
-  description: 'A community-driven ecosystem designed for luminous thinkers, creators, and builders in the age of artificial intelligence.',
+  title: {
+    template: '%s | 올라랩(OlaLab) - 올라 AI 커뮤니티',
+    default: '올라랩(OlaLab) | 올라 AI (Ola AI) 커뮤니티',
+  },
+  description: '올라랩(OlaLab)은 AI 시대를 위한 지식 공유 커뮤니티, 올라 AI 플랫폼입니다. 최신 인공지능 도구, 프롬프트, 활용 노하우를 만나보세요.',
+  keywords: ['올라랩', 'OlaLab', '올라ai', '올라 AI', 'Ola AI', 'AI 커뮤니티', '프롬프트', '인공지능 도구', 'LLM', 'AI 노하우'],
+  openGraph: {
+    title: '올라랩(OlaLab) | 올라 AI (Ola AI) 커뮤니티',
+    description: '올라랩(OlaLab)은 AI 시대를 위한 지식 공유 커뮤니티, 올라 AI 플랫폼입니다.',
+    siteName: 'OlaLab',
+    locale: 'ko_KR',
+    type: 'website',
+  },
+  verification: {
+    google: 'XeJUenidK3zxi-QwS68OUHg84PwHK-ug8g6XhGuFCWM',
+  },
 };
 
 export default async function LocaleLayout({
