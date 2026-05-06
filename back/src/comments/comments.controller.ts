@@ -9,16 +9,13 @@ import {
   Headers,
   UnauthorizedException,
   ForbiddenException,
-  Logger,
 } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
-import * as jwt from 'jsonwebtoken';
 import { CommentsService } from './comments.service';
+import { verifySupabaseJwt } from '../common/supabase-auth.util';
 
 @Controller('comments')
 export class CommentsController {
-  private readonly logger = new Logger(CommentsController.name);
-
   constructor(private readonly commentsService: CommentsService) {}
 
   @Get()
@@ -28,7 +25,7 @@ export class CommentsController {
 
   @Throttle({ default: { limit: 10, ttl: 60000 } })
   @Post()
-  create(
+  async create(
     @Body()
     body: {
       content: string;
@@ -37,7 +34,7 @@ export class CommentsController {
     },
     @Headers('authorization') authorization?: string,
   ) {
-    const email = this.requireEmailFromAuthHeader(authorization);
+    const { email } = await this.extractUser(authorization);
     return this.commentsService.create({
       content: body.content,
       postId: body.postId,
@@ -51,72 +48,20 @@ export class CommentsController {
     @Param('id') id: string,
     @Headers('authorization') authorization?: string,
   ) {
-    const email = this.requireEmailFromAuthHeader(authorization);
-
+    const { email } = await this.extractUser(authorization);
     const result = await this.commentsService.remove(id, email);
     if (!result) {
-      // Either comment does not exist or the requester is not the author
-      throw new ForbiddenException(
-        'You are not allowed to delete this comment.',
-      );
+      throw new ForbiddenException('You are not allowed to delete this comment.');
     }
     return result;
   }
 
-  /**
-   * Authorization 헤더에서 Bearer 토큰을 추출하고 email 클레임을 반환한다.
-   * 실패 시 401 UnauthorizedException 을 throw 한다.
-   */
-  private requireEmailFromAuthHeader(authorization?: string): string {
-    if (!authorization || !authorization.toLowerCase().startsWith('bearer ')) {
+  private async extractUser(authorization?: string) {
+    if (!authorization?.toLowerCase().startsWith('bearer ')) {
       throw new UnauthorizedException('Missing Bearer token.');
     }
-
     const token = authorization.slice(7).trim();
-    if (!token) {
-      throw new UnauthorizedException('Empty Bearer token.');
-    }
-
-    const email = this.extractEmailFromToken(token);
-    if (!email) {
-      throw new UnauthorizedException('Token does not contain an email claim.');
-    }
-    return email;
-  }
-
-  /**
-   * Supabase JWT 에서 email 클레임을 추출한다.
-   * SUPABASE_JWT_SECRET 이 설정되어 있지 않으면 즉시 401 을 throw 한다.
-   * (서명 검증 없는 decode 폴백은 보안상 허용하지 않는다.)
-   */
-  private extractEmailFromToken(token: string): string | null {
-    const secret = process.env.SUPABASE_JWT_SECRET;
-    if (!secret || secret.trim().length === 0) {
-      this.logger.error(
-        'SUPABASE_JWT_SECRET is not configured. Refusing to accept JWT without signature verification.',
-      );
-      throw new UnauthorizedException(
-        'Server authentication is not configured.',
-      );
-    }
-
-    try {
-      const payload = jwt.verify(token, secret) as jwt.JwtPayload;
-      if (!payload || typeof payload === 'string') return null;
-
-      const candidate =
-        (payload as jwt.JwtPayload & { email?: string }).email ??
-        // Supabase 는 email 외에 user_metadata.email 에도 보관할 수 있음
-        (payload as jwt.JwtPayload & { user_metadata?: { email?: string } })
-          .user_metadata?.email ??
-        null;
-
-      return typeof candidate === 'string' ? candidate : null;
-    } catch (err) {
-      this.logger.warn(
-        `JWT verification failed: ${(err as Error).message ?? 'unknown error'}`,
-      );
-      throw new UnauthorizedException('Invalid or expired token.');
-    }
+    if (!token) throw new UnauthorizedException('Empty Bearer token.');
+    return verifySupabaseJwt(token);
   }
 }
