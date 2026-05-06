@@ -77,6 +77,10 @@ export default function ProfilePage() {
   const [posts, setPosts] = useState<MyPost[]>([]);
   const [prompts, setPrompts] = useState<MyPrompt[]>([]);
   const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([]);
+  const [dbUser, setDbUser] = useState<{ id: string; username: string; name: string } | null>(null);
+  const [isEditingUsername, setIsEditingUsername] = useState(false);
+  const [newUsername, setNewUsername] = useState('');
+  const [usernameError, setUsernameError] = useState('');
   const [dataLoading, setDataLoading] = useState(false);
   const [dataLoaded, setDataLoaded] = useState(false);
 
@@ -91,16 +95,20 @@ export default function ProfilePage() {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         const token = session?.access_token;
-        const [postsRes, promptsRes, bookmarksRes] = await Promise.all([
+        const [postsRes, promptsRes, bookmarksRes, meRes] = await Promise.all([
           fetch(`${API_BASE}/posts?userEmail=${encodeURIComponent(user.email!)}`),
           fetch(`${API_BASE}/prompts?userEmail=${encodeURIComponent(user.email!)}`),
           token
             ? fetch(`${API_BASE}/bookmarks`, { headers: { Authorization: `Bearer ${token}` } })
             : Promise.resolve(null),
+          token
+            ? fetch(`${API_BASE}/users/me`, { headers: { Authorization: `Bearer ${token}` } })
+            : Promise.resolve(null),
         ]);
         if (postsRes.ok) setPosts(await postsRes.json());
         if (promptsRes.ok) setPrompts(await promptsRes.json());
         if (bookmarksRes?.ok) setBookmarks(await bookmarksRes.json());
+        if (meRes?.ok) setDbUser(await meRes.json());
         setDataLoaded(true);
       } catch (e) {
         console.error('[profile] data fetch failed:', e);
@@ -119,10 +127,43 @@ export default function ProfilePage() {
   }
   if (!user) return null;
 
-  const displayName = user.user_metadata?.name ?? user.user_metadata?.full_name ?? '사용자';
+  const displayName = dbUser?.name ?? user.user_metadata?.name ?? user.user_metadata?.full_name ?? '사용자';
+  const username = dbUser?.username ?? '';
   const avatarUrl = user.user_metadata?.avatar_url;
   const initial = displayName.charAt(0).toUpperCase();
   const totalLikes = [...posts, ...prompts].reduce((sum, item) => sum + (item.likes || 0), 0);
+
+  const handleUsernameSave = async () => {
+    setUsernameError('');
+    if (!newUsername.trim()) {
+      setIsEditingUsername(false);
+      return;
+    }
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) throw new Error('로그인 토큰이 없습니다.');
+
+      const res = await fetch(`${API_BASE}/users/me/username`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ username: newUsername.trim() }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || '닉네임 변경에 실패했습니다.');
+      }
+
+      setDbUser(prev => prev ? { ...prev, username: data.data.username } : null);
+      setIsEditingUsername(false);
+    } catch (err) {
+      setUsernameError((err as Error).message);
+    }
+  };
 
   const TAB_COUNTS: Record<Tab, number> = {
     overview: 0,
@@ -161,7 +202,52 @@ export default function ProfilePage() {
               </button>
             </div>
             <h1 className="text-xl font-extrabold text-slate-900 dark:text-white">{displayName}</h1>
-            <p className="text-slate-400 dark:text-slate-500 text-sm mt-0.5">{user.email}</p>
+            
+            {/* Username Section */}
+            <div className="mt-1 flex items-center gap-2">
+              {isEditingUsername ? (
+                <div className="flex flex-col gap-1 w-full max-w-sm">
+                  <div className="flex items-center gap-2">
+                    <span className="text-slate-400 font-bold">@</span>
+                    <input
+                      type="text"
+                      value={newUsername}
+                      onChange={(e) => setNewUsername(e.target.value)}
+                      placeholder="새 닉네임"
+                      maxLength={20}
+                      className="flex-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-1.5 text-sm outline-none focus:border-sky-500 font-bold text-slate-700 dark:text-slate-300"
+                    />
+                    <button onClick={handleUsernameSave} className="bg-sky-600 hover:bg-sky-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-colors">
+                      저장
+                    </button>
+                    <button onClick={() => { setIsEditingUsername(false); setUsernameError(''); }} className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors">
+                      취소
+                    </button>
+                  </div>
+                  {usernameError && <p className="text-xs font-bold text-rose-500">{usernameError}</p>}
+                  <p className="text-[10px] text-slate-400 font-medium">한글, 영문, 숫자만 사용 가능 (2~20자)</p>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 group">
+                  <p className="text-slate-500 dark:text-slate-400 text-sm font-bold">
+                    @{username}
+                  </p>
+                  <button 
+                    onClick={() => {
+                      setNewUsername(username);
+                      setIsEditingUsername(true);
+                      setUsernameError('');
+                    }}
+                    className="text-slate-300 hover:text-sky-500 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100 p-1"
+                    title="닉네임 수정"
+                  >
+                    <span className="material-symbols-outlined text-[14px]">edit</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <p className="text-slate-400 dark:text-slate-500 text-xs mt-1">{user.email}</p>
             <div className="mt-3 flex gap-2 flex-wrap">
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-sky-50 text-sky-600 text-xs font-bold border border-sky-100">
                 <span className="material-symbols-outlined text-[12px]">verified</span>
