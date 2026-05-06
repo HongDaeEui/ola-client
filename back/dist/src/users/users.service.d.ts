@@ -34,4 +34,24 @@ export declare class UsersService {
             role: import("@prisma/client").$Enums.UserRole;
         };
     }>;
+    findByEmail(email: string): Promise<{
+        createdAt: Date;
+        id: string;
+        name: string | null;
+        updatedAt: Date;
+        email: string;
+        username: string;
+        avatarUrl: string | null;
+        role: import("@prisma/client").$Enums.UserRole;
+    } | null>;
+    updateUsername(email: string, username: string): Promise<{
+        createdAt: Date;
+        id: string;
+        name: string | null;
+        updatedAt: Date;
+        email: string;
+        username: string;
+        avatarUrl: string | null;
+        role: import("@prisma/client").$Enums.UserRole;
+    }>;
 }

@@ -47,6 +47,30 @@ let UsersService = class UsersService {
             data: user,
         };
     }
+    async findByEmail(email) {
+        return this.prisma.user.findUnique({
+            where: { email },
+        });
+    }
+    async updateUsername(email, username) {
+        const usernameRegex = /^[a-zA-Z0-9가-힣]+$/;
+        if (!usernameRegex.test(username)) {
+            throw new Error('닉네임은 공백 및 특수문자 없이 한글, 영문, 숫자만 사용할 수 있습니다.');
+        }
+        if (username.length < 2 || username.length > 20) {
+            throw new Error('닉네임은 2자 이상 20자 이하로 설정해야 합니다.');
+        }
+        const existing = await this.prisma.user.findUnique({
+            where: { username },
+        });
+        if (existing && existing.email !== email) {
+            throw new Error('이미 사용 중인 닉네임입니다.');
+        }
+        return this.prisma.user.update({
+            where: { email },
+            data: { username },
+        });
+    }
 };
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([

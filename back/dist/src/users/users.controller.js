@@ -16,6 +16,7 @@ exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
 const admin_guard_1 = require("../common/admin.guard");
+const supabase_auth_util_1 = require("../common/supabase-auth.util");
 let UsersController = class UsersController {
     usersService;
     constructor(usersService) {
@@ -26,6 +27,35 @@ let UsersController = class UsersController {
     }
     updateRole(id, role) {
         return this.usersService.updateRole(id, role);
+    }
+    async getMe(authorization) {
+        const { email } = await this.extractUser(authorization);
+        const user = await this.usersService.findByEmail(email);
+        if (!user)
+            throw new common_1.UnauthorizedException('User not found in DB');
+        return user;
+    }
+    async updateUsername(authorization, username) {
+        if (!username || typeof username !== 'string') {
+            throw new common_1.BadRequestException('username is required');
+        }
+        const { email } = await this.extractUser(authorization);
+        try {
+            const updatedUser = await this.usersService.updateUsername(email, username);
+            return { success: true, data: updatedUser };
+        }
+        catch (e) {
+            throw new common_1.BadRequestException(e.message);
+        }
+    }
+    async extractUser(authorization) {
+        if (!authorization?.toLowerCase().startsWith('bearer ')) {
+            throw new common_1.UnauthorizedException('Missing Bearer token.');
+        }
+        const token = authorization.slice(7).trim();
+        if (!token)
+            throw new common_1.UnauthorizedException('Empty Bearer token.');
+        return (0, supabase_auth_util_1.verifySupabaseJwt)(token);
     }
 };
 exports.UsersController = UsersController;
@@ -45,6 +75,21 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "updateRole", null);
+__decorate([
+    (0, common_1.Get)('me'),
+    __param(0, (0, common_1.Headers)('authorization')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getMe", null);
+__decorate([
+    (0, common_1.Patch)('me/username'),
+    __param(0, (0, common_1.Headers)('authorization')),
+    __param(1, (0, common_1.Body)('username')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "updateUsername", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),
     __metadata("design:paramtypes", [users_service_1.UsersService])
