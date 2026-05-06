@@ -14,11 +14,14 @@ interface PostAuthorActionsProps {
 }
 
 export function PostAuthorActions({ postId, authorEmail }: PostAuthorActionsProps) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
   const [isDeleting, setIsDeleting] = useState(false);
 
-  if (!user || user.email !== authorEmail) {
+  if (loading) return null;
+
+  const userEmail = user?.email ?? (user?.user_metadata?.email as string | undefined);
+  if (!userEmail || userEmail !== authorEmail) {
     return null;
   }
 
