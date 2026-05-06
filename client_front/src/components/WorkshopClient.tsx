@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from '@/i18n/routing';
 
 interface Step {
@@ -156,6 +158,9 @@ function StepBody({ body }: { body: string }) {
 export function WorkshopButton({ steps, title, emoji, color }: WorkshopProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -193,126 +198,162 @@ export function WorkshopButton({ steps, title, emoji, color }: WorkshopProps) {
         <span className="relative z-10 drop-shadow-sm">따라하기 (모임 모드)</span>
       </button>
 
-      {isOpen && (
-        <div className="fixed inset-0 z-[100] bg-slate-950 text-white flex flex-col font-['Noto_Sans_KR'] overflow-hidden">
-
-          {/* ── Top bar ── */}
-          <div className="h-16 border-b border-white/10 flex items-center justify-between px-6 bg-slate-900/60 backdrop-blur-xl shrink-0">
-            <div className="flex items-center gap-3 min-w-0">
-              <span className="text-xl shrink-0">{emoji || '🧪'}</span>
-              <span className="font-extrabold text-white/90 text-sm truncate hidden sm:block">{title}</span>
-            </div>
-            <div className="flex items-center gap-3 shrink-0">
-              {/* Step counter pills */}
-              <div className="hidden sm:flex items-center gap-1">
-                {steps.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setCurrentStep(i)}
-                    title={steps[i].heading}
-                    className={`transition-all rounded-full ${
-                      i === currentStep
-                        ? 'w-6 h-2.5 bg-sky-400'
-                        : i < currentStep
-                        ? 'w-2.5 h-2.5 bg-sky-400/40'
-                        : 'w-2.5 h-2.5 bg-white/20 hover:bg-white/40'
-                    }`}
-                  />
-                ))}
-              </div>
-              <span className="text-slate-400 text-sm font-bold tabular-nums">
-                <span className="text-white">{currentStep + 1}</span>/{steps.length}
-              </span>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="w-9 h-9 rounded-full bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white transition-colors flex items-center justify-center"
-              >
-                <span className="material-symbols-outlined text-[20px]">close</span>
-              </button>
-            </div>
-          </div>
-
-          {/* ── Progress bar ── */}
-          <div className="h-1 bg-white/5 w-full shrink-0">
-            <div
-              style={{ width: `${progress}%` }}
-              className={`h-full bg-linear-to-r ${color || 'from-sky-400 to-indigo-500'} transition-all duration-500 ease-out`}
-            />
-          </div>
-
-          {/* ── Slide content ── */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="max-w-4xl mx-auto px-6 py-10 md:py-14">
-
-              {/* Step badge */}
-              <div className="flex items-center gap-3 mb-5">
-                <span className="text-sky-400 font-black text-xs tracking-[0.2em] uppercase border border-sky-400/30 bg-sky-400/10 px-4 py-1.5 rounded-full">
-                  Step {currentStep + 1}
-                </span>
-                <span className="text-slate-500 text-xs font-medium">{currentStep + 1} / {steps.length} 단계</span>
-              </div>
-
-              {/* Heading — auto-shrinks if long */}
-              <h2 className={`font-extrabold leading-tight tracking-tight mb-8 text-white drop-shadow-lg ${
-                step.heading.length > 30 ? 'text-3xl md:text-4xl' : 'text-4xl md:text-5xl lg:text-6xl'
-              }`}>
-                {step.heading}
-              </h2>
-
-              {/* Body */}
-              <div className="bg-white/4 border border-white/8 rounded-3xl p-7 md:p-10 backdrop-blur-sm">
-                <StepBody body={step.body} />
-              </div>
-
-              {/* Keyboard hint (first step only) */}
-              {currentStep === 0 && (
-                <p className="text-center text-slate-600 text-xs mt-6 font-medium">
-                  ← → 키 또는 하단 버튼으로 이동
-                </p>
-              )}
-            </div>
-          </div>
-
-          {/* ── Bottom nav ── */}
-          <div className="h-20 border-t border-white/10 flex items-center justify-between px-6 md:px-12 bg-slate-900/60 backdrop-blur-xl shrink-0">
-            <button
-              onClick={() => setCurrentStep(prev => prev - 1)}
-              disabled={currentStep === 0}
-              className="flex items-center gap-2 px-5 py-3 rounded-full font-bold text-sm disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/10 transition-colors"
+      {mounted && createPortal(
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-2xl text-white flex flex-col font-['Noto_Sans_KR'] overflow-hidden"
             >
-              <span className="material-symbols-outlined text-[20px]">arrow_back</span>
-              이전
-            </button>
+              {/* ── Background Effects ── */}
+              <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-sky-500/10 rounded-full blur-[100px]" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-500/10 rounded-full blur-[100px]" />
+              </div>
 
-            {/* Center: step title preview */}
-            <div className="hidden md:block text-center flex-1 mx-8">
-              {currentStep < steps.length - 1 && (
-                <p className="text-slate-500 text-xs font-medium truncate">
-                  다음: {steps[currentStep + 1].heading}
-                </p>
-              )}
-            </div>
+              {/* ── Progress bar (Top) ── */}
+              <div className="h-1 w-full shrink-0 bg-white/5 relative z-20">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${progress}%` }}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                  className={`h-full bg-linear-to-r ${color || 'from-sky-400 to-indigo-500'}`}
+                />
+              </div>
 
-            {currentStep < steps.length - 1 ? (
-              <button
-                onClick={() => setCurrentStep(prev => prev + 1)}
-                className="flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm bg-white text-slate-900 hover:bg-sky-50 transition-colors shadow-lg"
-              >
-                다음 단계
-                <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
-              </button>
-            ) : (
-              <button
-                onClick={() => setIsOpen(false)}
-                className="flex items-center gap-2 px-6 py-3 rounded-full font-bold text-sm bg-emerald-500 text-white hover:bg-emerald-400 transition-colors shadow-lg"
-              >
-                <span className="material-symbols-outlined text-[20px]">check_circle</span>
-                완료!
-              </button>
-            )}
-          </div>
+              {/* ── Top bar ── */}
+              <div className="h-16 border-b border-white/10 flex items-center justify-between px-6 bg-slate-900/40 shrink-0 relative z-10 shadow-sm">
+                <div className="flex items-center gap-3 min-w-0">
+                  <span className="text-xl shrink-0 drop-shadow-md">{emoji || '🧪'}</span>
+                  <span className="font-extrabold text-white/90 text-sm truncate hidden sm:block tracking-wide">{title}</span>
+                </div>
+                <div className="flex items-center gap-4 shrink-0">
+                  {/* Step counter pills */}
+                  <div className="hidden sm:flex items-center gap-1.5">
+                    {steps.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setCurrentStep(i)}
+                        title={steps[i].heading}
+                        className={`transition-all rounded-full ${
+                          i === currentStep
+                            ? 'w-8 h-2 bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.6)]'
+                            : i < currentStep
+                            ? 'w-2 h-2 bg-sky-400/40 hover:bg-sky-400/60'
+                            : 'w-2 h-2 bg-white/10 hover:bg-white/30'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <div className="bg-white/10 px-3 py-1 rounded-full border border-white/5 text-slate-300 text-xs font-black tabular-nums tracking-widest">
+                    <span className="text-white">{currentStep + 1}</span> / {steps.length}
+                  </div>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="w-9 h-9 rounded-full bg-white/5 text-slate-300 hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center border border-white/10 hover:border-rose-500 hover:shadow-lg hover:shadow-rose-500/20"
+                  >
+                    <span className="material-symbols-outlined text-[20px]">close</span>
+                  </button>
+                </div>
+              </div>
 
-        </div>
+              {/* ── Slide content ── */}
+              <div className="flex-1 overflow-y-auto relative z-10 scrollbar-hide">
+                <div className="max-w-4xl mx-auto px-6 py-10 md:py-16">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currentStep}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.4, ease: 'easeOut' }}
+                    >
+                      {/* Step badge */}
+                      <div className="flex items-center gap-3 mb-6">
+                        <span className="text-sky-300 font-black text-[10px] tracking-[0.25em] uppercase border border-sky-400/20 bg-sky-400/10 px-4 py-1.5 rounded-full shadow-inner">
+                          Step {currentStep + 1}
+                        </span>
+                        <span className="text-slate-400 text-xs font-medium tracking-wide">{currentStep + 1} / {steps.length} 단계</span>
+                      </div>
+
+                      {/* Heading */}
+                      <h2 className={`font-extrabold leading-tight tracking-tight mb-10 text-white drop-shadow-xl ${
+                        step.heading.length > 30 ? 'text-3xl md:text-4xl' : 'text-4xl md:text-5xl lg:text-6xl'
+                      }`}>
+                        {step.heading}
+                      </h2>
+
+                      {/* Body */}
+                      <div className="bg-slate-900/60 border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl backdrop-blur-md">
+                        <StepBody body={step.body} />
+                      </div>
+
+                      {/* Keyboard hint (first step only) */}
+                      {currentStep === 0 && (
+                        <motion.p 
+                          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}
+                          className="text-center text-slate-500 text-xs mt-8 font-medium tracking-widest uppercase"
+                        >
+                          ← → 키 또는 하단 버튼으로 이동
+                        </motion.p>
+                      )}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+              </div>
+
+              {/* ── Bottom nav ── */}
+              <div className="h-24 border-t border-white/10 flex items-center justify-between px-6 md:px-12 bg-slate-900/80 backdrop-blur-2xl shrink-0 relative z-20">
+                <button
+                  onClick={() => setCurrentStep(prev => prev - 1)}
+                  disabled={currentStep === 0}
+                  className="group flex items-center gap-2 px-6 py-3.5 rounded-2xl font-bold text-sm disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/5 border border-transparent hover:border-white/10 transition-all text-slate-300 hover:text-white"
+                >
+                  <span className="material-symbols-outlined text-[20px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                  이전
+                </button>
+
+                {/* Center: step title preview */}
+                <div className="hidden md:block text-center flex-1 mx-8">
+                  {currentStep < steps.length - 1 && (
+                    <motion.p 
+                      key={`next-${currentStep}`}
+                      initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }}
+                      className="text-slate-400 text-sm font-medium truncate flex items-center justify-center gap-2"
+                    >
+                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Next</span>
+                      {steps[currentStep + 1].heading}
+                    </motion.p>
+                  )}
+                </div>
+
+                {currentStep < steps.length - 1 ? (
+                  <button
+                    onClick={() => setCurrentStep(prev => prev + 1)}
+                    className="group flex items-center gap-2 px-8 py-3.5 rounded-2xl font-black text-sm bg-white text-slate-900 hover:bg-sky-50 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] hover:scale-105"
+                  >
+                    다음 단계
+                    <span className="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="group relative flex items-center gap-2 px-8 py-3.5 rounded-2xl font-black text-sm bg-linear-to-r from-emerald-400 to-teal-500 text-white hover:from-emerald-300 hover:to-teal-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] hover:scale-105 overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-white/20 blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <span className="material-symbols-outlined text-[20px] relative z-10 group-hover:rotate-12 transition-transform">celebration</span>
+                    <span className="relative z-10">완료! 닫기</span>
+                  </button>
+                )}
+              </div>
+
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
       )}
     </>
   );
