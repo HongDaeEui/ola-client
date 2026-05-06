@@ -1,9 +1,8 @@
 'use client';
 
-import { useAuth } from '@/context/AuthContext';
 import { useRouter } from '@/i18n/routing';
 import { API_BASE } from '@/lib/api';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 
 const supabase = createClient();
@@ -14,42 +13,35 @@ interface PostAuthorActionsProps {
 }
 
 export function PostAuthorActions({ postId, authorEmail }: PostAuthorActionsProps) {
-  const { user, loading } = useAuth();
   const router = useRouter();
+  const [isOwner, setIsOwner] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  if (loading) return null;
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) return;
+      const email =
+        session.user.email ??
+        (session.user.user_metadata?.email as string | undefined);
+      if (email && email === authorEmail) setIsOwner(true);
+    });
+  }, [authorEmail]);
 
-  const userEmail = user?.email ?? (user?.user_metadata?.email as string | undefined);
-  if (!userEmail || userEmail !== authorEmail) {
-    return null;
-  }
+  if (!isOwner) return null;
 
   const handleDelete = async () => {
-    if (!window.confirm('정말 이 게시글을 삭제하시겠습니까? 복구할 수 없습니다.')) {
-      return;
-    }
-    
+    if (!window.confirm('정말 이 게시글을 삭제하시겠습니까? 복구할 수 없습니다.')) return;
     setIsDeleting(true);
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const token = session?.access_token;
-      
-      if (!token) {
-        alert('로그인이 만료되었습니다.');
-        return;
-      }
+      if (!token) { alert('로그인이 만료되었습니다.'); return; }
 
       const res = await fetch(`${API_BASE}/posts/${postId}/user`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
-
-      if (!res.ok) {
-        throw new Error('삭제에 실패했습니다.');
-      }
+      if (!res.ok) throw new Error('삭제에 실패했습니다.');
 
       alert('게시글이 삭제되었습니다.');
       router.push('/community');
