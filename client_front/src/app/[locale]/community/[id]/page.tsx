@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
 import { ShareButton } from '@/components/ShareButton';
 import { ViewTracker } from '@/components/ViewTracker';
+import { PostAuthorActions } from '@/components/PostAuthorActions';
 import CommentSection from './CommentSection';
 export const revalidate = 300;
 
@@ -13,6 +14,7 @@ export const revalidate = 300;
 interface Author {
   username: string;
   avatarUrl: string | null;
+  email: string;
 }
 
 interface Post {
@@ -145,7 +147,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
                   <p className="text-xs text-slate-400 font-medium">Ola 멤버</p>
                 </div>
               </div>
-              <div className="flex items-center gap-4 text-slate-400 text-sm">
+              <div className="flex flex-wrap items-center gap-4 text-slate-400 text-sm">
                 <div className="flex items-center gap-1.5">
                   <span className="material-symbols-outlined text-[18px]">thumb_up</span>
                   <span className="font-bold">{post.likes}</span>
@@ -154,6 +156,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
                   <span className="material-symbols-outlined text-[18px]">visibility</span>
                   <span className="font-bold">{post.views}</span>
                 </div>
+                <PostAuthorActions postId={post.id} authorEmail={post.author.email} />
               </div>
             </div>
           </div>

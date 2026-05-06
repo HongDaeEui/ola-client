@@ -1,7 +1,6 @@
 import { PostsService } from './posts.service';
 export declare class PostsController {
     private readonly postsService;
-    private readonly logger;
     constructor(postsService: PostsService);
     findAll(category?: string, userEmail?: string, page?: string, limit?: string, admin?: string): import("@prisma/client").Prisma.PrismaPromise<{
         category: string;
@@ -31,6 +30,7 @@ export declare class PostsController {
     }[]>;
     findOne(id: string): Promise<{
         author: {
+            email: string;
             username: string;
             avatarUrl: string | null;
         };
@@ -49,6 +49,39 @@ export declare class PostsController {
         flagReason: string | null;
     }>;
     remove(id: string): Promise<{
+        category: string;
+        createdAt: Date;
+        id: string;
+        likes: number;
+        updatedAt: Date;
+        title: string;
+        content: string;
+        authorId: string;
+        isFlagged: boolean;
+        imageUrl: string | null;
+        views: number;
+        flagReason: string | null;
+    }>;
+    removeByUser(id: string, authorization?: string): Promise<{
+        category: string;
+        createdAt: Date;
+        id: string;
+        likes: number;
+        updatedAt: Date;
+        title: string;
+        content: string;
+        authorId: string;
+        isFlagged: boolean;
+        imageUrl: string | null;
+        views: number;
+        flagReason: string | null;
+    }>;
+    update(id: string, body: {
+        title?: string;
+        content?: string;
+        category?: string;
+        imageUrl?: string | null;
+    }, authorization?: string): Promise<{
         category: string;
         createdAt: Date;
         id: string;
@@ -101,5 +134,5 @@ export declare class PostsController {
         views: number;
         flagReason: string | null;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
-    private requireEmailFromAuthHeader;
+    private extractUser;
 }

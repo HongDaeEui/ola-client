@@ -1,7 +1,6 @@
 import { NotificationsService } from './notifications.service';
 export declare class NotificationsController {
     private readonly notificationsService;
-    private readonly logger;
     constructor(notificationsService: NotificationsService);
     getByUserEmail(authorization?: string): Promise<{
         createdAt: Date;
@@ -31,5 +30,5 @@ export declare class NotificationsController {
         targetTitle: string | null;
         read: boolean;
     }>;
-    private requireEmailFromAuthHeader;
+    private extractUser;
 }

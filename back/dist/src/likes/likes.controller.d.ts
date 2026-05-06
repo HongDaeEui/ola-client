@@ -1,7 +1,6 @@
 import { LikesService } from './likes.service';
 export declare class LikesController {
     private readonly likesService;
-    private readonly logger;
     constructor(likesService: LikesService);
     toggle(body: {
         targetType: string;
@@ -12,5 +11,5 @@ export declare class LikesController {
     getStatus(targetType: string, targetId: string, authorization?: string): Promise<{
         liked: boolean;
     }>;
-    private requireUserIdFromAuthHeader;
+    private extractUser;
 }

@@ -1,7 +1,6 @@
 import { BookmarksService } from './bookmarks.service';
 export declare class BookmarksController {
     private readonly bookmarksService;
-    private readonly logger;
     constructor(bookmarksService: BookmarksService);
     toggle(body: {
         targetType: string;
@@ -20,5 +19,5 @@ export declare class BookmarksController {
         targetType: string;
         targetId: string;
     } | null)[]>;
-    private requireUserIdFromAuthHeader;
+    private extractUser;
 }

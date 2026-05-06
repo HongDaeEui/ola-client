@@ -1,7 +1,6 @@
 import { PromptsService } from './prompts.service';
 export declare class PromptsController {
     private readonly promptsService;
-    private readonly logger;
     constructor(promptsService: PromptsService);
     getPrompts(category?: string, userEmail?: string, page?: string, limit?: string, admin?: string): Promise<({
         author: {
@@ -89,5 +88,5 @@ export declare class PromptsController {
         flagReason: string | null;
         toolName: string;
     }>;
-    private requireEmailFromAuthHeader;
+    private extractUser;
 }

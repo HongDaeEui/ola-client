@@ -50,6 +50,7 @@ let PostsService = class PostsService {
                     select: {
                         username: true,
                         avatarUrl: true,
+                        email: true,
                     },
                 },
             },
@@ -144,6 +145,45 @@ let PostsService = class PostsService {
         });
     }
     async remove(id) {
+        return this.prisma.post.delete({
+            where: { id },
+        });
+    }
+    async update(id, userEmail, data) {
+        const post = await this.prisma.post.findUnique({
+            where: { id },
+            include: { author: true },
+        });
+        if (!post)
+            throw new common_1.NotFoundException(`게시글(${id})을 찾을 수 없습니다.`);
+        if (post.author.email !== userEmail) {
+            throw new Error('권한이 없습니다.');
+        }
+        if (data.content && data.content !== post.content) {
+            this.moderationService.moderatePost(id, data.content).catch((err) => {
+                console.error('Failed to run AI moderation on update', err);
+            });
+        }
+        return this.prisma.post.update({
+            where: { id },
+            data: {
+                ...(data.title ? { title: data.title } : {}),
+                ...(data.content ? { content: data.content } : {}),
+                ...(data.category ? { category: data.category } : {}),
+                ...(data.imageUrl !== undefined ? { imageUrl: data.imageUrl } : {}),
+            },
+        });
+    }
+    async removeByUser(id, userEmail) {
+        const post = await this.prisma.post.findUnique({
+            where: { id },
+            include: { author: true },
+        });
+        if (!post)
+            throw new common_1.NotFoundException(`게시글(${id})을 찾을 수 없습니다.`);
+        if (post.author.email !== userEmail) {
+            throw new Error('권한이 없습니다.');
+        }
         return this.prisma.post.delete({
             where: { id },
         });

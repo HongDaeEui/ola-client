@@ -22,9 +22,15 @@ let CommentsService = class CommentsService {
     }
     findByPost(postId) {
         return this.prisma.comment.findMany({
-            where: { postId },
+            where: { postId, parentId: null },
             include: {
                 author: { select: { username: true, avatarUrl: true, email: true } },
+                replies: {
+                    include: {
+                        author: { select: { username: true, avatarUrl: true, email: true } },
+                    },
+                    orderBy: { createdAt: 'asc' },
+                },
             },
             orderBy: { createdAt: 'asc' },
         });
@@ -42,7 +48,12 @@ let CommentsService = class CommentsService {
             },
         });
         const comment = await this.prisma.comment.create({
-            data: { content: data.content, postId: data.postId, authorId: author.id },
+            data: {
+                content: data.content,
+                postId: data.postId,
+                authorId: author.id,
+                parentId: data.parentId ?? null,
+            },
             include: {
                 author: { select: { username: true, avatarUrl: true, email: true } },
             },
@@ -62,6 +73,19 @@ let CommentsService = class CommentsService {
             }).catch(() => { });
         }
         return comment;
+    }
+    async update(id, userEmail, content) {
+        const user = await this.prisma.user.findUnique({ where: { email: userEmail } });
+        if (!user)
+            return null;
+        const comment = await this.prisma.comment.findUnique({ where: { id } });
+        if (!comment || comment.authorId !== user.id)
+            return null;
+        return this.prisma.comment.update({
+            where: { id },
+            data: { content },
+            include: { author: { select: { username: true, avatarUrl: true, email: true } } },
+        });
     }
     async remove(id, userEmail) {
         const comment = await this.prisma.comment.findUnique({

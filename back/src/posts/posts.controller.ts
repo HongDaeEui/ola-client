@@ -57,6 +57,25 @@ export class PostsController {
     return this.postsService.remove(id);
   }
 
+  @Delete(':id/user')
+  async removeByUser(
+    @Param('id') id: string,
+    @Headers('authorization') authorization?: string,
+  ) {
+    const { email } = await this.extractUser(authorization);
+    return this.postsService.removeByUser(id, email);
+  }
+
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() body: { title?: string; content?: string; category?: string; imageUrl?: string | null },
+    @Headers('authorization') authorization?: string,
+  ) {
+    const { email } = await this.extractUser(authorization);
+    return this.postsService.update(id, email, body);
+  }
+
   @Throttle({ default: { limit: 10, ttl: 60000 } })
   @Post()
   async create(

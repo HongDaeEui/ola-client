@@ -27,6 +27,7 @@ export declare class PostsService {
     })[]>;
     findOne(id: string): Promise<{
         author: {
+            email: string;
             username: string;
             avatarUrl: string | null;
         };
@@ -111,6 +112,39 @@ export declare class PostsService {
         views: number;
     }[]>;
     remove(id: string): Promise<{
+        category: string;
+        createdAt: Date;
+        id: string;
+        likes: number;
+        updatedAt: Date;
+        title: string;
+        content: string;
+        authorId: string;
+        isFlagged: boolean;
+        imageUrl: string | null;
+        views: number;
+        flagReason: string | null;
+    }>;
+    update(id: string, userEmail: string, data: {
+        title?: string;
+        content?: string;
+        category?: string;
+        imageUrl?: string | null;
+    }): Promise<{
+        category: string;
+        createdAt: Date;
+        id: string;
+        likes: number;
+        updatedAt: Date;
+        title: string;
+        content: string;
+        authorId: string;
+        isFlagged: boolean;
+        imageUrl: string | null;
+        views: number;
+        flagReason: string | null;
+    }>;
+    removeByUser(id: string, userEmail: string): Promise<{
         category: string;
         createdAt: Date;
         id: string;

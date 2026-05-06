@@ -2,7 +2,6 @@ import { MeetupsService } from './meetups.service';
 import { CreateMeetupDto } from './dto/create-meetup.dto';
 export declare class MeetupsController {
     private readonly meetupsService;
-    private readonly logger;
     constructor(meetupsService: MeetupsService);
     create(dto: CreateMeetupDto, authorization?: string): Promise<{
         status: string;
@@ -85,5 +84,5 @@ export declare class MeetupsController {
     getStatus(id: string, authorization?: string): Promise<{
         attending: boolean;
     }>;
-    private requireEmailFromAuthHeader;
+    private extractUser;
 }

@@ -39,6 +39,7 @@ export class PostsService {
           select: {
             username: true,
             avatarUrl: true,
+            email: true,
           },
         },
       },
@@ -153,6 +154,54 @@ export class PostsService {
   }
 
   async remove(id: string) {
+    return this.prisma.post.delete({
+      where: { id },
+    });
+  }
+
+  async update(id: string, userEmail: string, data: {
+    title?: string;
+    content?: string;
+    category?: string;
+    imageUrl?: string | null;
+  }) {
+    const post = await this.prisma.post.findUnique({
+      where: { id },
+      include: { author: true },
+    });
+    if (!post) throw new NotFoundException(`게시글(${id})을 찾을 수 없습니다.`);
+    if (post.author.email !== userEmail) {
+      throw new Error('권한이 없습니다.');
+    }
+    
+    // AI 모더레이션 재검사가 필요하다면 여기서 비동기 호출 (생략 가능)
+    if (data.content && data.content !== post.content) {
+      this.moderationService.moderatePost(id, data.content).catch((err) => {
+        console.error('Failed to run AI moderation on update', err);
+      });
+    }
+
+    return this.prisma.post.update({
+      where: { id },
+      data: {
+        ...(data.title ? { title: data.title } : {}),
+        ...(data.content ? { content: data.content } : {}),
+        ...(data.category ? { category: data.category } : {}),
+        ...(data.imageUrl !== undefined ? { imageUrl: data.imageUrl } : {}),
+      },
+    });
+  }
+
+  async removeByUser(id: string, userEmail: string) {
+    const post = await this.prisma.post.findUnique({
+      where: { id },
+      include: { author: true },
+    });
+    if (!post) throw new NotFoundException(`게시글(${id})을 찾을 수 없습니다.`);
+    if (post.author.email !== userEmail) {
+      throw new Error('권한이 없습니다.');
+    }
+
     return this.prisma.post.delete({
       where: { id },
     });

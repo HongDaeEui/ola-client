@@ -10,18 +10,36 @@ export declare class CommentsService {
             username: string;
             avatarUrl: string | null;
         };
+        replies: ({
+            author: {
+                email: string;
+                username: string;
+                avatarUrl: string | null;
+            };
+        } & {
+            createdAt: Date;
+            id: string;
+            updatedAt: Date;
+            content: string;
+            authorId: string;
+            postId: string;
+            parentId: string | null;
+        })[];
     } & {
         createdAt: Date;
         id: string;
+        updatedAt: Date;
         content: string;
         authorId: string;
         postId: string;
+        parentId: string | null;
     })[]>;
     create(data: {
         content: string;
         postId: string;
         userEmail: string;
         userName: string;
+        parentId?: string;
     }): Promise<{
         author: {
             email: string;
@@ -31,15 +49,34 @@ export declare class CommentsService {
     } & {
         createdAt: Date;
         id: string;
+        updatedAt: Date;
         content: string;
         authorId: string;
         postId: string;
+        parentId: string | null;
     }>;
+    update(id: string, userEmail: string, content: string): Promise<({
+        author: {
+            email: string;
+            username: string;
+            avatarUrl: string | null;
+        };
+    } & {
+        createdAt: Date;
+        id: string;
+        updatedAt: Date;
+        content: string;
+        authorId: string;
+        postId: string;
+        parentId: string | null;
+    }) | null>;
     remove(id: string, userEmail: string): Promise<{
         createdAt: Date;
         id: string;
+        updatedAt: Date;
         content: string;
         authorId: string;
         postId: string;
+        parentId: string | null;
     } | null>;
 }
