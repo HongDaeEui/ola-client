@@ -44,8 +44,7 @@ export function PostAuthorActions({ postId, authorEmail }: PostAuthorActionsProp
       if (!res.ok) throw new Error('삭제에 실패했습니다.');
 
       alert('게시글이 삭제되었습니다.');
-      router.push('/community');
-      router.refresh();
+      window.location.href = '/ko/community';
     } catch (err) {
       alert((err as Error).message || '삭제 중 오류가 발생했습니다.');
     } finally {
