@@ -5,6 +5,9 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: 'Ola AI Community - The Luminous Horizon',
   description: 'A community-driven ecosystem designed for luminous thinkers, creators, and builders in the age of artificial intelligence.',
+  verification: {
+    google: 'XeJUenidK3zxi-QwS68OUHg84PwHK-ug8g6XhGuFCWM',
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
