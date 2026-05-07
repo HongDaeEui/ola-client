@@ -25,16 +25,21 @@ function sample(arr) {
 }
 
 const FAKE_USERS = [
-  { email: 'user1@olalab.kr', username: 'AI_Explorer', name: '김지훈' },
-  { email: 'user2@olalab.kr', username: 'Creative_Mind', name: '이수아' },
-  { email: 'user3@olalab.kr', username: 'Dev_Master', name: '박민석' },
-  { email: 'user4@olalab.kr', username: 'Design_Guru', name: '최유진' },
-  { email: 'user5@olalab.kr', username: 'Data_Nerd', name: '정현우' },
-  { email: 'user6@olalab.kr', username: 'Marketing_Pro', name: '강서연' },
-  { email: 'user7@olalab.kr', username: 'Startup_Hustler', name: '윤도현' },
-  { email: 'user8@olalab.kr', username: 'Tech_Enthusiast', name: '임예은' },
-  { email: 'user9@olalab.kr', username: 'Future_Creator', name: '한건희' },
-  { email: 'user10@olalab.kr', username: 'Prompt_Engineer', name: '송지아' },
+  { email: 'user1@olalab.kr', username: 'AI_Explorer', name: '프롬프트장인' },
+  { email: 'user2@olalab.kr', username: 'Creative_Mind', name: '코딩하는고양이' },
+  { email: 'user3@olalab.kr', username: 'Dev_Master', name: '퇴근좀시켜줘' },
+  { email: 'user4@olalab.kr', username: 'Design_Guru', name: 'AI로월천벌기' },
+  { email: 'user5@olalab.kr', username: 'Data_Nerd', name: '밤샘개발자' },
+  { email: 'user6@olalab.kr', username: 'Marketing_Pro', name: '감자튀김' },
+  { email: 'user7@olalab.kr', username: 'Startup_Hustler', name: '초보마케터' },
+  { email: 'user8@olalab.kr', username: 'Tech_Enthusiast', name: '디자인깎는노인' },
+  { email: 'user9@olalab.kr', username: 'Future_Creator', name: '일하기싫은직장인' },
+  { email: 'user10@olalab.kr', username: 'Prompt_Engineer', name: 'GPT마스터' },
+  { email: 'user11@olalab.kr', username: 'Cool_Cat', name: '코드짜는기계' },
+  { email: 'user12@olalab.kr', username: 'Night_Owl', name: '오류해결사' },
+  { email: 'user13@olalab.kr', username: 'Coffee_Lover', name: '카페인중독자' },
+  { email: 'user14@olalab.kr', username: 'Pixel_Art', name: '그림그리는AI' },
+  { email: 'user15@olalab.kr', username: 'AI_Newbie', name: '인공지능뉴비' },
 ];
 
 const TOOLS = ['ChatGPT 4o', 'Claude 3.5 Sonnet', 'Midjourney v6', 'Notion AI', 'Cursor', 'Vercel v0', 'n8n', 'Suno v4', 'Runway Gen-3', 'Kling AI', 'Perplexity', 'NotebookLM', 'Gamma', 'Canva AI', 'Copilot'];
