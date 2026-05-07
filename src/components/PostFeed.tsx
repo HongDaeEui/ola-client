@@ -135,9 +135,6 @@ export function PostFeed({ initialPosts, category }: Props) {
                     <span className="text-[13px] font-extrabold text-slate-800 dark:text-slate-200 leading-tight">
                       {post.author?.name || '익명 사용자'}
                     </span>
-                    <span className="text-[11px] font-bold text-slate-400">
-                      @{post.author?.username}
-                    </span>
                   </div>
                 </div>
                 <div className="flex items-center gap-4 text-slate-400">

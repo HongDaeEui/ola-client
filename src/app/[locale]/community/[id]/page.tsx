@@ -13,6 +13,7 @@ export const revalidate = 300;
 
 interface Author {
   username: string;
+  name?: string | null;
   avatarUrl: string | null;
   email: string;
 }
@@ -140,10 +141,12 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-linear-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold uppercase text-sm">
-                  {post.author?.username?.charAt(0) || '?'}
+                  {post.author?.name?.charAt(0) || post.author?.username?.charAt(0) || '?'}
                 </div>
                 <div>
-                  <p className="font-bold text-slate-900 dark:text-white text-sm">@{post.author?.username}</p>
+                  <p className="font-bold text-slate-900 dark:text-white text-sm">
+                    {post.author?.name || '익명 사용자'}
+                  </p>
                   <p className="text-xs text-slate-400 font-medium">Ola 멤버</p>
                 </div>
               </div>
