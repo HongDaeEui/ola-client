@@ -27,6 +27,7 @@ const comments_module_1 = require("./comments/comments.module");
 const notifications_module_1 = require("./notifications/notifications.module");
 const users_module_1 = require("./users/users.module");
 const moderation_module_1 = require("./moderation/moderation.module");
+const telegram_module_1 = require("./telegram/telegram.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -55,6 +56,7 @@ exports.AppModule = AppModule = __decorate([
             notifications_module_1.NotificationsModule,
             users_module_1.UsersModule,
             moderation_module_1.ModerationModule,
+            telegram_module_1.TelegramModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [

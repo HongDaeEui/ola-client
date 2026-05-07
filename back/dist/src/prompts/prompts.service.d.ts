@@ -1,9 +1,11 @@
 import { PrismaService } from '../prisma/prisma.service';
 import { ModerationService } from '../moderation/moderation.service';
+import { TelegramService } from '../telegram/telegram.service';
 export declare class PromptsService {
     private prisma;
     private moderationService;
-    constructor(prisma: PrismaService, moderationService: ModerationService);
+    private telegramService;
+    constructor(prisma: PrismaService, moderationService: ModerationService, telegramService: TelegramService);
     findAll(filters?: {
         category?: string;
         userEmail?: string;

@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ToolsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const telegram_service_1 = require("../telegram/telegram.service");
 const TOOL_LIST_SELECT = {
     id: true,
     name: true,
@@ -42,8 +43,10 @@ function applyLogoUrl(tool) {
 }
 let ToolsService = class ToolsService {
     prisma;
-    constructor(prisma) {
+    telegramService;
+    constructor(prisma, telegramService) {
         this.prisma = prisma;
+        this.telegramService = telegramService;
     }
     async findAll(filters) {
         const where = { status: 'ACTIVE' };
@@ -142,18 +145,25 @@ let ToolsService = class ToolsService {
         return related.map(applyLogoUrl);
     }
     async create(data) {
-        return this.prisma.tool.create({
+        const tool = await this.prisma.tool.create({
             data: {
                 ...data,
                 status: 'PENDING',
                 tags: data.tags ?? [],
             },
         });
+        this.telegramService.sendToolSubmitNotification({
+            title: tool.name,
+            description: tool.shortDesc,
+            websiteUrl: tool.launchUrl,
+        }).catch(() => { });
+        return tool;
     }
 };
 exports.ToolsService = ToolsService;
 exports.ToolsService = ToolsService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        telegram_service_1.TelegramService])
 ], ToolsService);
 //# sourceMappingURL=tools.service.js.map

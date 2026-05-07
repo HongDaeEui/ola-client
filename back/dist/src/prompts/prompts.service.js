@@ -13,12 +13,15 @@ exports.PromptsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
 const moderation_service_1 = require("../moderation/moderation.service");
+const telegram_service_1 = require("../telegram/telegram.service");
 let PromptsService = class PromptsService {
     prisma;
     moderationService;
-    constructor(prisma, moderationService) {
+    telegramService;
+    constructor(prisma, moderationService, telegramService) {
         this.prisma = prisma;
         this.moderationService = moderationService;
+        this.telegramService = telegramService;
     }
     async findAll(filters, skip = 0, take, includeFlagged = false) {
         const where = {};
@@ -89,6 +92,11 @@ let PromptsService = class PromptsService {
         this.moderationService.moderatePrompt(prompt.id, prompt.content).catch((err) => {
             console.error('Failed to run AI moderation', err);
         });
+        this.telegramService.sendPromptSubmitNotification({
+            title: prompt.title,
+            model: prompt.toolName,
+            content: prompt.content,
+        }).catch(() => { });
         return prompt;
     }
     async remove(id) {
@@ -101,6 +109,7 @@ exports.PromptsService = PromptsService;
 exports.PromptsService = PromptsService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        moderation_service_1.ModerationService])
+        moderation_service_1.ModerationService,
+        telegram_service_1.TelegramService])
 ], PromptsService);
 //# sourceMappingURL=prompts.service.js.map

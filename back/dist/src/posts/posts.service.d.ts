@@ -8,6 +8,7 @@ export declare class PostsService {
     constructor(prisma: PrismaService, notificationsService: NotificationsService, moderationService: ModerationService);
     findAll(category?: string, skip?: number, take?: number, includeFlagged?: boolean): import("@prisma/client").Prisma.PrismaPromise<({
         author: {
+            name: string | null;
             username: string;
             avatarUrl: string | null;
         };
@@ -27,6 +28,7 @@ export declare class PostsService {
     })[]>;
     findOne(id: string): Promise<{
         author: {
+            name: string | null;
             email: string;
             username: string;
             avatarUrl: string | null;
@@ -54,6 +56,7 @@ export declare class PostsService {
         userName: string;
     }): Promise<{
         author: {
+            name: string | null;
             username: string;
             avatarUrl: string | null;
         };
@@ -78,6 +81,7 @@ export declare class PostsService {
         likes: number;
         title: string;
         author: {
+            name: string | null;
             username: string;
             avatarUrl: string | null;
         };

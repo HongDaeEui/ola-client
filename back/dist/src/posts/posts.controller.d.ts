@@ -17,6 +17,7 @@ export declare class PostsController {
         likes: number;
         title: string;
         author: {
+            name: string | null;
             username: string;
             avatarUrl: string | null;
         };
@@ -30,6 +31,7 @@ export declare class PostsController {
     }[]>;
     findOne(id: string): Promise<{
         author: {
+            name: string | null;
             email: string;
             username: string;
             avatarUrl: string | null;
@@ -103,6 +105,7 @@ export declare class PostsController {
         userName: string;
     }, authorization?: string): Promise<{
         author: {
+            name: string | null;
             username: string;
             avatarUrl: string | null;
         };

@@ -1,7 +1,9 @@
 import { PrismaService } from '../prisma/prisma.service';
+import { TelegramService } from '../telegram/telegram.service';
 export declare class ToolsService {
     private prisma;
-    constructor(prisma: PrismaService);
+    private telegramService;
+    constructor(prisma: PrismaService, telegramService: TelegramService);
     findAll(filters?: {
         category?: string;
         pricing?: string;

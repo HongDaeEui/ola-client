@@ -34,6 +34,7 @@ let PostsService = class PostsService {
                     select: {
                         username: true,
                         avatarUrl: true,
+                        name: true,
                     },
                 },
             },
@@ -50,6 +51,7 @@ let PostsService = class PostsService {
                     select: {
                         username: true,
                         avatarUrl: true,
+                        name: true,
                         email: true,
                     },
                 },
@@ -81,7 +83,7 @@ let PostsService = class PostsService {
             },
             include: {
                 author: {
-                    select: { username: true, avatarUrl: true },
+                    select: { username: true, avatarUrl: true, name: true },
                 },
             },
         });
@@ -102,7 +104,7 @@ let PostsService = class PostsService {
                 likes: true,
                 views: true,
                 createdAt: true,
-                author: { select: { username: true, avatarUrl: true } },
+                author: { select: { username: true, avatarUrl: true, name: true } },
             },
         });
     }
