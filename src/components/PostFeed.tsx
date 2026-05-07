@@ -8,6 +8,7 @@ const LIMIT = 10;
 
 interface Author {
   username: string;
+  name?: string | null;
   avatarUrl: string | null;
 }
 
@@ -126,11 +127,18 @@ export function PostFeed({ initialPosts, category }: Props) {
                 {post.content}
               </p>
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-linear-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-[10px] font-bold text-white uppercase">
-                    {post.author?.username?.charAt(0) || '?'}
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-linear-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-[11px] font-black text-white uppercase shadow-sm">
+                    {post.author?.name?.charAt(0) || post.author?.username?.charAt(0) || '?'}
                   </div>
-                  <span className="text-sm font-bold text-slate-600 dark:text-slate-400">@{post.author?.username}</span>
+                  <div className="flex flex-col">
+                    <span className="text-[13px] font-extrabold text-slate-800 dark:text-slate-200 leading-tight">
+                      {post.author?.name || '익명 사용자'}
+                    </span>
+                    <span className="text-[11px] font-bold text-slate-400">
+                      @{post.author?.username}
+                    </span>
+                  </div>
                 </div>
                 <div className="flex items-center gap-4 text-slate-400">
                   <div className="flex items-center gap-1">
