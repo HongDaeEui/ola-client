@@ -51,7 +51,7 @@ export default function WritePage() {
     const e: Record<string, string> = {};
     if (!title.trim()) e.title = '제목을 입력해주세요.';
     if (!category) e.category = '카테고리를 선택해주세요.';
-    if (content.trim().length < 20) e.content = `본문을 최소 20자 이상 작성해주세요. (현재 ${content.trim().length}자)`;
+    if (!content.trim()) e.content = '본문을 작성해주세요.';
     setErrors(e);
     return Object.keys(e).length === 0;
   }
@@ -213,7 +213,7 @@ export default function WritePage() {
                 ) : (
                   <p className="text-xs text-slate-400">마크다운 미지원 · 줄바꿈으로 단락 구분</p>
                 )}
-                <span className={`text-xs font-bold ${charCount >= 20 ? 'text-emerald-500' : 'text-slate-400'}`}>
+                <span className="text-xs font-bold text-slate-400">
                   {charCount}자
                 </span>
               </div>
