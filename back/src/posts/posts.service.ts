@@ -22,6 +22,7 @@ export class PostsService {
           select: {
             username: true,
             avatarUrl: true,
+            name: true,
           },
         },
       },
@@ -39,6 +40,7 @@ export class PostsService {
           select: {
             username: true,
             avatarUrl: true,
+            name: true,
             email: true,
           },
         },
@@ -77,7 +79,7 @@ export class PostsService {
       },
       include: {
         author: {
-          select: { username: true, avatarUrl: true },
+          select: { username: true, avatarUrl: true, name: true },
         },
       },
     });
@@ -107,7 +109,7 @@ export class PostsService {
         likes: true,
         views: true,
         createdAt: true,
-        author: { select: { username: true, avatarUrl: true } },
+        author: { select: { username: true, avatarUrl: true, name: true } },
       },
     });
   }

@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { TelegramService } from '../telegram/telegram.service';
 
 // 목록 API 공통 select: description 제외하여 페이로드 최소화
 const TOOL_LIST_SELECT = {
@@ -34,7 +35,10 @@ function applyLogoUrl<T extends { iconUrl?: string | null }>(tool: T): T {
 
 @Injectable()
 export class ToolsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private telegramService: TelegramService,
+  ) {}
 
   async findAll(filters?: { category?: string; pricing?: string; tags?: string; sort?: string }) {
     const where: Record<string, unknown> = { status: 'ACTIVE' };
@@ -157,12 +161,21 @@ export class ToolsService {
     pricingModel?: string;
     tags?: string[];
   }) {
-    return this.prisma.tool.create({
+    const tool = await this.prisma.tool.create({
       data: {
         ...data,
         status: 'PENDING',
         tags: data.tags ?? [],
       },
     });
+
+    // Send Telegram notification asynchronously
+    this.telegramService.sendToolSubmitNotification({
+      title: tool.name,
+      description: tool.shortDesc,
+      websiteUrl: tool.launchUrl,
+    }).catch(() => {});
+
+    return tool;
   }
 }
