@@ -14,7 +14,7 @@ interface Comment {
   createdAt: string;
   updatedAt?: string;
   parentId?: string | null;
-  author: { username: string; avatarUrl?: string; email: string };
+  author: { username: string; avatarUrl?: string; email: string; name?: string | null };
   replies?: Comment[];
 }
 
@@ -241,10 +241,12 @@ export default function CommentSection({ postId }: { postId: string }) {
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2.5 mb-2">
             <div className="w-7 h-7 rounded-full bg-linear-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold text-[10px] uppercase shrink-0">
-              {reply.author.username.charAt(0)}
+              {reply.author.name?.charAt(0) || reply.author.username.charAt(0)}
             </div>
             <div>
-              <span className="text-sm font-bold text-slate-900 dark:text-white">@{reply.author.username}</span>
+              <span className="text-sm font-bold text-slate-900 dark:text-white">
+                {reply.author.name || '익명 사용자'}
+              </span>
               <span className="text-xs text-slate-400 ml-2">{timeAgo(reply.createdAt)}</span>
               {reply.updatedAt && reply.updatedAt !== reply.createdAt && (
                 <span className="text-xs text-slate-400 ml-1">(수정됨)</span>
@@ -334,10 +336,12 @@ export default function CommentSection({ postId }: { postId: string }) {
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2.5 mb-2">
                     <div className="w-8 h-8 rounded-full bg-linear-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold text-xs uppercase shrink-0">
-                      {c.author.username.charAt(0)}
+                      {c.author.name?.charAt(0) || c.author.username.charAt(0)}
                     </div>
                     <div>
-                      <span className="text-sm font-bold text-slate-900 dark:text-white">@{c.author.username}</span>
+                      <span className="text-sm font-bold text-slate-900 dark:text-white">
+                        {c.author.name || '익명 사용자'}
+                      </span>
                       <span className="text-xs text-slate-400 ml-2">{timeAgo(c.createdAt)}</span>
                       {c.updatedAt && c.updatedAt !== c.createdAt && (
                         <span className="text-xs text-slate-400 ml-1">(수정됨)</span>

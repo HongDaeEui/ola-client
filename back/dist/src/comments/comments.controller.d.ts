@@ -6,31 +6,33 @@ export declare class CommentsController {
         author: {
             email: string;
             username: string;
+            name: string | null;
             avatarUrl: string | null;
         };
         replies: ({
             author: {
                 email: string;
                 username: string;
+                name: string | null;
                 avatarUrl: string | null;
             };
         } & {
-            createdAt: Date;
             id: string;
-            updatedAt: Date;
             content: string;
-            authorId: string;
             postId: string;
+            authorId: string;
             parentId: string | null;
+            updatedAt: Date;
+            createdAt: Date;
         })[];
     } & {
-        createdAt: Date;
         id: string;
-        updatedAt: Date;
         content: string;
-        authorId: string;
         postId: string;
+        authorId: string;
         parentId: string | null;
+        updatedAt: Date;
+        createdAt: Date;
     })[]>;
     create(body: {
         content: string;
@@ -41,16 +43,17 @@ export declare class CommentsController {
         author: {
             email: string;
             username: string;
+            name: string | null;
             avatarUrl: string | null;
         };
     } & {
-        createdAt: Date;
         id: string;
-        updatedAt: Date;
         content: string;
-        authorId: string;
         postId: string;
+        authorId: string;
         parentId: string | null;
+        updatedAt: Date;
+        createdAt: Date;
     }>;
     update(id: string, body: {
         content: string;
@@ -58,25 +61,26 @@ export declare class CommentsController {
         author: {
             email: string;
             username: string;
+            name: string | null;
             avatarUrl: string | null;
         };
     } & {
-        createdAt: Date;
         id: string;
-        updatedAt: Date;
         content: string;
-        authorId: string;
         postId: string;
+        authorId: string;
         parentId: string | null;
+        updatedAt: Date;
+        createdAt: Date;
     }>;
     remove(id: string, authorization?: string): Promise<{
-        createdAt: Date;
         id: string;
-        updatedAt: Date;
         content: string;
-        authorId: string;
         postId: string;
+        authorId: string;
         parentId: string | null;
+        updatedAt: Date;
+        createdAt: Date;
     }>;
     private extractUser;
 }

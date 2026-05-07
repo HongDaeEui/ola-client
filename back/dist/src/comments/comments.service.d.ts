@@ -8,31 +8,33 @@ export declare class CommentsService {
         author: {
             email: string;
             username: string;
+            name: string | null;
             avatarUrl: string | null;
         };
         replies: ({
             author: {
                 email: string;
                 username: string;
+                name: string | null;
                 avatarUrl: string | null;
             };
         } & {
-            createdAt: Date;
             id: string;
-            updatedAt: Date;
             content: string;
-            authorId: string;
             postId: string;
+            authorId: string;
             parentId: string | null;
+            updatedAt: Date;
+            createdAt: Date;
         })[];
     } & {
-        createdAt: Date;
         id: string;
-        updatedAt: Date;
         content: string;
-        authorId: string;
         postId: string;
+        authorId: string;
         parentId: string | null;
+        updatedAt: Date;
+        createdAt: Date;
     })[]>;
     create(data: {
         content: string;
@@ -44,39 +46,41 @@ export declare class CommentsService {
         author: {
             email: string;
             username: string;
+            name: string | null;
             avatarUrl: string | null;
         };
     } & {
-        createdAt: Date;
         id: string;
-        updatedAt: Date;
         content: string;
-        authorId: string;
         postId: string;
+        authorId: string;
         parentId: string | null;
+        updatedAt: Date;
+        createdAt: Date;
     }>;
     update(id: string, userEmail: string, content: string): Promise<({
         author: {
             email: string;
             username: string;
+            name: string | null;
             avatarUrl: string | null;
         };
     } & {
-        createdAt: Date;
         id: string;
-        updatedAt: Date;
         content: string;
-        authorId: string;
         postId: string;
+        authorId: string;
         parentId: string | null;
+        updatedAt: Date;
+        createdAt: Date;
     }) | null>;
     remove(id: string, userEmail: string): Promise<{
-        createdAt: Date;
         id: string;
-        updatedAt: Date;
         content: string;
-        authorId: string;
         postId: string;
+        authorId: string;
         parentId: string | null;
+        updatedAt: Date;
+        createdAt: Date;
     } | null>;
 }

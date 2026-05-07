@@ -24,10 +24,10 @@ let CommentsService = class CommentsService {
         return this.prisma.comment.findMany({
             where: { postId, parentId: null },
             include: {
-                author: { select: { username: true, avatarUrl: true, email: true } },
+                author: { select: { username: true, avatarUrl: true, email: true, name: true } },
                 replies: {
                     include: {
-                        author: { select: { username: true, avatarUrl: true, email: true } },
+                        author: { select: { username: true, avatarUrl: true, email: true, name: true } },
                     },
                     orderBy: { createdAt: 'asc' },
                 },
@@ -55,7 +55,7 @@ let CommentsService = class CommentsService {
                 parentId: data.parentId ?? null,
             },
             include: {
-                author: { select: { username: true, avatarUrl: true, email: true } },
+                author: { select: { username: true, avatarUrl: true, email: true, name: true } },
             },
         });
         const post = await this.prisma.post.findUnique({
@@ -84,7 +84,7 @@ let CommentsService = class CommentsService {
         return this.prisma.comment.update({
             where: { id },
             data: { content },
-            include: { author: { select: { username: true, avatarUrl: true, email: true } } },
+            include: { author: { select: { username: true, avatarUrl: true, email: true, name: true } } },
         });
     }
     async remove(id, userEmail) {
