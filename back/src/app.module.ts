@@ -18,6 +18,7 @@ import { CommentsModule } from './comments/comments.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { UsersModule } from './users/users.module';
 import { ModerationModule } from './moderation/moderation.module';
+import { TelegramModule } from './telegram/telegram.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { ModerationModule } from './moderation/moderation.module';
     NotificationsModule,
     UsersModule,
     ModerationModule,
+    TelegramModule,
   ],
   controllers: [AppController],
   providers: [

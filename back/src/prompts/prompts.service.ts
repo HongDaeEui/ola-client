@@ -1,12 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ModerationService } from '../moderation/moderation.service';
+import { TelegramService } from '../telegram/telegram.service';
 
 @Injectable()
 export class PromptsService {
   constructor(
     private prisma: PrismaService,
     private moderationService: ModerationService,
+    private telegramService: TelegramService,
   ) {}
 
   async findAll(filters?: { category?: string; userEmail?: string }, skip = 0, take?: number, includeFlagged = false) {
@@ -86,6 +88,13 @@ export class PromptsService {
     this.moderationService.moderatePrompt(prompt.id, prompt.content).catch((err) => {
       console.error('Failed to run AI moderation', err);
     });
+
+    // 텔레그램 알림 비동기 전송
+    this.telegramService.sendPromptSubmitNotification({
+      title: prompt.title,
+      model: prompt.toolName,
+      content: prompt.content,
+    }).catch(() => {});
 
     return prompt;
   }
