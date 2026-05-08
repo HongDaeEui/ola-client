@@ -47,7 +47,15 @@ function HeroSection({ tools }: { tools: { name: string; iconUrl?: string }[] })
   };
 
   return (
-    <section className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 pt-28 pb-20 px-4 sm:px-6 text-center">
+    <section className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 pt-28 pb-20 px-4 sm:px-6 text-center relative overflow-hidden">
+      {/* Announcement Banner */}
+      <motion.div variants={fadeUp} className="absolute top-0 left-0 right-0 z-10 bg-linear-to-r from-sky-500 to-indigo-600 text-white py-2.5 px-4 text-sm font-bold shadow-md">
+        <Link href="/labs" className="flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+          <span className="material-symbols-outlined text-[16px]">campaign</span>
+          [공지] 26년 5월 오프라인 실험실(Labs) 모임 신청 안내 - 선착순 마감 주의! 👉 참여하기
+        </Link>
+      </motion.div>
+
       <motion.div
         className="max-w-4xl mx-auto space-y-5"
         variants={container}
@@ -214,6 +222,66 @@ export default function HomeClient({ tools, posts, categories, marqueeTools }: H
               <Link href="/tools?sort=rating" className="hidden sm:flex text-xs font-bold text-sky-600 hover:underline whitespace-nowrap">
                 전체 보기 →
               </Link>
+            </div>
+          </ScrollReveal>
+
+          {/* Trending Today Section (Mobile & Desktop) */}
+          <ScrollReveal delay={0.1}>
+            <div className="mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-[0_2px_10px_rgba(0,0,0,0.03)] dark:shadow-none">
+              <div className="flex flex-col md:flex-row gap-6">
+                
+                {/* Today's Popular Tools */}
+                <div className="flex-1">
+                  <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm mb-3 flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-rose-500 text-[18px]">local_fire_department</span>
+                    🔥 오늘의 인기 도구
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {trendTools.slice(0, 3).map(tool => (
+                      <Link key={tool.id} href={`/tools/${tool.id}`} className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 hover:border-sky-300 dark:hover:border-sky-600 transition-colors group">
+                        {tool.iconUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={tool.iconUrl} alt={tool.name} className="w-10 h-10 rounded-lg object-contain bg-white shrink-0" />
+                        ) : (
+                          <div className="w-10 h-10 rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center font-bold text-xs shrink-0">{tool.name.substring(0, 2)}</div>
+                        )}
+                        <div className="min-w-0">
+                          <p className="font-bold text-sm text-slate-700 dark:text-slate-200 truncate group-hover:text-sky-600 transition-colors">{tool.name}</p>
+                          <div className="flex items-center text-[10px] text-slate-400 gap-1 font-bold">
+                            <span className="material-symbols-outlined text-[12px] text-amber-400">star</span>
+                            {tool.rating.toFixed(1)}
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {/* This Week's Best Posts */}
+                <div className="flex-1 border-t md:border-t-0 md:border-l border-slate-100 dark:border-slate-800 pt-5 md:pt-0 md:pl-6">
+                  <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm mb-3 flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-amber-500 text-[18px]">emoji_events</span>
+                    🏆 이번 주 베스트 글
+                  </h3>
+                  <ul className="space-y-2">
+                    {posts.slice(0, 3).map((post, idx) => (
+                      <li key={post.id}>
+                        <Link href={`/community/${post.id}`} className="flex items-start gap-2.5 group p-2 -mx-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                          <span className={`w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 ${idx === 0 ? 'bg-amber-100 text-amber-600' : idx === 1 ? 'bg-slate-200 text-slate-600' : 'bg-orange-100 text-orange-600'}`}>{idx + 1}</span>
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-sky-600 transition-colors line-clamp-1">{post.title}</p>
+                            <div className="flex items-center gap-2 mt-0.5 text-[10px] text-slate-400">
+                              <span className="font-medium text-slate-500 dark:text-slate-400">{post.author.username}</span>
+                              <span className="flex items-center gap-0.5"><span className="material-symbols-outlined text-[11px]">visibility</span>{post.views}</span>
+                            </div>
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+              </div>
             </div>
           </ScrollReveal>
 
