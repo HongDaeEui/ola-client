@@ -65,8 +65,8 @@ export default async function CategoriesPage({ params }: { params: Promise<{ loc
                 href={`/tools?category=${encodeURIComponent(cat.category)}`}
                 className="group relative bg-slate-50 rounded-3xl p-8 border border-slate-100 hover:border-sky-300 hover:bg-white hover:shadow-2xl hover:shadow-sky-100 transition-all overflow-hidden"
               >
-                <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${meta.color} opacity-[0.03] group-hover:opacity-10 transition-opacity rounded-bl-[100px]`} />
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${meta.color} flex items-center justify-center text-white shadow-lg mb-6 group-hover:scale-110 transition-transform`}>
+                <div className={`absolute top-0 right-0 w-32 h-32 bg-linear-to-br ${meta.color} opacity-[0.03] group-hover:opacity-10 transition-opacity rounded-bl-[100px]`} />
+                <div className={`w-14 h-14 rounded-2xl bg-linear-to-br ${meta.color} flex items-center justify-center text-white shadow-lg mb-6 group-hover:scale-110 transition-transform`}>
                   <span className="material-symbols-outlined text-3xl font-light">{meta.icon}</span>
                 </div>
                 <h3 className="text-lg font-extrabold text-slate-900 mb-2 group-hover:text-sky-600 transition-colors tracking-tight">

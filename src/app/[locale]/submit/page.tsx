@@ -254,7 +254,7 @@ export default function SubmitPage() {
 
               {/* Submitter info */}
               <div className="flex items-center gap-3 mb-8 pb-6 border-b border-slate-100">
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold text-sm">
+                <div className="w-9 h-9 rounded-full bg-linear-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white font-bold text-sm">
                   {(user.user_metadata?.name ?? user.email ?? 'U').charAt(0).toUpperCase()}
                 </div>
                 <div>
@@ -406,7 +406,7 @@ export default function SubmitPage() {
               </ul>
             </div>
 
-            <div className="bg-gradient-to-br from-sky-50 to-indigo-50 border border-sky-100 rounded-3xl p-6">
+            <div className="bg-linear-to-br from-sky-50 to-indigo-50 border border-sky-100 rounded-3xl p-6">
               <div className="flex items-center gap-2 mb-2">
                 <span className="material-symbols-outlined text-[18px] text-sky-500">verified</span>
                 <p className="text-sm font-black text-sky-700">빠른 승인을 원한다면</p>

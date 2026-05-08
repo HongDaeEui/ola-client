@@ -54,7 +54,7 @@ export default async function PromptsPage({
         <div className="flex gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar">
           <Link
             href="/prompts"
-            className={`px-5 py-2 rounded-full text-sm font-bold border flex-shrink-0 transition-colors ${
+            className={`px-5 py-2 rounded-full text-sm font-bold border shrink-0 transition-colors ${
               !category
                 ? 'bg-sky-600 border-sky-600 text-white shadow-lg shadow-sky-100'
                 : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-sky-300'
@@ -66,7 +66,7 @@ export default async function PromptsPage({
             <Link
               key={c}
               href={category === c ? '/prompts' : `/prompts?category=${encodeURIComponent(c)}`}
-              className={`px-5 py-2 rounded-full text-sm font-bold border flex-shrink-0 transition-colors ${
+              className={`px-5 py-2 rounded-full text-sm font-bold border shrink-0 transition-colors ${
                 category === c
                   ? 'bg-sky-600 border-sky-600 text-white shadow-lg shadow-sky-100'
                   : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:border-sky-300'

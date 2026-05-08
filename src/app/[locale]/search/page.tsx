@@ -148,7 +148,7 @@ function SearchContent() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[1, 2, 3, 4].map(key => (
                   <div key={key} className="flex gap-4 p-4 border border-slate-100 dark:border-slate-800 rounded-2xl animate-pulse">
-                    <div className="w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-700/50 flex-shrink-0" />
+                    <div className="w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-700/50 shrink-0" />
                     <div className="flex-1 space-y-2 py-1">
                       <div className="h-4 bg-slate-200 dark:bg-slate-700/50 rounded w-1/2" />
                       <div className="h-3 bg-slate-200 dark:bg-slate-700/50 rounded w-full" />
@@ -210,7 +210,7 @@ function SearchContent() {
                     <Link key={tool.id} href={`/tools/${tool.id}`}
                       className="flex items-center gap-4 bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-100 dark:border-slate-700 hover:border-sky-200 dark:hover:border-sky-700 hover:shadow-md transition-all group"
                     >
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-sky-100 to-indigo-100 dark:from-sky-900/40 dark:to-indigo-900/40 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                      <div className="w-12 h-12 rounded-xl bg-linear-to-br from-sky-100 to-indigo-100 dark:from-sky-900/40 dark:to-indigo-900/40 flex items-center justify-center shrink-0 overflow-hidden">
                         {getLogoUrl(tool.iconUrl)
                           // eslint-disable-next-line @next/next/no-img-element
                           ? <img src={getLogoUrl(tool.iconUrl)} alt={tool.name} width={48} height={48} className="w-full h-full object-contain p-1" />
@@ -252,7 +252,7 @@ function SearchContent() {
                           {lab.emoji && <span className="mr-1.5">{lab.emoji}</span>}{highlight(lab.title, q)}
                         </p>
                         {lab.difficulty && (
-                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${DIFFICULTY_COLOR[lab.difficulty] ?? 'bg-slate-100 text-slate-500'}`}>
+                          <span className={`text-xs px-2 py-0.5 rounded-full font-medium shrink-0 ${DIFFICULTY_COLOR[lab.difficulty] ?? 'bg-slate-100 text-slate-500'}`}>
                             {lab.difficulty}
                           </span>
                         )}
@@ -280,7 +280,7 @@ function SearchContent() {
                         <p className="font-semibold text-slate-800 dark:text-slate-100 group-hover:text-amber-600">{highlight(p.title, q)}</p>
                         <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{p.toolName} · {p.category}</p>
                       </div>
-                      <div className="flex items-center gap-1 text-xs text-slate-400 flex-shrink-0">
+                      <div className="flex items-center gap-1 text-xs text-slate-400 shrink-0">
                         <span className="material-symbols-outlined text-base">favorite</span>
                         {p.likes}
                       </div>
@@ -307,7 +307,7 @@ function SearchContent() {
                           {post.category} · {new Date(post.createdAt).toLocaleDateString('ko-KR')}
                         </p>
                       </div>
-                      <div className="flex items-center gap-3 text-xs text-slate-400 flex-shrink-0">
+                      <div className="flex items-center gap-3 text-xs text-slate-400 shrink-0">
                         <span className="flex items-center gap-1">
                           <span className="material-symbols-outlined text-base">visibility</span>{post.views}
                         </span>

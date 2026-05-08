@@ -1,5 +1,4 @@
 import { API_BASE, apiFetch } from '@/lib/api';
-import Image from "next/image";
 import { Link } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
 import { getLogoUrl } from '@/lib/logo';
@@ -120,7 +119,7 @@ function StarRating({ rating }: { rating: number }) {
 function InfoCard({ icon, label, value, color }: { icon: string; label: string; value: string; color: string }) {
   return (
     <div className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-slate-100 hover:border-slate-200 hover:shadow-sm transition-all">
-      <div className={`w-11 h-11 rounded-xl ${color} flex items-center justify-center flex-shrink-0`}>
+      <div className={`w-11 h-11 rounded-xl ${color} flex items-center justify-center shrink-0`}>
         <span className="material-symbols-outlined text-[20px] text-white" style={{ fontVariationSettings: "'FILL' 1" }}>
           {icon}
         </span>
@@ -150,9 +149,9 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
       {/* ── Hero Section with gradient background ── */}
       <section className="relative pt-28 lg:pt-32 pb-16 overflow-hidden">
         {/* Gradient backdrop */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-sky-900" />
+        <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-slate-800 to-sky-900" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-sky-500/20 via-transparent to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-50 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-slate-50 to-transparent" />
 
         <div className="relative z-10 max-w-5xl mx-auto px-6">
 
@@ -330,7 +329,7 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
                         className="group flex flex-col bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg hover:shadow-emerald-100/50 hover:border-emerald-300 transition-all duration-300"
                       >
                         {/* Compact Banner */}
-                        <div className={`h-28 relative p-4 flex flex-col justify-between overflow-hidden bg-gradient-to-br ${
+                        <div className={`h-28 relative p-4 flex flex-col justify-between overflow-hidden bg-linear-to-br ${
                           [
                             'from-sky-500 to-indigo-600',
                             'from-rose-500 to-fuchsia-600',
@@ -346,7 +345,7 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
                             loading="lazy"
                             className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-60 group-hover:scale-110 group-hover:opacity-80 transition-all duration-700 ease-in-out"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+                          <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
                           <div className="relative z-10 flex justify-between items-start">
                             <span className="text-[10px] font-black tracking-wider px-2.5 py-1 rounded-full bg-white/20 text-white backdrop-blur-md border border-white/20 shadow-sm uppercase">
                               {lab.category}
@@ -372,7 +371,8 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
                             <div className="flex items-center gap-2 text-slate-500">
                               <div className="w-6 h-6 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center font-bold text-slate-600 text-[10px] shadow-sm uppercase overflow-hidden">
                                 {lab.author.avatarUrl ? (
-                                  <Image src={lab.author.avatarUrl} alt={lab.author.username} width={24} height={24} className="w-full h-full object-cover" />
+                                  // eslint-disable-next-line @next/next/no-img-element
+                                  <img src={lab.author.avatarUrl} alt={lab.author.username} className="w-full h-full object-cover" />
                                 ) : (
                                   lab.author.username.charAt(0)
                                 )}
@@ -403,7 +403,7 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
                   href={tool.launchUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full bg-gradient-to-r from-slate-900 to-slate-700 text-white py-3.5 rounded-2xl font-black text-sm hover:from-slate-800 hover:to-slate-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-slate-200"
+                  className="w-full bg-linear-to-r from-slate-900 to-slate-700 text-white py-3.5 rounded-2xl font-black text-sm hover:from-slate-800 hover:to-slate-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-slate-200"
                 >
                   <span className="material-symbols-outlined text-[18px]">open_in_new</span>
                   공식 사이트 방문
@@ -470,7 +470,7 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
             </div>
 
             {/* Share Card */}
-            <div className="bg-gradient-to-br from-sky-500 to-indigo-600 rounded-3xl p-6 shadow-lg shadow-sky-100 text-white relative overflow-hidden">
+            <div className="bg-linear-to-br from-sky-500 to-indigo-600 rounded-3xl p-6 shadow-lg shadow-sky-100 text-white relative overflow-hidden">
               <div className="absolute -top-8 -right-8 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
               <div className="relative z-10">
                 <h3 className="font-black text-lg mb-2">이 도구가 마음에 드셨나요?</h3>

@@ -141,7 +141,7 @@ export default async function CommunityPage({
           <aside className="w-full lg:w-96 space-y-8">
 
             {/* Write CTA */}
-            <div className="bg-gradient-to-br from-sky-500 to-indigo-600 rounded-3xl p-8 text-white relative overflow-hidden">
+            <div className="bg-linear-to-br from-sky-500 to-indigo-600 rounded-3xl p-8 text-white relative overflow-hidden">
               <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-white/10 rounded-full" />
               <h3 className="font-black text-lg mb-2 relative z-10">당신의 경험을 나눠주세요</h3>
               <p className="text-sky-100 text-sm leading-relaxed mb-5 relative z-10">

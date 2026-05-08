@@ -233,23 +233,26 @@ export default function HomeClient({ tools, posts, categories, marqueeTools }: H
                 {/* Today's Popular Tools */}
                 <div className="flex-1">
                   <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm mb-3 flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-rose-500 text-[18px]">local_fire_department</span>
                     🔥 오늘의 인기 도구
                   </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {trendTools.slice(0, 3).map(tool => (
-                      <Link key={tool.id} href={`/tools/${tool.id}`} className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 hover:border-sky-300 dark:hover:border-sky-600 transition-colors group">
+                  <div className="space-y-2">
+                    {trendTools.slice(0, 3).map((tool, idx) => (
+                      <Link key={tool.id} href={`/tools/${tool.id}`} className="flex items-center gap-3 p-2.5 -mx-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+                        <span className={`w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 ${idx === 0 ? 'bg-rose-100 text-rose-600' : idx === 1 ? 'bg-slate-200 text-slate-600' : 'bg-orange-100 text-orange-600'}`}>{idx + 1}</span>
                         {tool.iconUrl ? (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={tool.iconUrl} alt={tool.name} className="w-10 h-10 rounded-lg object-contain bg-white shrink-0" />
+                          <img src={tool.iconUrl} alt={tool.name} className="w-8 h-8 rounded-lg object-contain bg-white shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.04)]" />
                         ) : (
-                          <div className="w-10 h-10 rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center font-bold text-xs shrink-0">{tool.name.substring(0, 2)}</div>
+                          <div className="w-8 h-8 rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center font-bold text-[10px] shrink-0">{tool.name.substring(0, 2)}</div>
                         )}
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                           <p className="font-bold text-sm text-slate-700 dark:text-slate-200 truncate group-hover:text-sky-600 transition-colors">{tool.name}</p>
-                          <div className="flex items-center text-[10px] text-slate-400 gap-1 font-bold">
-                            <span className="material-symbols-outlined text-[12px] text-amber-400">star</span>
-                            {tool.rating.toFixed(1)}
+                          <div className="flex items-center gap-2 mt-0.5 text-[10px] text-slate-400">
+                            <span className="truncate">{tool.category}</span>
+                            <span className="flex items-center gap-0.5 font-bold text-amber-500">
+                              <span className="material-symbols-outlined text-[10px]">star</span>
+                              {tool.rating.toFixed(1)}
+                            </span>
                           </div>
                         </div>
                       </Link>
@@ -260,7 +263,6 @@ export default function HomeClient({ tools, posts, categories, marqueeTools }: H
                 {/* This Week's Best Posts */}
                 <div className="flex-1 border-t md:border-t-0 md:border-l border-slate-100 dark:border-slate-800 pt-5 md:pt-0 md:pl-6">
                   <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm mb-3 flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-amber-500 text-[18px]">emoji_events</span>
                     🏆 이번 주 베스트 글
                   </h3>
                   <ul className="space-y-2">
