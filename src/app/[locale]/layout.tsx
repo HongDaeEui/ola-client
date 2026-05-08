@@ -43,7 +43,7 @@ export default async function LocaleLayout({
       <ThemeProvider>
         <AuthProvider>
           <TopNavBar />
-          <div className="flex-grow">
+          <div className="grow">
             {children}
           </div>
           <Footer />

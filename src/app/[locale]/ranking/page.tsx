@@ -56,7 +56,7 @@ export default async function RankingPage({ params }: { params: Promise<{ locale
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-28 lg:pt-32 pb-20 font-['Noto_Sans_KR']">
       <div className="max-w-5xl mx-auto px-6">
 
-        <div className="bg-gradient-to-br from-slate-900 to-indigo-900 rounded-[40px] p-10 text-center text-white mb-12 shadow-2xl shadow-indigo-100">
+        <div className="bg-linear-to-br from-slate-900 to-indigo-900 rounded-[40px] p-10 text-center text-white mb-12 shadow-2xl shadow-indigo-100">
           <div className="inline-block bg-sky-500/20 text-sky-300 text-xs font-bold px-3 py-1 rounded-full mb-4 border border-sky-500/30">실시간 인기 랭킹</div>
           <h1 className="text-3xl md:text-4xl font-extrabold mb-3 tracking-tighter">Ola 인기 TOP 10</h1>
           <p className="text-indigo-200 opacity-80 max-w-xl mx-auto leading-relaxed text-sm md:text-base">

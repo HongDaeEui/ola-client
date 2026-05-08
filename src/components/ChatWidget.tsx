@@ -102,7 +102,7 @@ export function ChatWidget() {
           style={{ animation: 'chatPopup 0.25s cubic-bezier(0.16, 1, 0.3, 1)' }}
         >
           {/* Header */}
-          <div className="flex items-center justify-between bg-gradient-to-r from-sky-500 to-indigo-600 px-5 py-4 text-white flex-shrink-0">
+          <div className="flex items-center justify-between bg-linear-to-r from-sky-500 to-indigo-600 px-5 py-4 text-white shrink-0">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
                 <span className="material-symbols-outlined text-[18px]">smart_toy</span>
@@ -128,7 +128,7 @@ export function ChatWidget() {
             {messages.map((msg: any) => (
               <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {msg.role === 'assistant' && (
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center flex-shrink-0 mt-1 mr-2">
+                  <div className="w-6 h-6 rounded-full bg-linear-to-br from-sky-400 to-indigo-500 flex items-center justify-center shrink-0 mt-1 mr-2">
                     <span className="material-symbols-outlined text-[12px] text-white">smart_toy</span>
                   </div>
                 )}
@@ -167,7 +167,7 @@ export function ChatWidget() {
             {/* Typing indicator */}
             {isLoading && messages[messages.length - 1]?.role === 'user' && (
               <div className="flex justify-start">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center flex-shrink-0 mt-1 mr-2">
+                <div className="w-6 h-6 rounded-full bg-linear-to-br from-sky-400 to-indigo-500 flex items-center justify-center shrink-0 mt-1 mr-2">
                   <span className="material-symbols-outlined text-[12px] text-white">smart_toy</span>
                 </div>
                 <div className="bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-600 rounded-2xl rounded-tl-sm px-4 py-3 flex gap-1.5 shadow-sm">
@@ -181,7 +181,7 @@ export function ChatWidget() {
           </div>
 
           {/* Input */}
-          <div className="p-4 bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700 flex-shrink-0">
+          <div className="p-4 bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700 shrink-0">
             <form
               onSubmit={handleLocalSubmit}
               className="flex items-center gap-2 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-2xl pl-4 pr-2 py-2 focus-within:border-sky-400 focus-within:ring-2 focus-within:ring-sky-100 dark:focus-within:ring-sky-900 transition-all"
@@ -221,7 +221,7 @@ export function ChatWidget() {
         onMouseLeave={() => setIsHovered(false)}
         aria-label="AI 비서"
         className={`w-14 h-14 rounded-full flex items-center justify-center text-white shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 ${
-          isOpen ? 'bg-slate-800' : 'bg-gradient-to-tr from-sky-500 to-indigo-600'
+          isOpen ? 'bg-slate-800' : 'bg-linear-to-tr from-sky-500 to-indigo-600'
         }`}
         style={{
           boxShadow: isOpen
