@@ -129,21 +129,24 @@ export default function SubmitPage() {
     if (!validate()) return;
     setSubmitting(true);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+      if (!token) {
+        setErrors({ submit: '로그인이 만료되었습니다. 다시 로그인해주세요.' });
+        setSubmitting(false);
+        return;
+      }
       if (tab === 'tool') {
         const res = await fetch(`${API_BASE}/tools`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify({ ...tool, tags: tool.tags }),
         });
         if (!res.ok) throw new Error();
       } else {
-        const { data: { session } } = await supabase.auth.getSession();
-        const token = session?.access_token;
-        if (!token) {
-          setErrors({ submit: '로그인이 만료되었습니다. 다시 로그인해주세요.' });
-          setSubmitting(false);
-          return;
-        }
         const res = await fetch(`${API_BASE}/prompts`, {
           method: 'POST',
           headers: {
