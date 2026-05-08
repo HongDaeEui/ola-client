@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import { API_BASE, apiFetch } from '@/lib/api';
-import Image from "next/image";
 import { Link } from '@/i18n/routing';
 import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
@@ -168,7 +167,8 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
           <div className="p-8 md:p-12 dark:bg-slate-900">
             {post.imageUrl && (
               <div className="mb-8 rounded-2xl overflow-hidden border border-slate-100">
-                <Image src={post.imageUrl} alt={post.title} width={24} height={24} className="w-full max-h-[480px] object-cover" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={post.imageUrl} alt={post.title} className="w-full max-h-[480px] object-cover" />
               </div>
             )}
             <div className="prose prose-slate max-w-none">

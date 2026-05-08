@@ -103,7 +103,7 @@ export default async function LabDetailPage({ params }: { params: Promise<{ id: 
     <div className="min-h-screen bg-slate-50 font-['Noto_Sans_KR']">
 
       {/* ── Hero ── */}
-      <section className={`relative pt-28 lg:pt-32 pb-20 bg-gradient-to-br ${lab.color || 'from-slate-700 to-slate-900'} overflow-hidden`}>
+      <section className={`relative pt-28 lg:pt-32 pb-20 bg-linear-to-br ${lab.color || 'from-slate-700 to-slate-900'} overflow-hidden`}>
         <div className="absolute inset-0 bg-black/25" />
         <div className="absolute -bottom-12 -right-12 w-72 h-72 bg-white/10 rounded-full blur-3xl" />
         <div className="absolute -top-10 -left-10 w-56 h-56 bg-white/10 rounded-full blur-2xl" />
@@ -199,7 +199,7 @@ export default async function LabDetailPage({ params }: { params: Promise<{ id: 
                     className="bg-white rounded-3xl border border-slate-100 p-7 shadow-sm hover:shadow-md hover:border-slate-200 transition-all"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-black text-sm flex-shrink-0 mt-0.5">
+                      <div className="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-black text-sm shrink-0 mt-0.5">
                         {i + 1}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -227,7 +227,7 @@ export default async function LabDetailPage({ params }: { params: Promise<{ id: 
             )}
 
             {/* Metric Highlight */}
-            <div className="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-3xl p-7 text-white relative overflow-hidden">
+            <div className="bg-linear-to-r from-emerald-500 to-teal-600 rounded-3xl p-7 text-white relative overflow-hidden">
               <div className="absolute -top-6 -right-6 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
               <div className="relative z-10">
                 <div className="flex items-center gap-2 mb-2">
@@ -254,7 +254,7 @@ export default async function LabDetailPage({ params }: { params: Promise<{ id: 
                       href={`/labs/${r.id}`}
                       className="flex items-center gap-4 p-4 rounded-2xl border border-slate-100 hover:border-sky-200 hover:shadow-md hover:shadow-sky-50 transition-all group"
                     >
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${r.color || 'from-slate-400 to-slate-600'} flex-shrink-0 flex items-center justify-center text-2xl`}>
+                      <div className={`w-12 h-12 rounded-xl bg-linear-to-br ${r.color || 'from-slate-400 to-slate-600'} shrink-0 flex items-center justify-center text-2xl`}>
                         {r.emoji || '🧪'}
                       </div>
                       <div className="min-w-0 flex-1">
@@ -271,7 +271,7 @@ export default async function LabDetailPage({ params }: { params: Promise<{ id: 
                           <span className="text-[10px] text-slate-400 font-medium">{r.category}</span>
                         </div>
                       </div>
-                      <span className="material-symbols-outlined text-slate-300 group-hover:text-sky-400 transition-colors text-[20px] flex-shrink-0">
+                      <span className="material-symbols-outlined text-slate-300 group-hover:text-sky-400 transition-colors text-[20px] shrink-0">
                         arrow_forward
                       </span>
                     </Link>
@@ -306,7 +306,7 @@ export default async function LabDetailPage({ params }: { params: Promise<{ id: 
                     key={i}
                     className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold px-3 py-2 rounded-xl hover:border-sky-200 hover:bg-sky-50 hover:text-sky-700 transition-colors"
                   >
-                    <span className="w-2 h-2 rounded-full bg-sky-400 flex-shrink-0" />
+                    <span className="w-2 h-2 rounded-full bg-sky-400 shrink-0" />
                     {tool}
                   </span>
                 ))}
@@ -353,7 +353,7 @@ export default async function LabDetailPage({ params }: { params: Promise<{ id: 
             </div>
 
             {/* CTA: Share */}
-            <div className="bg-gradient-to-br from-sky-500 to-indigo-600 rounded-3xl p-6 text-white relative overflow-hidden shadow-lg shadow-sky-100">
+            <div className="bg-linear-to-br from-sky-500 to-indigo-600 rounded-3xl p-6 text-white relative overflow-hidden shadow-lg shadow-sky-100">
               <div className="absolute -top-6 -right-6 w-28 h-28 bg-white/10 rounded-full blur-xl" />
               <div className="relative z-10">
                 <h3 className="font-black text-base mb-1.5">직접 나도 해봤어요!</h3>

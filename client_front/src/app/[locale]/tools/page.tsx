@@ -115,7 +115,7 @@ export default async function ToolsPage({
         <div className="flex flex-col md:flex-row gap-8 items-start">
 
           {/* Sidebar Filters */}
-          <aside className="w-full md:w-64 flex-shrink-0 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 sticky top-28">
+          <aside className="w-full md:w-64 shrink-0 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 sticky top-28">
             <div className="flex items-center justify-between mb-5">
               <h3 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <span className="material-symbols-outlined text-sky-500">filter_list</span>
@@ -144,7 +144,7 @@ export default async function ToolsPage({
                           : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
                       }`}
                     >
-                      <span className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition-all ${isActive ? 'border-sky-500 bg-sky-500' : 'border-slate-300 dark:border-slate-600'}`}>
+                      <span className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 transition-all ${isActive ? 'border-sky-500 bg-sky-500' : 'border-slate-300 dark:border-slate-600'}`}>
                         {isActive && <span className="material-symbols-outlined text-white text-[12px]">check</span>}
                       </span>
                       {p}
@@ -170,7 +170,7 @@ export default async function ToolsPage({
                           : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
                       }`}
                     >
-                      <span className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition-all ${isActive ? 'border-sky-500 bg-sky-500' : 'border-slate-300'}`}>
+                      <span className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 transition-all ${isActive ? 'border-sky-500 bg-sky-500' : 'border-slate-300'}`}>
                         {isActive && <span className="material-symbols-outlined text-white text-[12px]">check</span>}
                       </span>
                       <span className="truncate">{cat}</span>
@@ -263,7 +263,7 @@ export default async function ToolsPage({
                   <Link key={tool.id} href={`/tools/${tool.id}`}
                     className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 hover:border-sky-300 hover:shadow-lg transition-all cursor-pointer group">
                     <div className="flex gap-4 mb-4">
-                      <div className="w-14 h-14 rounded-xl bg-slate-100 flex-shrink-0 flex items-center justify-center text-slate-500 font-bold text-lg uppercase tracking-tighter border border-slate-100 group-hover:bg-slate-900 group-hover:text-white transition-all duration-300 overflow-hidden">
+                      <div className="w-14 h-14 rounded-xl bg-slate-100 shrink-0 flex items-center justify-center text-slate-500 font-bold text-lg uppercase tracking-tighter border border-slate-100 group-hover:bg-slate-900 group-hover:text-white transition-all duration-300 overflow-hidden">
                         {getLogoUrl(tool.iconUrl)
                           // eslint-disable-next-line @next/next/no-img-element
                           ? <img src={getLogoUrl(tool.iconUrl)} alt={tool.name} width={56} height={56} className="w-full h-full object-contain p-1" />
@@ -274,7 +274,7 @@ export default async function ToolsPage({
                         <div className="flex items-center justify-between mb-1 gap-2">
                           <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-sky-600 transition-colors truncate">{tool.name}</h3>
                           {tool.isFeatured && (
-                            <span className="text-[10px] bg-sky-500 text-white px-1.5 py-0.5 rounded font-black uppercase flex-shrink-0">Featured</span>
+                            <span className="text-[10px] bg-sky-500 text-white px-1.5 py-0.5 rounded font-black uppercase shrink-0">Featured</span>
                           )}
                         </div>
                         <div className="flex items-center gap-2 flex-wrap">

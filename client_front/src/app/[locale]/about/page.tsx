@@ -1,8 +1,3 @@
-import Image from "next/image";
-
-
-
-
 export const revalidate = 300;
 
 export default function AboutStory() {
@@ -18,7 +13,7 @@ export default function AboutStory() {
           <span className="text-secondary font-bold tracking-[0.2em] text-xs uppercase mb-8 border border-secondary-container px-4 py-1.5 rounded-full bg-secondary-container/10">Brand Philosophy</span>
           <h1 className="font-['Noto_Serif'] text-6xl md:text-8xl font-bold text-on-surface mb-8 leading-[1.05] tracking-tight">
             Design <br className="hidden md:block" />
-            the <span className="italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Luminous.</span>
+            the <span className="italic font-normal text-transparent bg-clip-text bg-linear-to-r from-primary to-secondary">Luminous.</span>
           </h1>
           <p className="text-xl md:text-2xl text-on-surface-variant font-light max-w-3xl leading-relaxed">
             Ola is not just a platform; it is a breathable horizon. We are a sanctuary for digital minds who believe that artificial intelligence should augment human warmth, not replace it.
@@ -30,7 +25,7 @@ export default function AboutStory() {
       <section className="px-6 md:px-12 mb-32">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
           <div className="relative h-[600px] rounded-3xl overflow-hidden shadow-2xl shadow-sky-900/10 group">
-            <div className="absolute inset-0 bg-gradient-to-tr from-sky-100 to-teal-50 group-hover:scale-105 transition-transform duration-1000"></div>
+            <div className="absolute inset-0 bg-linear-to-tr from-sky-100 to-teal-50 group-hover:scale-105 transition-transform duration-1000"></div>
             <img 
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFoJSTZf6QWJ4X93z0-t7f5Wk_VnF9eUquvT54n711_35vJ-Y9J0_v1vB9xIuX-lU9N5JgW9uXlM7p_05e_WbB2A7S6jJgKVuV0QO8Pz7pS9P1A4Jj0R3zT2G5n8sN4m9T7J9H5B1QxS_43K-9b9U5R-1t4S5U3Q2U7L9r9A" 
               alt="Ethereal abstract concept" 
