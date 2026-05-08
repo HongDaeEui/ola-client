@@ -35,7 +35,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (!isAdmin) return;
-    fetch(`${API_BASE}/tools/pending`)
+    fetch('/api/admin/tools/pending', { cache: 'no-store' })
       .then(r => r.ok ? r.json() : [])
       .then(setTools)
       .finally(() => setFetching(false));
@@ -44,7 +44,7 @@ export default function AdminPage() {
   async function handleAction(id: string, action: 'approve' | 'reject') {
     setActionLoading(prev => ({ ...prev, [id]: action }));
     try {
-      await apiFetch(`${API_BASE}/tools/${id}/${action}`, { method: 'PATCH' });
+      await fetch(`/api/admin/tools/${id}/${action}`, { method: 'PATCH' });
       setDone(prev => ({ ...prev, [id]: action === 'approve' ? 'approved' : 'rejected' }));
     } finally {
       setActionLoading(prev => ({ ...prev, [id]: null }));
@@ -152,7 +152,7 @@ export default function AdminPage() {
                       등록일: {new Date(tool.createdAt).toLocaleDateString('ko-KR')}
                     </p>
                   </div>
-                  <div className="flex flex-col gap-2 flex-shrink-0">
+                  <div className="flex flex-col gap-2 shrink-0">
                     <button
                       onClick={() => handleAction(tool.id, 'approve')}
                       disabled={!!actionLoading[tool.id]}
