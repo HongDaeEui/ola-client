@@ -1,0 +1,121 @@
+// Harness Hub (하네스 마켓) 전용 데이터베이스 스키마 초안
+// 이 파일을 back/prisma/schema.prisma 에 덮어쓰고 활용하세요.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==========================================
+// User (사용자 / 고객)
+// ==========================================
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  nickname  String
+  avatarUrl String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 커머스 관련 Relations
+  orders    Order[]
+  reviews   Review[]
+  cart      CartItem[]
+}
+
+enum Role {
+  USER
+  ADMIN
+  SELLER
+}
+
+// ==========================================
+// Harness (하네스 상품 엔티티 - 기존 Tool 대체)
+// ==========================================
+model Harness {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Int
+  imageUrl    String?
+  size        String   // S, M, L, XL 등
+  color       String
+  stock       Int      @default(0)
+  
+  rating      Float    @default(0.0)
+  status      ItemStatus @default(PENDING)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  reviews     Review[]
+  orderItems  OrderItem[]
+  cartItems   CartItem[]
+}
+
+enum ItemStatus {
+  PENDING
+  PUBLISHED
+  OUT_OF_STOCK
+}
+
+// ==========================================
+// Commerce (주문, 장바구니, 리뷰)
+// ==========================================
+model Order {
+  id          String      @id @default(uuid())
+  userId      String
+  totalAmount Int
+  status      OrderStatus @default(PAYMENT_PENDING)
+  createdAt   DateTime    @default(now())
+
+  user        User        @relation(fields: [userId], references: [id])
+  items       OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  harnessId String
+  quantity  Int
+  price     Int
+
+  order     Order   @relation(fields: [orderId], references: [id])
+  harness   Harness @relation(fields: [harnessId], references: [id])
+}
+
+model CartItem {
+  id        String  @id @default(uuid())
+  userId    String
+  harnessId String
+  quantity  Int     @default(1)
+
+  user      User    @relation(fields: [userId], references: [id])
+  harness   Harness @relation(fields: [harnessId], references: [id])
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  userId    String
+  harnessId String
+  rating    Int
+  content   String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+  harness   Harness  @relation(fields: [harnessId], references: [id])
+}
+
+enum OrderStatus {
+  PAYMENT_PENDING
+  PAID
+  SHIPPING
+  DELIVERED
+  CANCELED
+}
