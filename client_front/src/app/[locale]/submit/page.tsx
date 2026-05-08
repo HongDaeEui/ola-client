@@ -4,6 +4,7 @@ import { API_BASE } from '@/lib/api';
 import { useState, useEffect, useRef, KeyboardEvent } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from '@/i18n/routing';
+import { createClient } from '@/lib/supabase/client';
 
 const SAVE_KEY = 'ola_submit_draft';
 
@@ -76,6 +77,7 @@ function TagInput({ tags, onChange }: { tags: string[]; onChange: (t: string[]) 
 // ── Main Page ───────────────────────────────────
 export default function SubmitPage() {
   const { user, signInWithGoogle } = useAuth();
+  const supabase = createClient();
   const [tab, setTab] = useState<TabType>('tool');
   const [done, setDone] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -135,9 +137,19 @@ export default function SubmitPage() {
         });
         if (!res.ok) throw new Error();
       } else {
+        const { data: { session } } = await supabase.auth.getSession();
+        const token = session?.access_token;
+        if (!token) {
+          setErrors({ submit: '로그인이 만료되었습니다. 다시 로그인해주세요.' });
+          setSubmitting(false);
+          return;
+        }
         const res = await fetch(`${API_BASE}/prompts`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify({
             ...prompt,
             userEmail: user!.email,
