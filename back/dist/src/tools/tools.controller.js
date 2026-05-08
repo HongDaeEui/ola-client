@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const throttler_1 = require("@nestjs/throttler");
 const tools_service_1 = require("./tools.service");
 const admin_guard_1 = require("../common/admin.guard");
+const supabase_auth_util_1 = require("../common/supabase-auth.util");
 let ToolsController = class ToolsController {
     toolsService;
     constructor(toolsService) {
@@ -49,8 +50,19 @@ let ToolsController = class ToolsController {
     reject(id) {
         return this.toolsService.reject(id);
     }
-    create(body) {
+    async create(body, authorization) {
+        const { email } = await this.extractUser(authorization);
+        console.log(`[tools.create] submitted by ${email}: ${body.name}`);
         return this.toolsService.create(body);
+    }
+    async extractUser(authorization) {
+        if (!authorization?.toLowerCase().startsWith('bearer ')) {
+            throw new common_1.UnauthorizedException('Missing Bearer token.');
+        }
+        const token = authorization.slice(7).trim();
+        if (!token)
+            throw new common_1.UnauthorizedException('Empty Bearer token.');
+        return (0, supabase_auth_util_1.verifySupabaseJwt)(token);
     }
 };
 exports.ToolsController = ToolsController;
@@ -123,9 +135,10 @@ __decorate([
     (0, throttler_1.Throttle)({ default: { limit: 5, ttl: 60000 } }),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Headers)('authorization')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
 ], ToolsController.prototype, "create", null);
 exports.ToolsController = ToolsController = __decorate([
     (0, common_1.Controller)('tools'),

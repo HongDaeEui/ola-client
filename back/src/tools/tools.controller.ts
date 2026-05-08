@@ -6,11 +6,14 @@ import {
   Body,
   Param,
   Query,
+  Headers,
   UseGuards,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { ToolsService } from './tools.service';
 import { AdminGuard } from '../common/admin.guard';
+import { verifySupabaseJwt } from '../common/supabase-auth.util';
 
 @Controller('tools')
 export class ToolsController {
@@ -71,7 +74,7 @@ export class ToolsController {
 
   @Throttle({ default: { limit: 5, ttl: 60000 } })
   @Post()
-  create(
+  async create(
     @Body()
     body: {
       name: string;
@@ -82,7 +85,19 @@ export class ToolsController {
       pricingModel?: string;
       tags?: string[];
     },
+    @Headers('authorization') authorization?: string,
   ) {
+    const { email } = await this.extractUser(authorization);
+    console.log(`[tools.create] submitted by ${email}: ${body.name}`);
     return this.toolsService.create(body);
+  }
+
+  private async extractUser(authorization?: string) {
+    if (!authorization?.toLowerCase().startsWith('bearer ')) {
+      throw new UnauthorizedException('Missing Bearer token.');
+    }
+    const token = authorization.slice(7).trim();
+    if (!token) throw new UnauthorizedException('Empty Bearer token.');
+    return verifySupabaseJwt(token);
   }
 }

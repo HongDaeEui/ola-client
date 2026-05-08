@@ -58,7 +58,7 @@ export function NotificationBell() {
   const { data: unreadData } = useSWR(
     user?.email ? `${API_BASE}/notifications/unread-count` : null,
     fetcher,
-    { refreshInterval: 10000, revalidateOnFocus: true }
+    { refreshInterval: 30000, revalidateOnFocus: true }
   );
 
   // 드롭다운 열릴 때만 전체 목록 패치
@@ -177,7 +177,7 @@ export function NotificationBell() {
                   className={`flex items-start gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors border-b border-slate-50 dark:border-slate-700/50 last:border-0 ${!n.read ? 'bg-sky-50/50 dark:bg-sky-900/20' : ''}`}
                 >
                   {/* Icon */}
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
                     n.type === 'LIKE' ? 'bg-rose-100 text-rose-500' : 'bg-emerald-100 text-emerald-600'
                   }`}>
                     <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
@@ -198,7 +198,7 @@ export function NotificationBell() {
 
                   {/* Unread dot */}
                   {!n.read && (
-                    <div className="w-2 h-2 bg-sky-500 rounded-full flex-shrink-0 mt-1.5" />
+                    <div className="w-2 h-2 bg-sky-500 rounded-full shrink-0 mt-1.5" />
                   )}
                 </Link>
               ))

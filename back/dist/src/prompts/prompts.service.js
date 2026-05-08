@@ -41,7 +41,7 @@ let PromptsService = class PromptsService {
                     },
                 },
             },
-            orderBy: { views: 'desc' },
+            orderBy: { createdAt: 'desc' },
             skip,
             ...(take !== undefined ? { take } : {}),
         });

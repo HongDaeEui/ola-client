@@ -47,10 +47,10 @@ function HeroSection({ tools }: { tools: { name: string; iconUrl?: string }[] })
   };
 
   return (
-    <section className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 pt-28 pb-20 px-4 sm:px-6 text-center relative overflow-hidden">
+    <section className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 pt-32 pb-20 px-4 sm:px-6 text-center relative overflow-hidden">
       {/* Announcement Banner */}
-      <motion.div variants={fadeUp} className="absolute top-0 left-0 right-0 z-10 bg-linear-to-r from-sky-500 to-indigo-600 text-white py-2.5 px-4 text-sm font-bold shadow-md">
-        <Link href="/labs" className="flex items-center justify-center gap-2 hover:opacity-90 transition-opacity">
+      <motion.div variants={fadeUp} className="absolute top-6 left-4 right-4 sm:left-1/2 sm:-translate-x-1/2 sm:w-full sm:max-w-2xl z-10 bg-teal-500/95 hover:bg-teal-600 backdrop-blur-md text-white py-2.5 px-6 text-sm font-bold shadow-lg shadow-teal-500/20 rounded-full border border-teal-400/30 transition-colors">
+        <Link href="/labs" className="flex items-center justify-center gap-2">
           <span className="material-symbols-outlined text-[16px]">campaign</span>
           [공지] 26년 5월 오프라인 실험실(Labs) 모임 신청 안내 - 선착순 마감 주의! 👉 참여하기
         </Link>

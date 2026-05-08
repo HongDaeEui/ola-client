@@ -76,8 +76,8 @@ export default async function LabsPage({
               직접 부딪혀보고 증명된 최고의 실전 레시피들을 만나보세요.
             </p>
           </div>
-          <div className="flex-shrink-0 w-full lg:w-auto relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-sky-400 to-indigo-500 rounded-3xl blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
+          <div className="shrink-0 w-full lg:w-auto relative group">
+            <div className="absolute -inset-1 bg-linear-to-r from-sky-400 to-indigo-500 rounded-3xl blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
             <Link href="/community/write"
               className="relative w-full lg:w-auto bg-slate-900 dark:bg-slate-800 text-white px-10 py-5 rounded-2xl font-black text-lg hover:bg-slate-800 dark:hover:bg-slate-700 transition-colors shadow-2xl flex items-center justify-center gap-3">
               내 실험 결과 공유하기
