@@ -1,5 +1,4 @@
 'use client';
-import { API_BASE, apiFetch } from '@/lib/api';
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
