@@ -8,6 +8,18 @@ import { ViewTracker } from '@/components/ViewTracker';
 import CopyButton from '../CopyButton';
 export const revalidate = 1800;
 
+export async function generateStaticParams() {
+  try {
+    const res = await fetch(`${API_BASE}/prompts`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    const prompts = Array.isArray(data) ? data : (data.items ?? data.data ?? []);
+    return prompts.map((p: { id: string }) => ({ id: p.id }));
+  } catch {
+    return [];
+  }
+}
+
 interface Author {
   username: string;
 }
@@ -25,7 +37,7 @@ interface Prompt {
 
 async function getPrompt(id: string): Promise<Prompt | null> {
   try {
-    const res = await apiFetch(`${API_BASE}/prompts/${id}`, { cache: 'no-store' });
+    const res = await apiFetch(`${API_BASE}/prompts/${id}`, { next: { revalidate: 1800 } });
     if (!res.ok) return null;
     return await res.json();
   } catch {

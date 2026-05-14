@@ -6,10 +6,21 @@ import { WorkshopButton, MeetupCreateBridge } from '@/components/WorkshopClient'
 import type { Metadata } from 'next';
 export const revalidate = 1800;
 
+export async function generateStaticParams() {
+  try {
+    const res = await fetch(`${API_BASE}/labs`);
+    if (!res.ok) return [];
+    const labs = await res.json();
+    return (Array.isArray(labs) ? labs : labs.items ?? []).map((l: { id: string }) => ({ id: l.id }));
+  } catch {
+    return [];
+  }
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   try {
-    const res = await apiFetch(`${API_BASE}/labs/${id}`, { cache: 'no-store' });
+    const res = await apiFetch(`${API_BASE}/labs/${id}`, { next: { revalidate: 1800 } });
     if (!res.ok) return { title: 'Lab Not Found — Ola' };
     const lab = await res.json();
     const title = `${lab.emoji ? lab.emoji + ' ' : ''}${lab.title} — Ola Labs`;
@@ -51,7 +62,7 @@ interface Lab {
 
 async function getLab(id: string): Promise<Lab | null> {
   try {
-    const res = await apiFetch(`${API_BASE}/labs/${id}`, { cache: 'no-store' });
+    const res = await apiFetch(`${API_BASE}/labs/${id}`, { next: { revalidate: 1800 } });
     if (!res.ok) return null;
     return await res.json();
   } catch {

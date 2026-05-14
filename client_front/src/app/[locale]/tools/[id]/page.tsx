@@ -8,10 +8,21 @@ import type { Metadata } from 'next';
 
 export const revalidate = 1800;
 
+export async function generateStaticParams() {
+  try {
+    const res = await fetch(`${API_BASE}/tools`);
+    if (!res.ok) return [];
+    const tools = await res.json();
+    return (Array.isArray(tools) ? tools : tools.items ?? []).map((t: { id: string }) => ({ id: t.id }));
+  } catch {
+    return [];
+  }
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   try {
-    const res = await apiFetch(`${API_BASE}/tools/${id}`, { cache: 'no-store' });
+    const res = await apiFetch(`${API_BASE}/tools/${id}`, { next: { revalidate: 1800 } });
     if (!res.ok) return { title: 'Tool Not Found — Ola' };
     const tool = await res.json();
     return {
@@ -64,7 +75,7 @@ interface Tool {
 
 async function getTool(id: string): Promise<Tool | null> {
   try {
-    const res = await apiFetch(`${API_BASE}/tools/${id}`, { cache: 'no-store' });
+    const res = await apiFetch(`${API_BASE}/tools/${id}`, { next: { revalidate: 1800 } });
     if (!res.ok) return null;
     return await res.json();
   } catch {
