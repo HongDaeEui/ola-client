@@ -6,7 +6,7 @@ import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
 import { ShareButton } from '@/components/ShareButton';
 import { ViewTracker } from '@/components/ViewTracker';
 import CopyButton from '../CopyButton';
-export const revalidate = 300;
+export const revalidate = 1800;
 
 interface Author {
   username: string;

@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
 import { WorkshopButton, MeetupCreateBridge } from '@/components/WorkshopClient';
 import type { Metadata } from 'next';
-export const revalidate = 300;
+export const revalidate = 1800;
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
@@ -61,7 +61,7 @@ async function getLab(id: string): Promise<Lab | null> {
 
 async function getRelatedLabs(currentId: string, category: string): Promise<Lab[]> {
   try {
-    const res = await apiFetch(`${API_BASE}/labs`, { next: { revalidate: 60 } });
+    const res = await apiFetch(`${API_BASE}/labs`, { next: { revalidate: 1800 } });
     if (!res.ok) return [];
     const all: Lab[] = await res.json();
     const same = all.filter(l => l.id !== currentId && l.category === category);

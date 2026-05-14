@@ -1,6 +1,6 @@
 import { API_BASE, apiFetch } from '@/lib/api';
 import HomeClient from '@/components/HomeClient';
-export const revalidate = 300;
+export const revalidate = 3600;
 
 interface Tool {
   id: string; name: string; shortDesc: string; description: string;
@@ -24,25 +24,25 @@ function fetchWithTimeout(url: string, options: RequestInit & { next?: object } 
 
 async function getFeaturedTools(): Promise<Tool[]> {
   try {
-    const res = await fetchWithTimeout(`${API_BASE}/tools/ranking`, { next: { revalidate: 300 } });
+    const res = await fetchWithTimeout(`${API_BASE}/tools/ranking`, { next: { revalidate: 3600 } });
     return res.ok ? res.json() : [];
   } catch { return []; }
 }
 async function getMarqueeTools(): Promise<{ name: string; iconUrl?: string }[]> {
   try {
-    const res = await fetchWithTimeout(`${API_BASE}/tools?limit=40`, { next: { revalidate: 300 } });
+    const res = await fetchWithTimeout(`${API_BASE}/tools?limit=40`, { next: { revalidate: 3600 } });
     return res.ok ? res.json() : [];
   } catch { return []; }
 }
 async function getRecentPosts(): Promise<Post[]> {
   try {
-    const res = await fetchWithTimeout(`${API_BASE}/posts/ranking`, { next: { revalidate: 120 } });
+    const res = await fetchWithTimeout(`${API_BASE}/posts/ranking`, { next: { revalidate: 600 } });
     return res.ok ? res.json() : [];
   } catch { return []; }
 }
 async function getTopCategories(): Promise<CategoryCount[]> {
   try {
-    const res = await fetchWithTimeout(`${API_BASE}/tools/categories`, { next: { revalidate: 300 } });
+    const res = await fetchWithTimeout(`${API_BASE}/tools/categories`, { next: { revalidate: 3600 } });
     if (!res.ok) return [];
     const data: CategoryCount[] = await res.json();
     return data.slice(0, 8);

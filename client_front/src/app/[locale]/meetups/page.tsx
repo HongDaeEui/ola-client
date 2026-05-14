@@ -2,7 +2,7 @@ import { RsvpButton } from '@/components/RsvpButton';
 import { SuggestTopicModal } from '@/components/SuggestTopicModal';
 import { API_BASE, apiFetch } from '@/lib/api';
 import { LivePulseBadge } from '@/components/Badges';
-export const revalidate = 300;
+export const revalidate = 3600;
 
 async function getUpcomingMeetups() {
   try {

@@ -3,7 +3,7 @@ import { API_BASE, apiFetch } from '@/lib/api';
 import { Link } from '@/i18n/routing';
 import PromptShareButton from './PromptShareButton';
 import { PromptFeed, type Prompt } from '@/components/PromptFeed';
-export const revalidate = 300;
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: '공유 프롬프트 | Ola',
@@ -18,7 +18,7 @@ async function getPrompts(category?: string): Promise<Prompt[]> {
   try {
     const qs = new URLSearchParams({ page: '1', limit: String(LIMIT) });
     if (category) qs.set('category', category);
-    const res = await apiFetch(`${API_BASE}/prompts?${qs}`, { next: { revalidate: 60 } });
+    const res = await apiFetch(`${API_BASE}/prompts?${qs}`, { next: { revalidate: 1800 } });
     if (!res.ok) return [];
     return res.json();
   } catch {

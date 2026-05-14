@@ -43,7 +43,7 @@ async function getPosts(category?: string): Promise<Post[]> {
   try {
     const qs = new URLSearchParams({ page: '1', limit: String(LIMIT) });
     if (category && category !== '전체') qs.set('category', category);
-    const res = await apiFetch(`${API_BASE}/posts?${qs}`, { next: { revalidate: 30 } });
+    const res = await apiFetch(`${API_BASE}/posts?${qs}`, { next: { revalidate: 300 } });
     if (!res.ok) return [];
     const data = await res.json();
     return Array.isArray(data) ? data : [];
@@ -55,7 +55,7 @@ async function getPosts(category?: string): Promise<Post[]> {
 
 async function getUpcomingMeetups(): Promise<Meetup[]> {
   try {
-    const res = await apiFetch(`${API_BASE}/meetups/upcoming`, { next: { revalidate: 30 } });
+    const res = await apiFetch(`${API_BASE}/meetups/upcoming`, { next: { revalidate: 300 } });
     if (!res.ok) return [];
     const data = await res.json();
     return Array.isArray(data) ? data : [];
@@ -67,7 +67,7 @@ async function getUpcomingMeetups(): Promise<Meetup[]> {
 
 async function getTagStats(): Promise<TagStat[]> {
   try {
-    const res = await apiFetch(`${API_BASE}/posts/tag-stats`, { next: { revalidate: 60 } });
+    const res = await apiFetch(`${API_BASE}/posts/tag-stats`, { next: { revalidate: 300 } });
     if (!res.ok) return [];
     const data = await res.json();
     return Array.isArray(data) ? data : [];

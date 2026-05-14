@@ -1,7 +1,7 @@
 import { API_BASE, apiFetch } from '@/lib/api';
 import { Link } from '@/i18n/routing';
 import { getLogoUrl } from '@/lib/logo';
-export const revalidate = 300;
+export const revalidate = 3600;
 
 
 type RankedTool = {
@@ -18,19 +18,19 @@ type RankedLab = {
 
 async function getToolRanking(): Promise<RankedTool[]> {
   try {
-    const res = await apiFetch(`${API_BASE}/tools/ranking`, { next: { revalidate: 300 } });
+    const res = await apiFetch(`${API_BASE}/tools/ranking`, { next: { revalidate: 3600 } });
     return res.ok ? res.json() : [];
   } catch { return []; }
 }
 async function getPostRanking(): Promise<RankedPost[]> {
   try {
-    const res = await apiFetch(`${API_BASE}/posts/ranking`, { next: { revalidate: 300 } });
+    const res = await apiFetch(`${API_BASE}/posts/ranking`, { next: { revalidate: 3600 } });
     return res.ok ? res.json() : [];
   } catch { return []; }
 }
 async function getLabRanking(): Promise<RankedLab[]> {
   try {
-    const res = await apiFetch(`${API_BASE}/labs`, { next: { revalidate: 300 } });
+    const res = await apiFetch(`${API_BASE}/labs`, { next: { revalidate: 3600 } });
     if (!res.ok) return [];
     const all: RankedLab[] = await res.json();
     return all.slice(0, 10);

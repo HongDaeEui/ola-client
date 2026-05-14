@@ -1,7 +1,7 @@
 import { Link } from '@/i18n/routing';
 import { API_BASE, apiFetch } from '@/lib/api';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
-export const revalidate = 300;
+export const revalidate = 3600;
 
 interface Experiment {
   id: string;
@@ -22,7 +22,7 @@ async function getExperiments(category?: string): Promise<Experiment[]> {
     const params = new URLSearchParams();
     if (category && category !== '전체 레시피') params.set('category', category);
     const qs = params.toString();
-    const res = await apiFetch(`${API_BASE}/labs${qs ? `?${qs}` : ''}`, { next: { revalidate: 60 } });
+    const res = await apiFetch(`${API_BASE}/labs${qs ? `?${qs}` : ''}`, { next: { revalidate: 1800 } });
     if (!res.ok) throw new Error('Failed to fetch data');
     return await res.json();
   } catch (error) {
