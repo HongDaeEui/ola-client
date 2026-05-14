@@ -6,6 +6,8 @@ import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
 import { ShareButton } from '@/components/ShareButton';
 import type { Metadata } from 'next';
 
+export const revalidate = 1800;
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   try {
@@ -72,7 +74,7 @@ async function getTool(id: string): Promise<Tool | null> {
 
 async function getRelatedTools(currentId: string): Promise<Tool[]> {
   try {
-    const res = await apiFetch(`${API_BASE}/tools/${currentId}/related`, { next: { revalidate: 300 } });
+    const res = await apiFetch(`${API_BASE}/tools/${currentId}/related`, { next: { revalidate: 1800 } });
     if (!res.ok) return [];
     return await res.json();
   } catch {

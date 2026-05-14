@@ -1,7 +1,7 @@
 import { API_BASE, apiFetch } from '@/lib/api';
 import { Link } from '@/i18n/routing';
 import ResourceCard from './ResourceCard';
-export const revalidate = 300;
+export const revalidate = 3600;
 
 
 interface Resource {
@@ -40,7 +40,7 @@ async function getResources(type?: string, difficulty?: string): Promise<Resourc
     if (type) params.set('type', type);
     if (difficulty) params.set('difficulty', difficulty);
     const qs = params.toString();
-    const res = await apiFetch(`${API_BASE}/resources${qs ? `?${qs}` : ''}`, { next: { revalidate: 60 } });
+    const res = await apiFetch(`${API_BASE}/resources${qs ? `?${qs}` : ''}`, { next: { revalidate: 1800 } });
     if (!res.ok) return [];
     return res.json();
   } catch { return []; }

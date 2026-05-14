@@ -1,13 +1,13 @@
 import { API_BASE, apiFetch } from '@/lib/api';
 import { Link } from '@/i18n/routing';
-export const revalidate = 300;
+export const revalidate = 3600;
 
 
 type CategoryCount = { category: string; count: number };
 
 async function getCategoryCounts(): Promise<CategoryCount[]> {
   try {
-    const res = await apiFetch(`${API_BASE}/tools/categories`, { next: { revalidate: 300 } });
+    const res = await apiFetch(`${API_BASE}/tools/categories`, { next: { revalidate: 3600 } });
     return res.ok ? res.json() : [];
   } catch { return []; }
 }
