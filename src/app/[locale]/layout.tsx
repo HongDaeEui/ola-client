@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { TopNavBar } from '@/components/layout/TopNavBar';
 import { Footer } from '@/components/layout/Footer';
 import { AuthProvider } from '@/context/AuthContext';
@@ -48,6 +49,13 @@ export default async function LocaleLayout({
           </div>
           <Footer />
           <ChatWidget />
+          {process.env.NEXT_PUBLIC_ADSENSE_ID && (
+            <Script
+              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_ID}`}
+              crossOrigin="anonymous"
+              strategy="lazyOnload"
+            />
+          )}
         </AuthProvider>
       </ThemeProvider>
     </NextIntlClientProvider>

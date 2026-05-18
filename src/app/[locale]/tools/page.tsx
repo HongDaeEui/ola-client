@@ -1,7 +1,9 @@
 import { Metadata } from 'next';
+import { Fragment } from 'react';
 import { API_BASE, apiFetch } from '@/lib/api';
 import { Link } from '@/i18n/routing';
 import { getLogoUrl } from '@/lib/logo';
+import AdUnit from '@/components/AdUnit';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
@@ -259,50 +261,57 @@ export default async function ToolsPage({
             {/* Grid */}
             {toolsList.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-                {toolsList.map((tool) => (
-                  <Link key={tool.id} href={`/tools/${tool.id}`}
-                    className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 hover:border-sky-300 hover:shadow-lg transition-all cursor-pointer group">
-                    <div className="flex gap-4 mb-4">
-                      <div className="w-14 h-14 rounded-xl bg-slate-100 shrink-0 flex items-center justify-center text-slate-500 font-bold text-lg uppercase tracking-tighter border border-slate-100 group-hover:bg-slate-900 group-hover:text-white transition-all duration-300 overflow-hidden">
-                        {getLogoUrl(tool.iconUrl)
-                          // eslint-disable-next-line @next/next/no-img-element
-                          ? <img src={getLogoUrl(tool.iconUrl)} alt={tool.name} width={56} height={56} className="w-full h-full object-contain p-1" />
-                          : tool.name.substring(0, 2)
-                        }
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-1 gap-2">
-                          <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-sky-600 transition-colors truncate">{tool.name}</h3>
-                          {tool.isFeatured && (
-                            <span className="text-[10px] bg-sky-500 text-white px-1.5 py-0.5 rounded font-black uppercase shrink-0">Featured</span>
-                          )}
+                {toolsList.map((tool, idx) => (
+                  <Fragment key={tool.id}>
+                    <Link href={`/tools/${tool.id}`}
+                      className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 hover:border-sky-300 hover:shadow-lg transition-all cursor-pointer group">
+                      <div className="flex gap-4 mb-4">
+                        <div className="w-14 h-14 rounded-xl bg-slate-100 shrink-0 flex items-center justify-center text-slate-500 font-bold text-lg uppercase tracking-tighter border border-slate-100 group-hover:bg-slate-900 group-hover:text-white transition-all duration-300 overflow-hidden">
+                          {getLogoUrl(tool.iconUrl)
+                            // eslint-disable-next-line @next/next/no-img-element
+                            ? <img src={getLogoUrl(tool.iconUrl)} alt={tool.name} width={56} height={56} className="w-full h-full object-contain p-1" />
+                            : tool.name.substring(0, 2)
+                          }
                         </div>
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${PRICING_COLOR[tool.pricingModel] ?? 'bg-slate-100 text-slate-600'}`}>
-                            {tool.pricingModel ?? 'Free'}
-                          </span>
-                          <div className="flex items-center text-[11px] text-slate-500 font-bold">
-                            <span className="material-symbols-outlined text-[12px] text-amber-400 mr-0.5">star</span>
-                            {tool.rating?.toFixed(1) ?? '—'}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between mb-1 gap-2">
+                            <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-sky-600 transition-colors truncate">{tool.name}</h3>
+                            {tool.isFeatured && (
+                              <span className="text-[10px] bg-sky-500 text-white px-1.5 py-0.5 rounded font-black uppercase shrink-0">Featured</span>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${PRICING_COLOR[tool.pricingModel] ?? 'bg-slate-100 text-slate-600'}`}>
+                              {tool.pricingModel ?? 'Free'}
+                            </span>
+                            <div className="flex items-center text-[11px] text-slate-500 font-bold">
+                              <span className="material-symbols-outlined text-[12px] text-amber-400 mr-0.5">star</span>
+                              {tool.rating?.toFixed(1) ?? '—'}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    <p className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1 truncate">{tool.shortDesc}</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">{tool.description}</p>
+                      <p className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1 truncate">{tool.shortDesc}</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">{tool.description}</p>
 
-                    <div className="mt-4 flex flex-wrap gap-1.5 pt-4 border-t border-slate-50 dark:border-slate-700">
-                      <span className="text-[10px] font-medium text-sky-700 bg-sky-50 px-2 py-0.5 rounded">
-                        {tool.category}
-                      </span>
-                      {(tool.tags ?? []).slice(0, 2).map(t => (
-                        <span key={t} className="text-[10px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
-                          #{t}
+                      <div className="mt-4 flex flex-wrap gap-1.5 pt-4 border-t border-slate-50 dark:border-slate-700">
+                        <span className="text-[10px] font-medium text-sky-700 bg-sky-50 px-2 py-0.5 rounded">
+                          {tool.category}
                         </span>
-                      ))}
-                    </div>
-                  </Link>
+                        {(tool.tags ?? []).slice(0, 2).map(t => (
+                          <span key={t} className="text-[10px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                            #{t}
+                          </span>
+                        ))}
+                      </div>
+                    </Link>
+                    {idx === 7 && (
+                      <div className="md:col-span-2 xl:col-span-3 my-4">
+                        <AdUnit slot="1234567890" />
+                      </div>
+                    )}
+                  </Fragment>
                 ))}
               </div>
             ) : (

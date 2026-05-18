@@ -52,6 +52,7 @@ interface Tool {
   rating: number;
   tags: string[];
   launchUrl?: string;
+  affiliateUrl?: string;
   iconUrl?: string;
   coverUrl?: string;
   isFeatured?: boolean;
@@ -400,9 +401,9 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
 
             {/* CTA: Visit Site */}
             <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm space-y-3">
-              {tool.launchUrl && (
+              {(tool.affiliateUrl || tool.launchUrl) && (
                 <a
-                  href={tool.launchUrl}
+                  href={tool.affiliateUrl || tool.launchUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full bg-linear-to-r from-slate-900 to-slate-700 text-white py-3.5 rounded-2xl font-black text-sm hover:from-slate-800 hover:to-slate-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-slate-200"

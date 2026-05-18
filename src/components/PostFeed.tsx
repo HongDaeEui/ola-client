@@ -1,8 +1,9 @@
 "use client";
 import { API_BASE } from '@/lib/api';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { Fragment, useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from '@/i18n/routing';
+import AdUnit from '@/components/AdUnit';
 
 const LIMIT = 10;
 
@@ -104,11 +105,11 @@ export function PostFeed({ initialPosts, category }: Props) {
   return (
     <>
       <div className="space-y-3">
-        {posts.map((post) => {
+        {posts.map((post, idx) => {
           const tagClass = CATEGORY_COLORS[post.category] ?? 'text-slate-600 bg-slate-100';
           return (
+            <Fragment key={post.id}>
             <Link
-              key={post.id}
               href={`/community/${post.id}`}
               className="block bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 hover:shadow-lg hover:border-sky-200 dark:hover:border-sky-700 transition-all group"
             >
@@ -149,6 +150,12 @@ export function PostFeed({ initialPosts, category }: Props) {
                 </div>
               </div>
             </Link>
+            {idx > 0 && (idx + 1) % 5 === 0 && (
+              <div className="my-2">
+                <AdUnit slot="3456789012" />
+              </div>
+            )}
+            </Fragment>
           );
         })}
       </div>
