@@ -6,44 +6,53 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Request } from 'express';
+import { verifySupabaseJwt } from './supabase-auth.util';
+
+const ADMIN_EMAIL = 'admin@olalab.kr';
 
 /**
  * AdminGuard
  *
- * X-Admin-Secret 헤더 값을 process.env.ADMIN_SECRET 과 비교하여
- * 관리자 전용 엔드포인트 접근을 제한한다.
+ * 다음 두 가지 방식 중 하나로 관리자 인증을 허용한다:
+ * 1. X-Admin-Secret 헤더 값이 process.env.ADMIN_SECRET 과 일치
+ * 2. Authorization: Bearer {token} 에서 Supabase JWT 검증 후 email === ADMIN_EMAIL
  *
- * - 헤더 값이 없거나 일치하지 않으면 403 ForbiddenException
- * - ADMIN_SECRET 환경변수가 미설정이면 경고 로그 후 403 (fail-closed)
- *
- * 사용 예:
- *   @UseGuards(AdminGuard)
- *   @Get('pending')
- *   findPending() { ... }
+ * - 두 방식 모두 실패 시 403 ForbiddenException
+ * - ADMIN_SECRET 환경변수 미설정 시 Bearer 토큰 방식만 사용
  */
 @Injectable()
 export class AdminGuard implements CanActivate {
   private readonly logger = new Logger(AdminGuard.name);
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
+
+    // 1) X-Admin-Secret 헤더 방식
     const provided =
       (request.headers['x-admin-secret'] as string | undefined) ??
       (request.headers['X-Admin-Secret'] as unknown as string | undefined);
-
     const expected = process.env.ADMIN_SECRET;
 
-    if (!expected || expected.trim().length === 0) {
-      this.logger.warn(
-        'ADMIN_SECRET is not configured. Denying admin request by default (fail-closed).',
-      );
-      throw new ForbiddenException('Admin access is not configured.');
+    if (expected && expected.trim().length > 0 && provided === expected) {
+      return true;
     }
 
-    if (!provided || provided !== expected) {
-      throw new ForbiddenException('Invalid or missing admin credentials.');
+    // 2) Bearer JWT 방식 — admin@olalab.kr 이메일 검증
+    const authorization = request.headers['authorization'] as string | undefined;
+    if (authorization?.toLowerCase().startsWith('bearer ')) {
+      const token = authorization.slice(7).trim();
+      try {
+        const { email } = await verifySupabaseJwt(token);
+        if (email === ADMIN_EMAIL) {
+          return true;
+        }
+        throw new ForbiddenException('Not an admin account.');
+      } catch (err) {
+        if (err instanceof ForbiddenException) throw err;
+        // JWT 검증 실패 — 아래에서 최종 거부
+      }
     }
 
-    return true;
+    throw new ForbiddenException('Invalid or missing admin credentials.');
   }
 }

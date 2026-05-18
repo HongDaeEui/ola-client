@@ -180,4 +180,37 @@ export class ToolsService {
 
     return tool;
   }
+
+  /**
+   * 관리자 직접 추가: status='ACTIVE'로 즉시 저장.
+   * PENDING/승인 워크플로우를 건너뛰며 Telegram 알림도 보내지 않는다.
+   */
+  async adminCreate(data: {
+    name: string;
+    shortDesc: string;
+    description: string;
+    category: string;
+    pricingModel: string;
+    launchUrl: string;
+    affiliateUrl?: string;
+    iconUrl?: string;
+    tags?: string[];
+    rating?: number;
+  }) {
+    return this.prisma.tool.create({
+      data: {
+        name: data.name,
+        shortDesc: data.shortDesc,
+        description: data.description,
+        category: data.category,
+        pricingModel: data.pricingModel,
+        launchUrl: data.launchUrl,
+        affiliateUrl: data.affiliateUrl,
+        iconUrl: data.iconUrl,
+        tags: data.tags ?? [],
+        rating: data.rating ?? 0,
+        status: 'ACTIVE',
+      },
+    });
+  }
 }

@@ -93,6 +93,32 @@ export class ToolsController {
     return this.toolsService.create(body);
   }
 
+  /**
+   * 관리자용 도구 직접 추가 엔드포인트
+   * - status='ACTIVE'로 즉시 저장 (PENDING 단계 생략)
+   * - X-Admin-Secret 헤더 필요 (AdminGuard)
+   */
+  @UseGuards(AdminGuard)
+  @Post('admin')
+  adminCreate(
+    @Body()
+    body: {
+      name: string;
+      shortDesc: string;
+      description: string;
+      category: string;
+      pricingModel: string;
+      launchUrl: string;
+      affiliateUrl?: string;
+      iconUrl?: string;
+      tags?: string[];
+      rating?: number;
+    },
+  ) {
+    console.log(`[tools.adminCreate] direct ACTIVE insert: ${body.name}`);
+    return this.toolsService.adminCreate(body);
+  }
+
   private async extractUser(authorization?: string) {
     if (!authorization?.toLowerCase().startsWith('bearer ')) {
       throw new UnauthorizedException('Missing Bearer token.');
