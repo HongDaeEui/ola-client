@@ -8,17 +8,6 @@ import type { Metadata } from 'next';
 
 export const revalidate = 1800;
 
-export async function generateStaticParams() {
-  try {
-    const res = await fetch(`${API_BASE}/tools`);
-    if (!res.ok) return [];
-    const tools = await res.json();
-    return (Array.isArray(tools) ? tools : tools.items ?? []).map((t: { id: string }) => ({ id: t.id }));
-  } catch {
-    return [];
-  }
-}
-
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   try {

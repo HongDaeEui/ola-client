@@ -6,17 +6,6 @@ import { WorkshopButton, MeetupCreateBridge } from '@/components/WorkshopClient'
 import type { Metadata } from 'next';
 export const revalidate = 1800;
 
-export async function generateStaticParams() {
-  try {
-    const res = await fetch(`${API_BASE}/labs`);
-    if (!res.ok) return [];
-    const labs = await res.json();
-    return (Array.isArray(labs) ? labs : labs.items ?? []).map((l: { id: string }) => ({ id: l.id }));
-  } catch {
-    return [];
-  }
-}
-
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   try {
