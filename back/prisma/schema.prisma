@@ -44,6 +44,7 @@ model Tool {
   coverUrl     String?
   isFeatured   Boolean  @default(false)
   launchUrl    String?
+  affiliateUrl String?
   status       String   @default("ACTIVE") // "ACTIVE", "COMING_SOON"
   tags         String[]
   likes        Int      @default(0)

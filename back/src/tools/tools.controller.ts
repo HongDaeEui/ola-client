@@ -82,6 +82,7 @@ export class ToolsController {
       description: string;
       category: string;
       launchUrl: string;
+      affiliateUrl?: string;
       pricingModel?: string;
       tags?: string[];
     },

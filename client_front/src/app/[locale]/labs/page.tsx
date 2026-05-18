@@ -1,6 +1,8 @@
+import { Fragment } from 'react';
 import { Link } from '@/i18n/routing';
 import { API_BASE, apiFetch } from '@/lib/api';
 import { LikeBookmarkButtons } from '@/components/LikeBookmarkButtons';
+import AdUnit from '@/components/AdUnit';
 export const revalidate = 3600;
 
 interface Experiment {
@@ -124,9 +126,11 @@ export default async function LabsPage({
                 'from-violet-500 to-purple-700',
                 'from-pink-500 to-rose-500',
               ][seed % 6];
+              const adIndex = Math.floor(experiments.length / 2) - 1;
 
               return (
-                <Link key={exp.id} href={`/labs/${exp.id}`}
+                <Fragment key={exp.id}>
+                <Link href={`/labs/${exp.id}`}
                   className="group bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-sky-900/10 hover:border-sky-200 dark:hover:border-sky-800 transition-all duration-300 overflow-hidden flex flex-col">
 
                   {/* Thumbnail */}
@@ -207,6 +211,12 @@ export default async function LabsPage({
                   </div>
 
                 </Link>
+                {i === adIndex && (
+                  <div className="md:col-span-2 my-2">
+                    <AdUnit slot="2345678901" />
+                  </div>
+                )}
+                </Fragment>
               );
             })}
           </div>

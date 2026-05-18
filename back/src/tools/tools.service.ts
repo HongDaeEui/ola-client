@@ -17,6 +17,7 @@ const TOOL_LIST_SELECT = {
   likes: true,
   status: true,
   launchUrl: true,
+  affiliateUrl: true,
   createdAt: true,
 } as const;
 
@@ -158,6 +159,7 @@ export class ToolsService {
     description: string;
     category: string;
     launchUrl: string;
+    affiliateUrl?: string;
     pricingModel?: string;
     tags?: string[];
   }) {
