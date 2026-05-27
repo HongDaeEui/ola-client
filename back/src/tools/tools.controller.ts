@@ -21,12 +21,22 @@ export class ToolsController {
 
   @Get()
   findAll(
+    @Query('q') q?: string,
     @Query('category') category?: string,
     @Query('pricing') pricing?: string,
     @Query('tags') tags?: string,
     @Query('sort') sort?: string,
+    @Query('limit') limit?: string,
   ) {
-    return this.toolsService.findAll({ category, pricing, tags, sort });
+    const parsedLimit = limit ? parseInt(limit, 10) : undefined;
+    return this.toolsService.findAll({
+      q,
+      category,
+      pricing,
+      tags,
+      sort,
+      limit: Number.isFinite(parsedLimit) ? parsedLimit : undefined,
+    });
   }
 
   @Get('featured')

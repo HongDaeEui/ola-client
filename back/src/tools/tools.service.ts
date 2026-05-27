@@ -41,8 +41,16 @@ export class ToolsService {
     private telegramService: TelegramService,
   ) {}
 
-  async findAll(filters?: { category?: string; pricing?: string; tags?: string; sort?: string }) {
+  async findAll(filters?: {
+    q?: string;
+    category?: string;
+    pricing?: string;
+    tags?: string;
+    sort?: string;
+    limit?: number;
+  }) {
     const where: Record<string, unknown> = { status: 'ACTIVE' };
+    const query = filters?.q?.trim();
     
     if (filters?.category) {
       where.category = { in: filters.category.split(',').map(s => s.trim()) };
@@ -53,13 +61,30 @@ export class ToolsService {
     if (filters?.tags) {
       where.tags = { hasSome: filters.tags.split(',').map(s => s.trim()) };
     }
+    if (query) {
+      where.OR = [
+        { name: { contains: query, mode: 'insensitive' } },
+        { shortDesc: { contains: query, mode: 'insensitive' } },
+        { description: { contains: query, mode: 'insensitive' } },
+        { category: { contains: query, mode: 'insensitive' } },
+      ];
+    }
 
     const orderBy =
       filters?.sort === 'rating' ? { rating: 'desc' as const }
       : filters?.sort === 'popular' ? { isFeatured: 'desc' as const }
       : { createdAt: 'desc' as const };
 
-    const tools = await this.prisma.tool.findMany({ where, orderBy, select: TOOL_LIST_SELECT });
+    const take =
+      typeof filters?.limit === 'number'
+        ? Math.max(1, Math.min(filters.limit, 100))
+        : undefined;
+    const tools = await this.prisma.tool.findMany({
+      where,
+      orderBy,
+      ...(take ? { take } : {}),
+      select: TOOL_LIST_SELECT,
+    });
     return tools.map(applyLogoUrl);
   }
 

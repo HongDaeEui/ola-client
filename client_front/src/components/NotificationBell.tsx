@@ -58,7 +58,7 @@ export function NotificationBell() {
   const { data: unreadData } = useSWR(
     user?.email ? `${API_BASE}/notifications/unread-count` : null,
     fetcher,
-    { refreshInterval: 30000, revalidateOnFocus: true }
+    { refreshInterval: 120000, revalidateOnFocus: false, dedupingInterval: 30000 }
   );
 
   // 드롭다운 열릴 때만 전체 목록 패치

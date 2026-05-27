@@ -101,6 +101,7 @@ export class PostsController {
   }
 
   @Patch(':id/view')
+  @Throttle({ default: { limit: 20, ttl: 60000 } })
   incrementViews(@Param('id') id: string) {
     return this.postsService.incrementViews(id);
   }

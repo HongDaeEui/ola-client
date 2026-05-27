@@ -11,6 +11,7 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { PromptsService } from './prompts.service';
 import { AdminGuard } from '../common/admin.guard';
 import { verifySupabaseJwt } from '../common/supabase-auth.util';
@@ -44,6 +45,7 @@ export class PromptsController {
   }
 
   @Patch(':id/view')
+  @Throttle({ default: { limit: 20, ttl: 60000 } })
   incrementViews(@Param('id') id: string) {
     return this.promptsService.incrementViews(id);
   }

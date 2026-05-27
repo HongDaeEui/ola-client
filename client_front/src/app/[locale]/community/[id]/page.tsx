@@ -31,7 +31,7 @@ interface Post {
 
 async function getPost(id: string): Promise<Post | null> {
   try {
-    const res = await apiFetch(`${API_BASE}/posts/${id}`, { cache: 'no-store' });
+    const res = await apiFetch(`${API_BASE}/posts/${id}`, { next: { revalidate: 300 } });
     if (!res.ok) return null;
     return res.json();
   } catch {

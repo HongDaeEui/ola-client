@@ -2,6 +2,10 @@ import { MetadataRoute } from 'next';
 import { API_BASE, apiFetch } from '@/lib/api';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://ola.olalab.kr';
+const SITEMAP_REVALIDATE_SECONDS = 21600; // 6h
+const SITEMAP_ITEM_LIMIT = 200;
+
+export const revalidate = SITEMAP_REVALIDATE_SECONDS;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const sitemap: MetadataRoute.Sitemap = [
@@ -14,8 +18,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     const [postsRes, promptsRes] = await Promise.all([
-      apiFetch(`${API_BASE}/posts?limit=1000`),
-      apiFetch(`${API_BASE}/prompts?limit=1000`),
+      apiFetch(`${API_BASE}/posts?limit=${SITEMAP_ITEM_LIMIT}`, { next: { revalidate: SITEMAP_REVALIDATE_SECONDS } }),
+      apiFetch(`${API_BASE}/prompts?limit=${SITEMAP_ITEM_LIMIT}`, { next: { revalidate: SITEMAP_REVALIDATE_SECONDS } }),
     ]);
 
     if (postsRes.ok) {

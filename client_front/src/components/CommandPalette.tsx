@@ -45,6 +45,10 @@ export function CommandPalette() {
       setResults([]);
       return;
     }
+    if (query.trim().length < 2) {
+      setResults([]);
+      return;
+    }
     const fetchSearch = async () => {
       setLoading(true);
       try {
@@ -98,7 +102,7 @@ export function CommandPalette() {
 
       <AnimatePresence>
         {open && (
-          <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh]">
+          <div className="fixed inset-0 z-100 flex items-start justify-center pt-[15vh]">
             <motion.div 
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               className="fixed inset-0 bg-slate-900/40 dark:bg-black/60 backdrop-blur-sm"

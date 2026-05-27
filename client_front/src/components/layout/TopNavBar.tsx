@@ -109,7 +109,7 @@ export function TopNavBar() { const t = useTranslations('Nav');
         const hasAny = data.tools.length + data.prompts.length + data.posts.length + data.labs.length > 0;
         setShowDropdown(hasAny);
       } catch { /* ignore */ }
-    }, 300);
+    }, 500);
   }, []);
 
   useEffect(() => {
