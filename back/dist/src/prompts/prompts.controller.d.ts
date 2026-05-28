@@ -9,17 +9,17 @@ export declare class PromptsController {
         };
     } & {
         category: string;
-        createdAt: Date;
         id: string;
-        likes: number;
-        updatedAt: Date;
         title: string;
+        toolName: string;
         content: string;
         authorId: string;
-        isFlagged: boolean;
+        likes: number;
         views: number;
+        createdAt: Date;
+        updatedAt: Date;
+        isFlagged: boolean;
         flagReason: string | null;
-        toolName: string;
     })[]>;
     findOne(id: string): Promise<{
         author: {
@@ -28,45 +28,45 @@ export declare class PromptsController {
         };
     } & {
         category: string;
-        createdAt: Date;
         id: string;
-        likes: number;
-        updatedAt: Date;
         title: string;
+        toolName: string;
         content: string;
         authorId: string;
-        isFlagged: boolean;
+        likes: number;
         views: number;
+        createdAt: Date;
+        updatedAt: Date;
+        isFlagged: boolean;
         flagReason: string | null;
-        toolName: string;
     }>;
     incrementViews(id: string): import("@prisma/client").Prisma.Prisma__PromptClient<{
         category: string;
-        createdAt: Date;
         id: string;
-        likes: number;
-        updatedAt: Date;
         title: string;
+        toolName: string;
         content: string;
         authorId: string;
-        isFlagged: boolean;
+        likes: number;
         views: number;
+        createdAt: Date;
+        updatedAt: Date;
+        isFlagged: boolean;
         flagReason: string | null;
-        toolName: string;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     remove(id: string): Promise<{
         category: string;
-        createdAt: Date;
         id: string;
-        likes: number;
-        updatedAt: Date;
         title: string;
+        toolName: string;
         content: string;
         authorId: string;
-        isFlagged: boolean;
+        likes: number;
         views: number;
+        createdAt: Date;
+        updatedAt: Date;
+        isFlagged: boolean;
         flagReason: string | null;
-        toolName: string;
     }>;
     create(body: {
         title: string;
@@ -76,17 +76,17 @@ export declare class PromptsController {
         userName: string;
     }, authorization?: string): Promise<{
         category: string;
-        createdAt: Date;
         id: string;
-        likes: number;
-        updatedAt: Date;
         title: string;
+        toolName: string;
         content: string;
         authorId: string;
-        isFlagged: boolean;
+        likes: number;
         views: number;
+        createdAt: Date;
+        updatedAt: Date;
+        isFlagged: boolean;
         flagReason: string | null;
-        toolName: string;
     }>;
     private extractUser;
 }

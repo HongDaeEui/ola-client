@@ -9,14 +9,14 @@ export declare class ResourcesService {
             avatarUrl: string | null;
         };
     } & {
-        createdAt: Date;
-        isFeatured: boolean;
         id: string;
-        description: string;
-        updatedAt: Date;
         title: string;
+        description: string;
         difficulty: string;
         authorId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isFeatured: boolean;
         type: string;
         contentUrl: string | null;
         reads: number;
@@ -27,27 +27,27 @@ export declare class ResourcesService {
             username: string;
         };
     } & {
-        createdAt: Date;
-        isFeatured: boolean;
         id: string;
-        description: string;
-        updatedAt: Date;
         title: string;
+        description: string;
         difficulty: string;
         authorId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isFeatured: boolean;
         type: string;
         contentUrl: string | null;
         reads: number;
     })[]>;
     incrementReads(id: string): Promise<{
-        createdAt: Date;
-        isFeatured: boolean;
         id: string;
-        description: string;
-        updatedAt: Date;
         title: string;
+        description: string;
         difficulty: string;
         authorId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isFeatured: boolean;
         type: string;
         contentUrl: string | null;
         reads: number;

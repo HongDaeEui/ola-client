@@ -8,13 +8,13 @@ export declare class MeetupsService {
             attendees: number;
         };
     } & {
-        status: string;
-        createdAt: Date;
         id: string;
-        description: string;
-        coverUrl: string | null;
-        updatedAt: Date;
         title: string;
+        description: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: string;
+        coverUrl: string | null;
         date: Date;
         location: string;
         isVirtual: boolean;
@@ -27,13 +27,13 @@ export declare class MeetupsService {
             attendees: number;
         };
     } & {
-        status: string;
-        createdAt: Date;
         id: string;
-        description: string;
-        coverUrl: string | null;
-        updatedAt: Date;
         title: string;
+        description: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: string;
+        coverUrl: string | null;
         date: Date;
         location: string;
         isVirtual: boolean;
@@ -42,13 +42,13 @@ export declare class MeetupsService {
         hostEmail: string | null;
     })[]>;
     createMeetup(dto: CreateMeetupDto, hostEmail: string): Promise<{
-        status: string;
-        createdAt: Date;
         id: string;
-        description: string;
-        coverUrl: string | null;
-        updatedAt: Date;
         title: string;
+        description: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: string;
+        coverUrl: string | null;
         date: Date;
         location: string;
         isVirtual: boolean;
@@ -61,13 +61,13 @@ export declare class MeetupsService {
             attendees: number;
         };
     } & {
-        status: string;
-        createdAt: Date;
         id: string;
-        description: string;
-        coverUrl: string | null;
-        updatedAt: Date;
         title: string;
+        description: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: string;
+        coverUrl: string | null;
         date: Date;
         location: string;
         isVirtual: boolean;

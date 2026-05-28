@@ -9,14 +9,14 @@ export declare class ResourcesController {
             avatarUrl: string | null;
         };
     } & {
-        createdAt: Date;
-        isFeatured: boolean;
         id: string;
-        description: string;
-        updatedAt: Date;
         title: string;
+        description: string;
         difficulty: string;
         authorId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isFeatured: boolean;
         type: string;
         contentUrl: string | null;
         reads: number;
@@ -27,14 +27,14 @@ export declare class ResourcesController {
             username: string;
         };
     } & {
-        createdAt: Date;
-        isFeatured: boolean;
         id: string;
-        description: string;
-        updatedAt: Date;
         title: string;
+        description: string;
         difficulty: string;
         authorId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isFeatured: boolean;
         type: string;
         contentUrl: string | null;
         reads: number;
@@ -44,14 +44,14 @@ export declare class ResourcesController {
         count: number;
     }[]>;
     incrementReads(id: string): Promise<{
-        createdAt: Date;
-        isFeatured: boolean;
         id: string;
-        description: string;
-        updatedAt: Date;
         title: string;
+        description: string;
         difficulty: string;
         authorId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isFeatured: boolean;
         type: string;
         contentUrl: string | null;
         reads: number;

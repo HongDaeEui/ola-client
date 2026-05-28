@@ -3,8 +3,8 @@ export declare class NotificationsController {
     private readonly notificationsService;
     constructor(notificationsService: NotificationsService);
     getByUserEmail(authorization?: string): Promise<{
-        createdAt: Date;
         id: string;
+        createdAt: Date;
         type: string;
         recipientId: string;
         message: string;
@@ -20,8 +20,8 @@ export declare class NotificationsController {
         success: boolean;
     } | undefined>;
     markRead(id: string, authorization?: string): Promise<{
-        createdAt: Date;
         id: string;
+        createdAt: Date;
         type: string;
         recipientId: string;
         message: string;

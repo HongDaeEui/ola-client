@@ -4,32 +4,32 @@ export declare class SearchController {
     constructor(searchService: SearchService);
     search(q: string): Promise<{
         tools: {
-            category: string;
-            pricingModel: string | null;
             id: string;
             name: string;
             shortDesc: string;
+            category: string;
+            pricingModel: string | null;
             iconUrl: string | null;
         }[];
         prompts: {
-            category: string;
             id: string;
+            category: string;
             likes: number;
             title: string;
             toolName: string;
         }[];
         posts: {
-            category: string;
-            createdAt: Date;
             id: string;
+            category: string;
             likes: number;
+            createdAt: Date;
             title: string;
             views: number;
         }[];
         labs: {
-            category: string;
             id: string;
             description: string;
+            category: string;
             likes: number;
             title: string;
             difficulty: string | null;
@@ -38,9 +38,9 @@ export declare class SearchController {
     }>;
     suggest(q: string): Promise<{
         tools: {
-            category: string;
             id: string;
             name: string;
+            category: string;
             iconUrl: string | null;
         }[];
         prompts: {
@@ -49,8 +49,8 @@ export declare class SearchController {
             toolName: string;
         }[];
         posts: {
-            category: string;
             id: string;
+            category: string;
             title: string;
         }[];
         labs: {

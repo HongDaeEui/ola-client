@@ -11,10 +11,10 @@ export declare class UsersService {
                 posts: number;
             };
         } & {
-            createdAt: Date;
             id: string;
-            name: string | null;
+            createdAt: Date;
             updatedAt: Date;
+            name: string | null;
             email: string;
             username: string;
             avatarUrl: string | null;
@@ -24,10 +24,10 @@ export declare class UsersService {
     updateRole(id: string, role: any): Promise<{
         success: boolean;
         data: {
-            createdAt: Date;
             id: string;
-            name: string | null;
+            createdAt: Date;
             updatedAt: Date;
+            name: string | null;
             email: string;
             username: string;
             avatarUrl: string | null;
@@ -35,20 +35,20 @@ export declare class UsersService {
         };
     }>;
     findByEmail(email: string): Promise<{
-        createdAt: Date;
         id: string;
-        name: string | null;
+        createdAt: Date;
         updatedAt: Date;
+        name: string | null;
         email: string;
         username: string;
         avatarUrl: string | null;
         role: import("@prisma/client").$Enums.UserRole;
     } | null>;
     updateUsername(email: string, username: string): Promise<{
-        createdAt: Date;
         id: string;
-        name: string | null;
+        createdAt: Date;
         updatedAt: Date;
+        name: string | null;
         email: string;
         username: string;
         avatarUrl: string | null;

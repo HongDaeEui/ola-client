@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SearchController = void 0;
 const common_1 = require("@nestjs/common");
+const throttler_1 = require("@nestjs/throttler");
 const search_service_1 = require("./search.service");
 let SearchController = class SearchController {
     searchService;
@@ -30,6 +31,7 @@ let SearchController = class SearchController {
 exports.SearchController = SearchController;
 __decorate([
     (0, common_1.Get)(),
+    (0, throttler_1.Throttle)({ default: { limit: 30, ttl: 60000 } }),
     __param(0, (0, common_1.Query)('q')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -37,6 +39,7 @@ __decorate([
 ], SearchController.prototype, "search", null);
 __decorate([
     (0, common_1.Get)('suggest'),
+    (0, throttler_1.Throttle)({ default: { limit: 60, ttl: 60000 } }),
     __param(0, (0, common_1.Query)('q')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

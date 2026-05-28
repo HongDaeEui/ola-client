@@ -142,6 +142,7 @@ __decorate([
 ], PostsController.prototype, "create", null);
 __decorate([
     (0, common_1.Patch)(':id/view'),
+    (0, throttler_1.Throttle)({ default: { limit: 20, ttl: 60000 } }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

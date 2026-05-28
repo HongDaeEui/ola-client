@@ -27,6 +27,7 @@ const TOOL_LIST_SELECT = {
     likes: true,
     status: true,
     launchUrl: true,
+    affiliateUrl: true,
     createdAt: true,
 };
 const LOGO_TOKEN = 'pk_HqFdbQC2T_GqjA12c910QQ';
@@ -50,6 +51,7 @@ let ToolsService = class ToolsService {
     }
     async findAll(filters) {
         const where = { status: 'ACTIVE' };
+        const query = filters?.q?.trim();
         if (filters?.category) {
             where.category = { in: filters.category.split(',').map(s => s.trim()) };
         }
@@ -59,10 +61,26 @@ let ToolsService = class ToolsService {
         if (filters?.tags) {
             where.tags = { hasSome: filters.tags.split(',').map(s => s.trim()) };
         }
+        if (query) {
+            where.OR = [
+                { name: { contains: query, mode: 'insensitive' } },
+                { shortDesc: { contains: query, mode: 'insensitive' } },
+                { description: { contains: query, mode: 'insensitive' } },
+                { category: { contains: query, mode: 'insensitive' } },
+            ];
+        }
         const orderBy = filters?.sort === 'rating' ? { rating: 'desc' }
             : filters?.sort === 'popular' ? { isFeatured: 'desc' }
                 : { createdAt: 'desc' };
-        const tools = await this.prisma.tool.findMany({ where, orderBy, select: TOOL_LIST_SELECT });
+        const take = typeof filters?.limit === 'number'
+            ? Math.max(1, Math.min(filters.limit, 100))
+            : undefined;
+        const tools = await this.prisma.tool.findMany({
+            where,
+            orderBy,
+            ...(take ? { take } : {}),
+            select: TOOL_LIST_SELECT,
+        });
         return tools.map(applyLogoUrl);
     }
     async findFeatured() {
@@ -158,6 +176,23 @@ let ToolsService = class ToolsService {
             websiteUrl: tool.launchUrl,
         }).catch(() => { });
         return tool;
+    }
+    async adminCreate(data) {
+        return this.prisma.tool.create({
+            data: {
+                name: data.name,
+                shortDesc: data.shortDesc,
+                description: data.description,
+                category: data.category,
+                pricingModel: data.pricingModel,
+                launchUrl: data.launchUrl,
+                affiliateUrl: data.affiliateUrl,
+                iconUrl: data.iconUrl,
+                tags: data.tags ?? [],
+                rating: data.rating ?? 0,
+                status: 'ACTIVE',
+            },
+        });
     }
 };
 exports.ToolsService = ToolsService;

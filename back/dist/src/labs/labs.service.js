@@ -66,6 +66,41 @@ let LabsService = class LabsService {
             where: { id },
         });
     }
+    async adminCreate(data) {
+        let authorId = data.authorId;
+        if (!authorId) {
+            const admin = await this.prisma.user.findFirst({
+                where: { role: 'ADMIN' },
+                select: { id: true },
+            });
+            if (admin) {
+                authorId = admin.id;
+            }
+            else {
+                const anyUser = await this.prisma.user.findFirst({
+                    select: { id: true },
+                });
+                if (!anyUser) {
+                    throw new common_1.NotFoundException('authorId가 지정되지 않았고 사용자 레코드가 존재하지 않습니다.');
+                }
+                authorId = anyUser.id;
+            }
+        }
+        return this.prisma.experiment.create({
+            data: {
+                title: data.title,
+                description: data.description,
+                content: data.content,
+                category: data.category,
+                difficulty: data.difficulty,
+                emoji: data.emoji,
+                metric: data.metric,
+                stack: data.stack ?? [],
+                color: data.color,
+                authorId,
+            },
+        });
+    }
 };
 exports.LabsService = LabsService;
 exports.LabsService = LabsService = __decorate([

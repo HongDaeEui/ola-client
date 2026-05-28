@@ -23,8 +23,16 @@ let ToolsController = class ToolsController {
     constructor(toolsService) {
         this.toolsService = toolsService;
     }
-    findAll(category, pricing, tags, sort) {
-        return this.toolsService.findAll({ category, pricing, tags, sort });
+    findAll(q, category, pricing, tags, sort, limit) {
+        const parsedLimit = limit ? parseInt(limit, 10) : undefined;
+        return this.toolsService.findAll({
+            q,
+            category,
+            pricing,
+            tags,
+            sort,
+            limit: Number.isFinite(parsedLimit) ? parsedLimit : undefined,
+        });
     }
     findFeatured() {
         return this.toolsService.findFeatured();
@@ -55,6 +63,10 @@ let ToolsController = class ToolsController {
         console.log(`[tools.create] submitted by ${email}: ${body.name}`);
         return this.toolsService.create(body);
     }
+    adminCreate(body) {
+        console.log(`[tools.adminCreate] direct ACTIVE insert: ${body.name}`);
+        return this.toolsService.adminCreate(body);
+    }
     async extractUser(authorization) {
         if (!authorization?.toLowerCase().startsWith('bearer ')) {
             throw new common_1.UnauthorizedException('Missing Bearer token.');
@@ -68,12 +80,14 @@ let ToolsController = class ToolsController {
 exports.ToolsController = ToolsController;
 __decorate([
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Query)('category')),
-    __param(1, (0, common_1.Query)('pricing')),
-    __param(2, (0, common_1.Query)('tags')),
-    __param(3, (0, common_1.Query)('sort')),
+    __param(0, (0, common_1.Query)('q')),
+    __param(1, (0, common_1.Query)('category')),
+    __param(2, (0, common_1.Query)('pricing')),
+    __param(3, (0, common_1.Query)('tags')),
+    __param(4, (0, common_1.Query)('sort')),
+    __param(5, (0, common_1.Query)('limit')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String, String]),
+    __metadata("design:paramtypes", [String, String, String, String, String, String]),
     __metadata("design:returntype", void 0)
 ], ToolsController.prototype, "findAll", null);
 __decorate([
@@ -140,6 +154,14 @@ __decorate([
     __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], ToolsController.prototype, "create", null);
+__decorate([
+    (0, common_1.UseGuards)(admin_guard_1.AdminGuard),
+    (0, common_1.Post)('admin'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], ToolsController.prototype, "adminCreate", null);
 exports.ToolsController = ToolsController = __decorate([
     (0, common_1.Controller)('tools'),
     __metadata("design:paramtypes", [tools_service_1.ToolsService])

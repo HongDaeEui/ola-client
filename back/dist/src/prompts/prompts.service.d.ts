@@ -17,30 +17,30 @@ export declare class PromptsService {
     } & {
         id: string;
         title: string;
-        toolName: string;
-        category: string;
         content: string;
         authorId: string;
         likes: number;
-        views: number;
+        category: string;
         createdAt: Date;
         updatedAt: Date;
         isFlagged: boolean;
+        views: number;
         flagReason: string | null;
+        toolName: string;
     })[]>;
     incrementViews(id: string): import("@prisma/client").Prisma.Prisma__PromptClient<{
         id: string;
         title: string;
-        toolName: string;
-        category: string;
         content: string;
         authorId: string;
         likes: number;
-        views: number;
+        category: string;
         createdAt: Date;
         updatedAt: Date;
         isFlagged: boolean;
+        views: number;
         flagReason: string | null;
+        toolName: string;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     findOne(id: string): Promise<{
         author: {
@@ -50,16 +50,16 @@ export declare class PromptsService {
     } & {
         id: string;
         title: string;
-        toolName: string;
-        category: string;
         content: string;
         authorId: string;
         likes: number;
-        views: number;
+        category: string;
         createdAt: Date;
         updatedAt: Date;
         isFlagged: boolean;
+        views: number;
         flagReason: string | null;
+        toolName: string;
     }>;
     create(data: {
         title: string;
@@ -71,29 +71,29 @@ export declare class PromptsService {
     }): Promise<{
         id: string;
         title: string;
-        toolName: string;
-        category: string;
         content: string;
         authorId: string;
         likes: number;
-        views: number;
+        category: string;
         createdAt: Date;
         updatedAt: Date;
         isFlagged: boolean;
+        views: number;
         flagReason: string | null;
+        toolName: string;
     }>;
     remove(id: string): Promise<{
         id: string;
         title: string;
-        toolName: string;
-        category: string;
         content: string;
         authorId: string;
         likes: number;
-        views: number;
+        category: string;
         createdAt: Date;
         updatedAt: Date;
         isFlagged: boolean;
+        views: number;
         flagReason: string | null;
+        toolName: string;
     }>;
 }

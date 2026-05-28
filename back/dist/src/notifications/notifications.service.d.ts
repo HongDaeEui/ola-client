@@ -5,8 +5,8 @@ export declare class NotificationsService {
     private gateway?;
     constructor(prisma: PrismaService, gateway?: NotificationsGateway | undefined);
     getByUserEmail(email: string): Promise<{
-        createdAt: Date;
         id: string;
+        createdAt: Date;
         type: string;
         recipientId: string;
         message: string;
@@ -19,8 +19,8 @@ export declare class NotificationsService {
         count: number;
     }>;
     markRead(id: string): Promise<{
-        createdAt: Date;
         id: string;
+        createdAt: Date;
         type: string;
         recipientId: string;
         message: string;
@@ -40,8 +40,8 @@ export declare class NotificationsService {
         targetId: string;
         targetTitle?: string;
     }): Promise<{
-        createdAt: Date;
         id: string;
+        createdAt: Date;
         type: string;
         recipientId: string;
         message: string;

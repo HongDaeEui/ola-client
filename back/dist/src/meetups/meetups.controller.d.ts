@@ -4,13 +4,13 @@ export declare class MeetupsController {
     private readonly meetupsService;
     constructor(meetupsService: MeetupsService);
     create(dto: CreateMeetupDto, authorization?: string): Promise<{
-        status: string;
-        createdAt: Date;
         id: string;
-        description: string;
-        coverUrl: string | null;
-        updatedAt: Date;
         title: string;
+        description: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: string;
+        coverUrl: string | null;
         date: Date;
         location: string;
         isVirtual: boolean;
@@ -23,13 +23,13 @@ export declare class MeetupsController {
             attendees: number;
         };
     } & {
-        status: string;
-        createdAt: Date;
         id: string;
-        description: string;
-        coverUrl: string | null;
-        updatedAt: Date;
         title: string;
+        description: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: string;
+        coverUrl: string | null;
         date: Date;
         location: string;
         isVirtual: boolean;
@@ -42,13 +42,13 @@ export declare class MeetupsController {
             attendees: number;
         };
     } & {
-        status: string;
-        createdAt: Date;
         id: string;
-        description: string;
-        coverUrl: string | null;
-        updatedAt: Date;
         title: string;
+        description: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: string;
+        coverUrl: string | null;
         date: Date;
         location: string;
         isVirtual: boolean;
@@ -61,13 +61,13 @@ export declare class MeetupsController {
             attendees: number;
         };
     } & {
-        status: string;
-        createdAt: Date;
         id: string;
-        description: string;
-        coverUrl: string | null;
-        updatedAt: Date;
         title: string;
+        description: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: string;
+        coverUrl: string | null;
         date: Date;
         location: string;
         isVirtual: boolean;

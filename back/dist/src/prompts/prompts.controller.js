@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PromptsController = void 0;
 const common_1 = require("@nestjs/common");
+const throttler_1 = require("@nestjs/throttler");
 const prompts_service_1 = require("./prompts.service");
 const admin_guard_1 = require("../common/admin.guard");
 const supabase_auth_util_1 = require("../common/supabase-auth.util");
@@ -79,6 +80,7 @@ __decorate([
 ], PromptsController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id/view'),
+    (0, throttler_1.Throttle)({ default: { limit: 20, ttl: 60000 } }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

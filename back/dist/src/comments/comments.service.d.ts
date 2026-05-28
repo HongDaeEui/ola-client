@@ -6,35 +6,35 @@ export declare class CommentsService {
     constructor(prisma: PrismaService, notifications: NotificationsService);
     findByPost(postId: string): import("@prisma/client").Prisma.PrismaPromise<({
         author: {
+            name: string | null;
             email: string;
             username: string;
-            name: string | null;
             avatarUrl: string | null;
         };
         replies: ({
             author: {
+                name: string | null;
                 email: string;
                 username: string;
-                name: string | null;
                 avatarUrl: string | null;
             };
         } & {
             id: string;
             content: string;
-            postId: string;
             authorId: string;
-            parentId: string | null;
-            updatedAt: Date;
             createdAt: Date;
+            updatedAt: Date;
+            postId: string;
+            parentId: string | null;
         })[];
     } & {
         id: string;
         content: string;
-        postId: string;
         authorId: string;
-        parentId: string | null;
-        updatedAt: Date;
         createdAt: Date;
+        updatedAt: Date;
+        postId: string;
+        parentId: string | null;
     })[]>;
     create(data: {
         content: string;
@@ -44,43 +44,43 @@ export declare class CommentsService {
         parentId?: string;
     }): Promise<{
         author: {
+            name: string | null;
             email: string;
             username: string;
-            name: string | null;
             avatarUrl: string | null;
         };
     } & {
         id: string;
         content: string;
-        postId: string;
         authorId: string;
-        parentId: string | null;
-        updatedAt: Date;
         createdAt: Date;
+        updatedAt: Date;
+        postId: string;
+        parentId: string | null;
     }>;
     update(id: string, userEmail: string, content: string): Promise<({
         author: {
+            name: string | null;
             email: string;
             username: string;
-            name: string | null;
             avatarUrl: string | null;
         };
     } & {
         id: string;
         content: string;
-        postId: string;
         authorId: string;
-        parentId: string | null;
-        updatedAt: Date;
         createdAt: Date;
+        updatedAt: Date;
+        postId: string;
+        parentId: string | null;
     }) | null>;
     remove(id: string, userEmail: string): Promise<{
         id: string;
         content: string;
-        postId: string;
         authorId: string;
-        parentId: string | null;
-        updatedAt: Date;
         createdAt: Date;
+        updatedAt: Date;
+        postId: string;
+        parentId: string | null;
     } | null>;
 }

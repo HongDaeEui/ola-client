@@ -4,10 +4,10 @@ export declare class LabsController {
     constructor(labsService: LabsService);
     getExperiments(category?: string): Promise<{
         category: string;
-        createdAt: Date;
         id: string;
         description: string;
         likes: number;
+        createdAt: Date;
         title: string;
         difficulty: string | null;
         emoji: string | null;
@@ -26,10 +26,38 @@ export declare class LabsController {
         };
     } & {
         category: string;
-        createdAt: Date;
         id: string;
         description: string;
         likes: number;
+        createdAt: Date;
+        updatedAt: Date;
+        title: string;
+        content: string | null;
+        difficulty: string | null;
+        emoji: string | null;
+        thumbnailUrl: string | null;
+        metric: string;
+        authorId: string;
+        stack: string[];
+        color: string | null;
+    }>;
+    adminCreate(body: {
+        title: string;
+        description: string;
+        content?: string;
+        category: string;
+        difficulty?: string;
+        emoji?: string;
+        metric: string;
+        stack?: string[];
+        color?: string;
+        authorId?: string;
+    }): Promise<{
+        category: string;
+        id: string;
+        description: string;
+        likes: number;
+        createdAt: Date;
         updatedAt: Date;
         title: string;
         content: string | null;
@@ -43,10 +71,10 @@ export declare class LabsController {
     }>;
     remove(id: string): Promise<{
         category: string;
-        createdAt: Date;
         id: string;
         description: string;
         likes: number;
+        createdAt: Date;
         updatedAt: Date;
         title: string;
         content: string | null;

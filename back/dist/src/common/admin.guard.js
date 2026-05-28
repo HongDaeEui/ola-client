@@ -9,21 +9,34 @@ var AdminGuard_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminGuard = void 0;
 const common_1 = require("@nestjs/common");
+const supabase_auth_util_1 = require("./supabase-auth.util");
+const ADMIN_EMAIL = 'admin@olalab.kr';
 let AdminGuard = AdminGuard_1 = class AdminGuard {
     logger = new common_1.Logger(AdminGuard_1.name);
-    canActivate(context) {
+    async canActivate(context) {
         const request = context.switchToHttp().getRequest();
         const provided = request.headers['x-admin-secret'] ??
             request.headers['X-Admin-Secret'];
         const expected = process.env.ADMIN_SECRET;
-        if (!expected || expected.trim().length === 0) {
-            this.logger.warn('ADMIN_SECRET is not configured. Denying admin request by default (fail-closed).');
-            throw new common_1.ForbiddenException('Admin access is not configured.');
+        if (expected && expected.trim().length > 0 && provided === expected) {
+            return true;
         }
-        if (!provided || provided !== expected) {
-            throw new common_1.ForbiddenException('Invalid or missing admin credentials.');
+        const authorization = request.headers['authorization'];
+        if (authorization?.toLowerCase().startsWith('bearer ')) {
+            const token = authorization.slice(7).trim();
+            try {
+                const { email } = await (0, supabase_auth_util_1.verifySupabaseJwt)(token);
+                if (email === ADMIN_EMAIL) {
+                    return true;
+                }
+                throw new common_1.ForbiddenException('Not an admin account.');
+            }
+            catch (err) {
+                if (err instanceof common_1.ForbiddenException)
+                    throw err;
+            }
         }
-        return true;
+        throw new common_1.ForbiddenException('Invalid or missing admin credentials.');
     }
 };
 exports.AdminGuard = AdminGuard;

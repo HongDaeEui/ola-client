@@ -13,14 +13,14 @@ export declare class PostsService {
             avatarUrl: string | null;
         };
     } & {
-        category: string;
-        createdAt: Date;
         id: string;
-        likes: number;
-        updatedAt: Date;
         title: string;
         content: string;
         authorId: string;
+        likes: number;
+        category: string;
+        createdAt: Date;
+        updatedAt: Date;
         isFlagged: boolean;
         imageUrl: string | null;
         views: number;
@@ -34,14 +34,14 @@ export declare class PostsService {
             avatarUrl: string | null;
         };
     } & {
-        category: string;
-        createdAt: Date;
         id: string;
-        likes: number;
-        updatedAt: Date;
         title: string;
         content: string;
         authorId: string;
+        likes: number;
+        category: string;
+        createdAt: Date;
+        updatedAt: Date;
         isFlagged: boolean;
         imageUrl: string | null;
         views: number;
@@ -61,25 +61,25 @@ export declare class PostsService {
             avatarUrl: string | null;
         };
     } & {
-        category: string;
-        createdAt: Date;
         id: string;
-        likes: number;
-        updatedAt: Date;
         title: string;
         content: string;
         authorId: string;
+        likes: number;
+        category: string;
+        createdAt: Date;
+        updatedAt: Date;
         isFlagged: boolean;
         imageUrl: string | null;
         views: number;
         flagReason: string | null;
     }>;
     findTopByViews(limit?: number): import("@prisma/client").Prisma.PrismaPromise<{
+        id: string;
+        title: string;
+        likes: number;
         category: string;
         createdAt: Date;
-        id: string;
-        likes: number;
-        title: string;
         author: {
             name: string | null;
             username: string;
@@ -88,14 +88,14 @@ export declare class PostsService {
         views: number;
     }[]>;
     incrementViews(id: string): import("@prisma/client").Prisma.Prisma__PostClient<{
-        category: string;
-        createdAt: Date;
         id: string;
-        likes: number;
-        updatedAt: Date;
         title: string;
         content: string;
         authorId: string;
+        likes: number;
+        category: string;
+        createdAt: Date;
+        updatedAt: Date;
         isFlagged: boolean;
         imageUrl: string | null;
         views: number;
@@ -108,22 +108,22 @@ export declare class PostsService {
         totalViews: number;
     }[]>;
     findByUserEmail(userEmail: string, includeFlagged?: boolean): import("@prisma/client").Prisma.PrismaPromise<{
+        id: string;
+        title: string;
+        likes: number;
         category: string;
         createdAt: Date;
-        id: string;
-        likes: number;
-        title: string;
         views: number;
     }[]>;
     remove(id: string): Promise<{
-        category: string;
-        createdAt: Date;
         id: string;
-        likes: number;
-        updatedAt: Date;
         title: string;
         content: string;
         authorId: string;
+        likes: number;
+        category: string;
+        createdAt: Date;
+        updatedAt: Date;
         isFlagged: boolean;
         imageUrl: string | null;
         views: number;
@@ -135,28 +135,28 @@ export declare class PostsService {
         category?: string;
         imageUrl?: string | null;
     }): Promise<{
-        category: string;
-        createdAt: Date;
         id: string;
-        likes: number;
-        updatedAt: Date;
         title: string;
         content: string;
         authorId: string;
+        likes: number;
+        category: string;
+        createdAt: Date;
+        updatedAt: Date;
         isFlagged: boolean;
         imageUrl: string | null;
         views: number;
         flagReason: string | null;
     }>;
     removeByUser(id: string, userEmail: string): Promise<{
-        category: string;
-        createdAt: Date;
         id: string;
-        likes: number;
-        updatedAt: Date;
         title: string;
         content: string;
         authorId: string;
+        likes: number;
+        category: string;
+        createdAt: Date;
+        updatedAt: Date;
         isFlagged: boolean;
         imageUrl: string | null;
         views: number;

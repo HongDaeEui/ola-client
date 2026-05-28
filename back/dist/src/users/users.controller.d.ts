@@ -11,11 +11,11 @@ export declare class UsersController {
                 posts: number;
             };
         } & {
-            createdAt: Date;
+            email: string;
             id: string;
             name: string | null;
+            createdAt: Date;
             updatedAt: Date;
-            email: string;
             username: string;
             avatarUrl: string | null;
             role: import("@prisma/client").$Enums.UserRole;
@@ -24,22 +24,22 @@ export declare class UsersController {
     updateRole(id: string, role: string): Promise<{
         success: boolean;
         data: {
-            createdAt: Date;
+            email: string;
             id: string;
             name: string | null;
+            createdAt: Date;
             updatedAt: Date;
-            email: string;
             username: string;
             avatarUrl: string | null;
             role: import("@prisma/client").$Enums.UserRole;
         };
     }>;
     getMe(authorization?: string): Promise<{
-        createdAt: Date;
+        email: string;
         id: string;
         name: string | null;
+        createdAt: Date;
         updatedAt: Date;
-        email: string;
         username: string;
         avatarUrl: string | null;
         role: import("@prisma/client").$Enums.UserRole;
@@ -47,11 +47,11 @@ export declare class UsersController {
     updateUsername(authorization?: string, username?: string): Promise<{
         success: boolean;
         data: {
-            createdAt: Date;
+            email: string;
             id: string;
             name: string | null;
+            createdAt: Date;
             updatedAt: Date;
-            email: string;
             username: string;
             avatarUrl: string | null;
             role: import("@prisma/client").$Enums.UserRole;

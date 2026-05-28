@@ -27,6 +27,9 @@ let LabsController = class LabsController {
     findOne(id) {
         return this.labsService.findOne(id);
     }
+    adminCreate(body) {
+        return this.labsService.adminCreate(body);
+    }
     remove(id) {
         return this.labsService.remove(id);
     }
@@ -46,6 +49,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], LabsController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.UseGuards)(admin_guard_1.AdminGuard),
+    (0, common_1.Post)('admin'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], LabsController.prototype, "adminCreate", null);
 __decorate([
     (0, common_1.UseGuards)(admin_guard_1.AdminGuard),
     (0, common_1.Delete)(':id'),
