@@ -5,7 +5,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://ola.olalab.kr';
 const SITEMAP_REVALIDATE_SECONDS = 21600; // 6h
 const SITEMAP_ITEM_LIMIT = 200;
 
-export const revalidate = SITEMAP_REVALIDATE_SECONDS;
+export const revalidate = 21600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const sitemap: MetadataRoute.Sitemap = [
