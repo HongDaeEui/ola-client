@@ -14,7 +14,7 @@
 | 프로젝트 루트 | `./ola` (모노레포 단일 루트) |
 | GitHub | `https://github.com/HONGDAEEUI-dev/ola` |
 | 프로덕션 프론트엔드 | Vercel 배포 (Next.js) |
-| 프로덕션 백엔드 API | `https://ola-backend-psi.vercel.app/api` |
+| 프로덕션 백엔드 API | Render (`dashboard.render.com`) — `ola-backend` 서비스, Node, Singapore |
 | 데이터베이스 | Supabase (PostgreSQL) |
 
 ---
