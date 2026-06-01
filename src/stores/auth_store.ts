@@ -83,7 +83,7 @@ export const useAuthStore = create<AuthState>()(
           const response = await apiService.post<{
             data: any;
             accessToken: string}>(AUTH_API.LOGIN, data)
-          if (response.status === 200) {
+          if (response.status === 200 || response.status === 201) {
             const tokens = {
               access_token: response.data.data.accessToken,
             }
