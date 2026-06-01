@@ -29,7 +29,7 @@ function SearchDropdown({ suggestions, onClose }: { suggestions: Suggestions; on
         <div>
           <p className="px-3 pt-3 pb-1 text-[10px] font-black text-slate-400 uppercase tracking-wider">도구</p>
           {suggestions.tools.map(t => (
-            <Link key={t.id} href={`/tools/${t.id}`} onClick={onClose}
+            <Link key={t.id} prefetch={false} href={`/tools/${t.id}`} onClick={onClose}
               className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 dark:hover:bg-slate-700 transition-colors">
               {getLogoUrl(t.iconUrl)
                 // eslint-disable-next-line @next/next/no-img-element
@@ -47,7 +47,7 @@ function SearchDropdown({ suggestions, onClose }: { suggestions: Suggestions; on
         <div>
           <p className="px-3 pt-2 pb-1 text-[10px] font-black text-slate-400 uppercase tracking-wider">프롬프트</p>
           {suggestions.prompts.map(p => (
-            <Link key={p.id} href={`/prompts/${p.id}`} onClick={onClose}
+            <Link key={p.id} prefetch={false} href={`/prompts/${p.id}`} onClick={onClose}
               className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 dark:hover:bg-slate-700 transition-colors">
               <span className="material-symbols-outlined text-[18px] text-violet-400 shrink-0">psychology</span>
               <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{p.title}</p>
@@ -59,7 +59,7 @@ function SearchDropdown({ suggestions, onClose }: { suggestions: Suggestions; on
         <div>
           <p className="px-3 pt-2 pb-1 text-[10px] font-black text-slate-400 uppercase tracking-wider">커뮤니티</p>
           {suggestions.posts.map(p => (
-            <Link key={p.id} href={`/community/${p.id}`} onClick={onClose}
+            <Link key={p.id} prefetch={false} href={`/community/${p.id}`} onClick={onClose}
               className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 dark:hover:bg-slate-700 transition-colors">
               <span className="material-symbols-outlined text-[18px] text-emerald-400 shrink-0">forum</span>
               <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{p.title}</p>
@@ -71,7 +71,7 @@ function SearchDropdown({ suggestions, onClose }: { suggestions: Suggestions; on
         <div>
           <p className="px-3 pt-2 pb-1 text-[10px] font-black text-slate-400 uppercase tracking-wider">AI 실험실</p>
           {suggestions.labs.map(l => (
-            <Link key={l.id} href={`/labs/${l.id}`} onClick={onClose}
+            <Link key={l.id} prefetch={false} href={`/labs/${l.id}`} onClick={onClose}
               className="flex items-center gap-2.5 px-3 py-2 hover:bg-sky-50 dark:hover:bg-slate-700 transition-colors">
               <span className="text-lg shrink-0">{l.emoji}</span>
               <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{l.title}</p>

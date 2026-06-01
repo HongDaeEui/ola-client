@@ -121,6 +121,7 @@ export default async function CommunityPage({
               {CATEGORIES.map(cat => (
                 <Link
                   key={cat}
+                  prefetch={false}
                   href={cat === '전체' ? '/community' : `/community?category=${encodeURIComponent(cat)}`}
                   className={`px-4 pb-3 pt-1 text-sm font-bold whitespace-nowrap border-b-2 transition-colors ${
                     activeCategory === cat
@@ -172,6 +173,7 @@ export default async function CommunityPage({
                     return (
                       <Link
                         key={stat.category}
+                        prefetch={false}
                         href={`/community?category=${encodeURIComponent(stat.category)}`}
                         className={`flex items-center justify-between w-full px-4 py-3 rounded-xl border font-bold text-sm transition-all ${isActive ? activeStyle : inactiveStyle}`}
                       >
@@ -197,6 +199,7 @@ export default async function CommunityPage({
                   {activeCategory !== '전체' && (
                     <Link
                       href="/community"
+                      prefetch={false}
                       className="flex items-center justify-center gap-1.5 w-full px-4 py-2.5 rounded-xl text-xs font-bold text-slate-500 hover:text-sky-600 transition-colors mt-1"
                     >
                       <span className="material-symbols-outlined text-[14px]">close</span>

@@ -62,6 +62,7 @@ export default async function CategoriesPage({ params }: { params: Promise<{ loc
             return (
               <Link
                 key={cat.category}
+                prefetch={false}
                 href={`/tools?category=${encodeURIComponent(cat.category)}`}
                 className="group relative bg-slate-50 rounded-3xl p-8 border border-slate-100 hover:border-sky-300 hover:bg-white hover:shadow-2xl hover:shadow-sky-100 transition-all overflow-hidden"
               >

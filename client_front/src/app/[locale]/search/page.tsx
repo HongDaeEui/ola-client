@@ -207,7 +207,7 @@ function SearchContent() {
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {results.tools.map(tool => (
-                    <Link key={tool.id} href={`/tools/${tool.id}`}
+                    <Link key={tool.id} prefetch={false} href={`/tools/${tool.id}`}
                       className="flex items-center gap-4 bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-100 dark:border-slate-700 hover:border-sky-200 dark:hover:border-sky-700 hover:shadow-md transition-all group"
                     >
                       <div className="w-12 h-12 rounded-xl bg-linear-to-br from-sky-100 to-indigo-100 dark:from-sky-900/40 dark:to-indigo-900/40 flex items-center justify-center shrink-0 overflow-hidden">
@@ -244,7 +244,7 @@ function SearchContent() {
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {results.labs.map(lab => (
-                    <Link key={lab.id} href={`/labs/${lab.id}`}
+                    <Link key={lab.id} prefetch={false} href={`/labs/${lab.id}`}
                       className="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-100 dark:border-slate-700 hover:border-purple-200 dark:hover:border-purple-700 hover:shadow-md transition-all group"
                     >
                       <div className="flex items-start justify-between gap-2">
@@ -273,7 +273,7 @@ function SearchContent() {
                 </h2>
                 <div className="flex flex-col gap-2">
                   {results.prompts.map(p => (
-                    <Link key={p.id} href={`/prompts/${p.id}`}
+                    <Link key={p.id} prefetch={false} href={`/prompts/${p.id}`}
                       className="flex items-center justify-between bg-white dark:bg-slate-800 rounded-xl px-4 py-3 border border-slate-100 dark:border-slate-700 hover:border-amber-200 dark:hover:border-amber-700 hover:shadow-sm transition-all group"
                     >
                       <div>
@@ -298,7 +298,7 @@ function SearchContent() {
                 </h2>
                 <div className="flex flex-col gap-2">
                   {results.posts.map(post => (
-                    <Link key={post.id} href={`/community/${post.id}`}
+                    <Link key={post.id} prefetch={false} href={`/community/${post.id}`}
                       className="flex items-center justify-between bg-white dark:bg-slate-800 rounded-xl px-4 py-3 border border-slate-100 dark:border-slate-700 hover:border-rose-200 dark:hover:border-rose-700 hover:shadow-sm transition-all group"
                     >
                       <div>

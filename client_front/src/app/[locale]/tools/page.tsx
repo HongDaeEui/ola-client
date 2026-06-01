@@ -124,7 +124,7 @@ export default async function ToolsPage({
                 필터
               </h3>
               {hasFilters && (
-                <Link href="/tools" className="text-xs text-sky-600 font-bold hover:underline">
+                <Link href="/tools" prefetch={false} className="text-xs text-sky-600 font-bold hover:underline">
                   초기화
                 </Link>
               )}
@@ -139,6 +139,7 @@ export default async function ToolsPage({
                   return (
                     <Link
                       key={p}
+                      prefetch={false}
                       href={buildMultiSelectHref(currentParams, 'pricing', p)}
                       className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
                         isActive
@@ -165,6 +166,7 @@ export default async function ToolsPage({
                   return (
                     <Link
                       key={cat}
+                      prefetch={false}
                       href={buildMultiSelectHref(currentParams, 'category', cat)}
                       className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
                         isActive
@@ -191,6 +193,7 @@ export default async function ToolsPage({
                   return (
                     <Link
                       key={tag}
+                      prefetch={false}
                       href={buildMultiSelectHref(currentParams, 'tags', tag)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                         isActive
@@ -219,19 +222,19 @@ export default async function ToolsPage({
                   {activeCategories.map(c => (
                     <span key={c} className="inline-flex items-center gap-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold px-2 py-1 rounded-full border border-slate-200 dark:border-slate-700">
                       <span className="max-w-[100px] truncate">{c}</span>
-                      <Link href={buildMultiSelectHref(currentParams, 'category', c)} className="ml-0.5 hover:text-slate-900 dark:hover:text-white">×</Link>
+                      <Link href={buildMultiSelectHref(currentParams, 'category', c)} prefetch={false} className="ml-0.5 hover:text-slate-900 dark:hover:text-white">×</Link>
                     </span>
                   ))}
                   {activePricings.map(p => (
                     <span key={p} className="inline-flex items-center gap-1 bg-sky-50 dark:bg-sky-900/40 text-sky-600 dark:text-sky-400 text-xs font-bold px-2 py-1 rounded-full border border-sky-100 dark:border-sky-800">
                       {p}
-                      <Link href={buildMultiSelectHref(currentParams, 'pricing', p)} className="ml-0.5 hover:text-sky-900 dark:hover:text-sky-200">×</Link>
+                      <Link href={buildMultiSelectHref(currentParams, 'pricing', p)} prefetch={false} className="ml-0.5 hover:text-sky-900 dark:hover:text-sky-200">×</Link>
                     </span>
                   ))}
                   {activeTags.map(t => (
                     <span key={t} className="inline-flex items-center gap-1 bg-violet-50 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400 text-xs font-bold px-2 py-1 rounded-full border border-violet-100 dark:border-violet-800">
                       {t}
-                      <Link href={buildMultiSelectHref(currentParams, 'tags', t)} className="ml-0.5 hover:text-violet-900 dark:hover:text-violet-200">×</Link>
+                      <Link href={buildMultiSelectHref(currentParams, 'tags', t)} prefetch={false} className="ml-0.5 hover:text-violet-900 dark:hover:text-violet-200">×</Link>
                     </span>
                   ))}
                   
@@ -245,6 +248,7 @@ export default async function ToolsPage({
                 {SORT_OPTIONS.map(opt => (
                   <Link
                     key={opt.value}
+                    prefetch={false}
                     href={buildSortHref(currentParams, opt.value)}
                     className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-all ${
                       (filters.sort ?? '') === opt.value
@@ -263,7 +267,7 @@ export default async function ToolsPage({
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                 {toolsList.map((tool, idx) => (
                   <Fragment key={tool.id}>
-                    <Link href={`/tools/${tool.id}`}
+                    <Link href={`/tools/${tool.id}`} prefetch={false}
                       className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 hover:border-sky-300 hover:shadow-lg transition-all cursor-pointer group">
                       <div className="flex gap-4 mb-4">
                         <div className="w-14 h-14 rounded-xl bg-slate-100 shrink-0 flex items-center justify-center text-slate-500 font-bold text-lg uppercase tracking-tighter border border-slate-100 group-hover:bg-slate-900 group-hover:text-white transition-all duration-300 overflow-hidden">
@@ -318,7 +322,7 @@ export default async function ToolsPage({
               <div className="text-center py-20">
                 <span className="material-symbols-outlined text-6xl text-slate-200">search_off</span>
                 <p className="mt-4 text-slate-500 dark:text-slate-400 font-medium">해당 조건의 도구가 없어요</p>
-                <Link href="/tools" className="mt-4 inline-block text-sky-600 font-bold text-sm hover:underline">
+                <Link href="/tools" prefetch={false} className="mt-4 inline-block text-sky-600 font-bold text-sm hover:underline">
                   필터 초기화 →
                 </Link>
               </div>

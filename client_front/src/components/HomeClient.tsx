@@ -134,7 +134,7 @@ function HeroSection({ tools }: { tools: { name: string; iconUrl?: string }[] })
         <motion.div variants={fadeUp} className="flex flex-wrap justify-center gap-2 mt-3 text-sm">
           <span className="text-slate-500 mr-1">추천:</span>
           {HINT_KEYWORDS.map(kw => (
-            <Link key={kw} href={`/search?q=${encodeURIComponent(kw)}`}
+            <Link key={kw} prefetch={false} href={`/search?q=${encodeURIComponent(kw)}`}
               className="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-3 py-1 rounded-full hover:bg-sky-100 hover:text-sky-700 dark:hover:bg-sky-900 dark:hover:text-sky-300 transition-colors">
               #{kw}
             </Link>
@@ -149,7 +149,7 @@ function HeroSection({ tools }: { tools: { name: string; iconUrl?: string }[] })
 function ToolCard({ tool }: { tool: Tool }) {
   return (
     <StaggerItem>
-      <Link href={`/tools/${tool.id}`}
+      <Link prefetch={false} href={`/tools/${tool.id}`}
         className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 hover:border-sky-300 dark:hover:border-sky-600 hover:shadow-lg hover:shadow-sky-100 dark:hover:shadow-sky-900/20 transition-all group flex flex-col h-full">
         <div className="flex gap-4 mb-4">
           <div className="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-700 shrink-0 overflow-hidden border border-slate-100 dark:border-slate-600 group-hover:scale-105 transition-transform duration-300">
@@ -213,13 +213,13 @@ export default function HomeClient({ tools, posts, categories, marqueeTools }: H
             <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-4 mb-6 sticky top-20 bg-slate-50 dark:bg-slate-950 z-10 pt-4">
               <div className="flex gap-1 sm:gap-4 overflow-x-auto hide-scrollbar">
                 <Link href="/tools" className="text-sky-600 font-bold border-b-2 border-sky-600 pb-2 whitespace-nowrap px-2 text-sm">전체 도구</Link>
-                <Link href="/tools?sort=rating" className="text-slate-500 dark:text-slate-400 font-medium hover:text-slate-800 dark:hover:text-slate-200 pb-2 whitespace-nowrap px-2 text-sm transition-colors">인기 도구</Link>
-                <Link href="/tools?pricing=Free" className="text-slate-500 dark:text-slate-400 font-medium hover:text-slate-800 dark:hover:text-slate-200 pb-2 whitespace-nowrap px-2 text-sm transition-colors">무료 도구</Link>
+                <Link href="/tools?sort=rating" prefetch={false} className="text-slate-500 dark:text-slate-400 font-medium hover:text-slate-800 dark:hover:text-slate-200 pb-2 whitespace-nowrap px-2 text-sm transition-colors">인기 도구</Link>
+                <Link href="/tools?pricing=Free" prefetch={false} className="text-slate-500 dark:text-slate-400 font-medium hover:text-slate-800 dark:hover:text-slate-200 pb-2 whitespace-nowrap px-2 text-sm transition-colors">무료 도구</Link>
                 <Link href="/ranking" className="text-slate-500 dark:text-slate-400 font-medium hover:text-slate-800 dark:hover:text-slate-200 pb-2 whitespace-nowrap px-2 text-sm flex items-center gap-1 transition-colors">
                   <span className="material-symbols-outlined text-[14px] text-amber-400">local_fire_department</span>랭킹
                 </Link>
               </div>
-              <Link href="/tools?sort=rating" className="hidden sm:flex text-xs font-bold text-sky-600 hover:underline whitespace-nowrap">
+              <Link href="/tools?sort=rating" prefetch={false} className="hidden sm:flex text-xs font-bold text-sky-600 hover:underline whitespace-nowrap">
                 전체 보기 →
               </Link>
             </div>
@@ -237,7 +237,7 @@ export default function HomeClient({ tools, posts, categories, marqueeTools }: H
                   </h3>
                   <div className="space-y-2">
                     {trendTools.slice(0, 3).map((tool, idx) => (
-                      <Link key={tool.id} href={`/tools/${tool.id}`} className="flex items-center gap-3 p-2.5 -mx-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+                      <Link key={tool.id} prefetch={false} href={`/tools/${tool.id}`} className="flex items-center gap-3 p-2.5 -mx-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
                         <span className={`w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 ${idx === 0 ? 'bg-rose-100 text-rose-600' : idx === 1 ? 'bg-slate-200 text-slate-600' : 'bg-orange-100 text-orange-600'}`}>{idx + 1}</span>
                         {tool.iconUrl ? (
                           // eslint-disable-next-line @next/next/no-img-element
@@ -268,7 +268,7 @@ export default function HomeClient({ tools, posts, categories, marqueeTools }: H
                   <ul className="space-y-2">
                     {posts.slice(0, 3).map((post, idx) => (
                       <li key={post.id}>
-                        <Link href={`/community/${post.id}`} className="flex items-start gap-2.5 group p-2 -mx-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                        <Link href={`/community/${post.id}`} prefetch={false} className="flex items-start gap-2.5 group p-2 -mx-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                           <span className={`w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 ${idx === 0 ? 'bg-amber-100 text-amber-600' : idx === 1 ? 'bg-slate-200 text-slate-600' : 'bg-orange-100 text-orange-600'}`}>{idx + 1}</span>
                           <div className="min-w-0">
                             <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-sky-600 transition-colors line-clamp-1">{post.title}</p>
@@ -331,7 +331,7 @@ export default function HomeClient({ tools, posts, categories, marqueeTools }: H
                     viewport={{ once: true }}
                     transition={{ delay: 0.3 + idx * 0.08, duration: 0.4, ease: 'easeOut' }}
                   >
-                    <Link href={`/tools/${tool.id}`} className="flex items-center gap-3 group">
+                    <Link href={`/tools/${tool.id}`} prefetch={false} className="flex items-center gap-3 group">
                       <div className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 transition-colors ${idx < 3 ? 'bg-sky-100 text-sky-700 group-hover:bg-sky-600 group-hover:text-white' : 'bg-slate-100 text-slate-500 group-hover:bg-slate-900 group-hover:text-white'}`}>
                         {idx + 1}
                       </div>
@@ -384,7 +384,7 @@ export default function HomeClient({ tools, posts, categories, marqueeTools }: H
                 <ul className="space-y-3">
                   {posts.slice(0, 4).map(post => (
                     <li key={post.id}>
-                      <Link href={`/community/${post.id}`} className="group block">
+                      <Link href={`/community/${post.id}`} prefetch={false} className="group block">
                         <p className="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors line-clamp-2 leading-snug">{post.title}</p>
                         <div className="flex items-center gap-2 mt-1 text-xs text-slate-400">
                           <span>{post.category}</span>
@@ -411,7 +411,7 @@ export default function HomeClient({ tools, posts, categories, marqueeTools }: H
                 <h3 className="font-bold text-slate-800 dark:text-slate-100 text-base mb-4">인기 카테고리</h3>
                 <div className="flex flex-wrap gap-2">
                   {categories.map(cat => (
-                    <Link key={cat.category} href={`/tools?category=${encodeURIComponent(cat.category)}`}
+                    <Link key={cat.category} prefetch={false} href={`/tools?category=${encodeURIComponent(cat.category)}`}
                       className="text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-1.5 rounded-lg hover:bg-sky-100 hover:text-sky-700 dark:hover:bg-sky-900 dark:hover:text-sky-300 transition-colors">
                       {cat.category}
                       <span className="ml-1 text-slate-400">{cat.count}</span>

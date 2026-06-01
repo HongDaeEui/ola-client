@@ -82,6 +82,7 @@ export function PromptFeed({ initialPrompts, category }: Props) {
         {prompts.map((p) => (
           <Link
             key={p.id}
+            prefetch={false}
             href={`/prompts/${p.id}`}
             className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 flex flex-col justify-between hover:border-sky-300 dark:hover:border-sky-700 hover:shadow-xl hover:shadow-sky-50 transition-all group"
           >

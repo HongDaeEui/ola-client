@@ -281,6 +281,7 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
                   {relatedTools.map((rt) => (
                     <Link
                       key={rt.id}
+                      prefetch={false}
                       href={`/tools/${rt.id}`}
                       className="flex items-start gap-4 p-4 rounded-2xl border border-slate-100 hover:border-sky-200 hover:shadow-md hover:shadow-sky-50 transition-all group"
                     >
@@ -328,6 +329,7 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
                     return (
                       <Link
                         key={lab.id}
+                        prefetch={false}
                         href={`/labs/${lab.id}`}
                         className="group flex flex-col bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg hover:shadow-emerald-100/50 hover:border-emerald-300 transition-all duration-300"
                       >

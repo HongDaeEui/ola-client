@@ -143,6 +143,7 @@ export default async function ResourcesPage({
               <ul className="space-y-1">
                 <li>
                   <Link
+                    prefetch={false}
                     href={activeDifficulty ? `/resources?difficulty=${activeDifficulty}` : '/resources'}
                     className={`flex items-center justify-between w-full px-3 py-2.5 rounded-xl text-sm font-bold transition-colors ${
                       !activeType ? 'bg-sky-600 text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-sky-600'
@@ -165,6 +166,7 @@ export default async function ResourcesPage({
                   return (
                     <li key={tc.type}>
                       <Link
+                        prefetch={false}
                         href={`/resources?${params.toString()}`}
                         className={`flex items-center justify-between w-full px-3 py-2.5 rounded-xl text-sm font-bold transition-colors ${
                           isActive ? 'bg-sky-600 text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-sky-600'
@@ -197,6 +199,7 @@ export default async function ResourcesPage({
                   return (
                     <Link
                       key={d}
+                      prefetch={false}
                       href={href}
                       className={`px-4 py-2.5 rounded-xl text-sm font-bold border transition-all text-center ${
                         isActive
@@ -230,7 +233,7 @@ export default async function ResourcesPage({
                     {activeDifficulty}
                   </span>
                 )}
-                <Link href="/resources" className="flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-sky-600 transition-colors ml-1">
+                <Link href="/resources" prefetch={false} className="flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-sky-600 transition-colors ml-1">
                   <span className="material-symbols-outlined text-[14px]">close</span>
                   초기화
                 </Link>
@@ -241,7 +244,7 @@ export default async function ResourcesPage({
               <div className="text-center py-24">
                 <span className="material-symbols-outlined text-[48px] text-slate-200 block mb-4">search_off</span>
                 <p className="text-slate-400 font-bold">해당 조건의 리소스가 없습니다.</p>
-                <Link href="/resources" className="inline-flex items-center gap-1.5 mt-4 text-sky-600 font-bold text-sm">
+                <Link href="/resources" prefetch={false} className="inline-flex items-center gap-1.5 mt-4 text-sky-600 font-bold text-sm">
                   <span className="material-symbols-outlined text-[16px]">arrow_back</span>
                   전체 보기
                 </Link>

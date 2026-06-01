@@ -380,7 +380,7 @@ export default function ProfilePage() {
             ) : posts.map(post => {
               const tagClass = CATEGORY_COLORS[post.category] ?? 'text-slate-600 bg-slate-100';
               return (
-                <Link key={post.id} href={`/community/${post.id}`}
+                <Link key={post.id} prefetch={false} href={`/community/${post.id}`}
                   className="block bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 rounded-2xl p-5 hover:shadow-md hover:border-sky-200 dark:hover:border-sky-700 transition-all group">
                   <div className="flex items-center gap-2 mb-2">
                     <span className={`text-[10px] font-black px-2 py-0.5 rounded-lg ${tagClass}`}>{post.category}</span>
@@ -431,7 +431,7 @@ export default function ProfilePage() {
                 </Link>
               </div>
             ) : prompts.map(prompt => (
-              <Link key={prompt.id} href={`/prompts/${prompt.id}`}
+              <Link key={prompt.id} prefetch={false} href={`/prompts/${prompt.id}`}
                 className="block bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 rounded-2xl p-5 hover:shadow-md hover:border-amber-200 dark:hover:border-amber-700 transition-all group">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="text-[10px] font-black px-2 py-0.5 rounded-lg bg-amber-50 text-amber-600">{prompt.category}</span>
@@ -475,7 +475,7 @@ export default function ProfilePage() {
               const meta = TYPE_META[b.targetType] ?? TYPE_META.POST;
               const title = b.item.title ?? b.item.name ?? '제목 없음';
               return (
-                <Link key={b.id} href={meta.href(b.targetId)}
+                <Link key={b.id} prefetch={false} href={meta.href(b.targetId)}
                   className="flex items-center gap-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 rounded-2xl p-4 hover:shadow-md hover:border-sky-200 dark:hover:border-sky-700 transition-all group">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${meta.color}`}>
                     <span className="material-symbols-outlined text-[20px]">{meta.icon}</span>

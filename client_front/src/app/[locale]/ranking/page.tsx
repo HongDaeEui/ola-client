@@ -73,7 +73,7 @@ export default async function RankingPage({ params }: { params: Promise<{ locale
           </div>
           <div className="space-y-2">
             {tools.map((tool, i) => (
-              <Link key={tool.id} href={`/tools/${tool.id}`}
+              <Link key={tool.id} prefetch={false} href={`/tools/${tool.id}`}
                 className="flex items-center gap-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 rounded-2xl px-5 py-4 hover:border-sky-300 dark:hover:border-sky-700 hover:shadow-lg hover:shadow-sky-50 transition-all group">
                 <div className={`w-10 flex items-center justify-center font-black text-xl italic shrink-0 ${i < 3 ? 'text-sky-600' : 'text-slate-300'}`}>{i + 1}</div>
                 <div className="w-11 h-11 rounded-xl bg-slate-100 dark:bg-slate-800 shrink-0 flex items-center justify-center font-bold text-slate-500 dark:text-slate-400 text-sm group-hover:bg-slate-900 group-hover:text-white transition-colors overflow-hidden">
@@ -110,7 +110,7 @@ export default async function RankingPage({ params }: { params: Promise<{ locale
           </div>
           <div className="space-y-2">
             {posts.map((post, i) => (
-              <Link key={post.id} href={`/community/${post.id}`}
+              <Link key={post.id} prefetch={false} href={`/community/${post.id}`}
                 className="flex items-center gap-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 rounded-2xl px-5 py-4 hover:border-rose-200 dark:hover:border-rose-700 hover:shadow-lg hover:shadow-rose-50 transition-all group">
                 <div className={`w-10 text-center font-black text-xl italic shrink-0 ${i < 3 ? 'text-rose-500' : 'text-slate-300'}`}>{i + 1}</div>
                 <div className="flex-1 min-w-0">
@@ -141,7 +141,7 @@ export default async function RankingPage({ params }: { params: Promise<{ locale
           </div>
           <div className="space-y-2">
             {labs.map((lab, i) => (
-              <Link key={lab.id} href={`/labs/${lab.id}`}
+              <Link key={lab.id} prefetch={false} href={`/labs/${lab.id}`}
                 className="flex items-center gap-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-700 rounded-2xl px-5 py-4 hover:border-purple-200 dark:hover:border-purple-700 hover:shadow-lg hover:shadow-purple-50 transition-all group">
                 <div className={`w-10 text-center font-black text-xl italic shrink-0 ${i < 3 ? 'text-purple-500' : 'text-slate-300'}`}>{i + 1}</div>
                 <div className="flex-1 min-w-0">

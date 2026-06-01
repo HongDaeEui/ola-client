@@ -110,6 +110,7 @@ export function PostFeed({ initialPosts, category }: Props) {
           return (
             <Fragment key={post.id}>
             <Link
+              prefetch={false}
               href={`/community/${post.id}`}
               className="block bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 hover:shadow-lg hover:border-sky-200 dark:hover:border-sky-700 transition-all group"
             >

@@ -93,6 +93,7 @@ export default async function LabsPage({
           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
             {FILTERS.map((f) => (
               <Link key={f}
+                prefetch={false}
                 href={f === '전체 레시피' ? '/labs' : `/labs?category=${encodeURIComponent(f)}`}
                 className={`px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all ${
                   activeFilter === f
@@ -130,7 +131,7 @@ export default async function LabsPage({
 
               return (
                 <Fragment key={exp.id}>
-                <Link href={`/labs/${exp.id}`}
+                <Link href={`/labs/${exp.id}`} prefetch={false}
                   className="group bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-sky-900/10 hover:border-sky-200 dark:hover:border-sky-800 transition-all duration-300 overflow-hidden flex flex-col">
 
                   {/* Thumbnail */}

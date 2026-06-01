@@ -54,6 +54,7 @@ export default async function PromptsPage({
         <div className="flex gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar">
           <Link
             href="/prompts"
+            prefetch={false}
             className={`px-5 py-2 rounded-full text-sm font-bold border shrink-0 transition-colors ${
               !category
                 ? 'bg-sky-600 border-sky-600 text-white shadow-lg shadow-sky-100'
@@ -65,6 +66,7 @@ export default async function PromptsPage({
           {CATEGORIES.map(c => (
             <Link
               key={c}
+              prefetch={false}
               href={category === c ? '/prompts' : `/prompts?category=${encodeURIComponent(c)}`}
               className={`px-5 py-2 rounded-full text-sm font-bold border shrink-0 transition-colors ${
                 category === c

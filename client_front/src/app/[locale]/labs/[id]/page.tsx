@@ -251,6 +251,7 @@ export default async function LabDetailPage({ params }: { params: Promise<{ id: 
                   {relatedLabs.map((r) => (
                     <Link
                       key={r.id}
+                      prefetch={false}
                       href={`/labs/${r.id}`}
                       className="flex items-center gap-4 p-4 rounded-2xl border border-slate-100 hover:border-sky-200 hover:shadow-md hover:shadow-sky-50 transition-all group"
                     >

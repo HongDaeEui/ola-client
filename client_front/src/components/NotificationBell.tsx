@@ -172,6 +172,7 @@ export function NotificationBell() {
               notifications.map(n => (
                 <Link
                   key={n.id}
+                  prefetch={false}
                   href={targetHref(n)}
                   onClick={() => handleClickNotification(n.id)}
                   className={`flex items-start gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors border-b border-slate-50 dark:border-slate-700/50 last:border-0 ${!n.read ? 'bg-sky-50/50 dark:bg-sky-900/20' : ''}`}
