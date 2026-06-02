@@ -8,7 +8,7 @@ function useDashboardStats() {
     queryKey: ['dashboard', 'tools'],
     queryFn: async () => {
       const res = await apiService.callWithErrorHandling(
-        () => apiService.get(TOOLS_API.PREFIX),
+        () => apiService.get(TOOLS_API.PREFIX, { limit: 100 }),
         ''
       );
       const data = (res as any).response?.data?.data || (res as any).response?.data || [];
@@ -20,7 +20,7 @@ function useDashboardStats() {
     queryKey: ['dashboard', 'prompts'],
     queryFn: async () => {
       const res = await apiService.callWithErrorHandling(
-        () => apiService.get(PROMPTS_API.PREFIX),
+        () => apiService.get(PROMPTS_API.PREFIX, { limit: 50 }),
         ''
       );
       const data = (res as any).response?.data?.data || (res as any).response?.data || [];
@@ -32,7 +32,7 @@ function useDashboardStats() {
     queryKey: ['dashboard', 'posts'],
     queryFn: async () => {
       const res = await apiService.callWithErrorHandling(
-        () => apiService.get(POSTS_API.PREFIX),
+        () => apiService.get(POSTS_API.PREFIX, { limit: 50 }),
         ''
       );
       const data = (res as any).response?.data?.data || (res as any).response?.data || [];
@@ -44,7 +44,7 @@ function useDashboardStats() {
     queryKey: ['dashboard', 'labs'],
     queryFn: async () => {
       const res = await apiService.callWithErrorHandling(
-        () => apiService.get(LABS_API.PREFIX),
+        () => apiService.get(LABS_API.PREFIX, { limit: 50 }),
         ''
       );
       const data = (res as any).response?.data?.data || (res as any).response?.data || [];
@@ -60,16 +60,16 @@ function StatCard({ icon, label, value, gradient, isLoading }: {
   icon: string; label: string; value: number | string; gradient: string; isLoading: boolean;
 }) {
   return (
-    <div className="relative overflow-hidden bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm hover:shadow-md transition-shadow">
-      <div className={`absolute -right-4 -top-4 w-24 h-24 rounded-full bg-gradient-to-br ${gradient} opacity-10`} />
+    <div className="relative overflow-hidden bg-white dark:bg-stone-900 rounded-2xl border border-slate-200 dark:border-stone-800 p-6 shadow-sm hover:shadow-md transition-shadow">
+      <div className={`absolute -right-4 -top-4 w-24 h-24 rounded-full bg-linear-to-br ${gradient} opacity-10`} />
       <div className="flex items-center gap-4">
-        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-2xl shadow-lg`}>
+        <div className={`w-12 h-12 rounded-xl bg-linear-to-br ${gradient} flex items-center justify-center text-2xl shadow-lg`}>
           {icon}
         </div>
         <div>
-          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{label}</p>
+          <p className="text-sm font-medium text-slate-500 dark:text-stone-400">{label}</p>
           {isLoading ? (
-            <div className="h-8 w-16 bg-slate-200 dark:bg-slate-700 rounded-md animate-pulse mt-1" />
+            <div className="h-8 w-16 bg-slate-200 dark:bg-stone-700 rounded-md animate-pulse mt-1" />
           ) : (
             <p className="text-3xl font-extrabold text-slate-900 dark:text-white">{value}</p>
           )}
@@ -83,8 +83,8 @@ function RecentList({ title, icon, items, isLoading, emptyText }: {
   title: string; icon: string; items: any[]; isLoading: boolean; emptyText: string;
 }) {
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
-      <div className="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center gap-2">
+    <div className="bg-white dark:bg-stone-900 rounded-2xl border border-slate-200 dark:border-stone-800 overflow-hidden shadow-sm">
+      <div className="px-6 py-4 border-b border-slate-200 dark:border-stone-800 flex items-center gap-2">
         <span className="text-lg">{icon}</span>
         <h3 className="font-bold text-slate-900 dark:text-white">{title}</h3>
       </div>
@@ -92,15 +92,15 @@ function RecentList({ title, icon, items, isLoading, emptyText }: {
         {isLoading ? (
           Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="px-6 py-4">
-              <div className="h-4 w-3/4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
-              <div className="h-3 w-1/2 bg-slate-100 dark:bg-slate-800 rounded animate-pulse mt-2" />
+              <div className="h-4 w-3/4 bg-slate-200 dark:bg-stone-700 rounded animate-pulse" />
+              <div className="h-3 w-1/2 bg-slate-100 dark:bg-stone-800 rounded animate-pulse mt-2" />
             </div>
           ))
         ) : items.length === 0 ? (
           <div className="px-6 py-8 text-center text-slate-400">{emptyText}</div>
         ) : (
           items.map((item, idx) => (
-            <div key={idx} className="px-6 py-3.5 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+            <div key={idx} className="px-6 py-3.5 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-stone-800/30 transition-colors">
               <div className="min-w-0 flex-1">
                 <p className="font-medium text-slate-800 dark:text-white text-sm truncate">{item.title || item.name}</p>
                 <p className="text-xs text-slate-500 mt-0.5">{item.category || item.toolName || ''}</p>

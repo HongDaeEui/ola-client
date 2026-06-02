@@ -45,7 +45,7 @@ export default function ToolsListPage() {
       header: '도구명',
       cell: (info) => (
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center overflow-hidden">
+          <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-stone-800 flex items-center justify-center overflow-hidden">
             {info.row.original.iconUrl ? (
               <img src={info.row.original.iconUrl} alt="icon" className="w-full h-full object-cover" />
             ) : (
@@ -75,7 +75,7 @@ export default function ToolsListPage() {
           ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400'
           : status === 'PENDING'
           ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400'
-          : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400';
+          : 'bg-slate-100 text-slate-700 dark:bg-stone-800 dark:text-stone-400';
         return <span className={`px-2 py-1 rounded-md text-xs font-bold ${color}`}>{status}</span>;
       }
     }),
@@ -129,7 +129,7 @@ export default function ToolsListPage() {
       {/* Header */}
       <div className="flex items-end justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-extrabold bg-gradient-to-r from-sky-500 to-indigo-600 bg-clip-text text-transparent pb-1">
+          <h1 className="text-3xl font-extrabold bg-linear-to-r from-sky-500 to-indigo-600 bg-clip-text text-transparent pb-1">
             AI 도구 관리
           </h1>
           <p className="text-slate-500 font-medium mt-1">
@@ -139,7 +139,7 @@ export default function ToolsListPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-4 border-b border-slate-200 dark:border-slate-700 mb-6">
+      <div className="flex items-center gap-4 border-b border-slate-200 dark:border-stone-700 mb-6">
         <button
           onClick={() => setActiveTab('ALL')}
           className={`px-4 py-3 text-sm font-bold border-b-2 transition-all ${
@@ -168,12 +168,12 @@ export default function ToolsListPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+      <div className="bg-white dark:bg-stone-900 rounded-2xl border border-slate-200 dark:border-stone-800 overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id} className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
+                <tr key={headerGroup.id} className="border-b border-slate-200 dark:border-stone-800 bg-slate-50/50 dark:bg-stone-800/50">
                   {headerGroup.headers.map(header => (
                     <th key={header.id} className="px-6 py-4 text-sm font-bold text-slate-500 uppercase tracking-wider">
                       {header.isPlaceholder
@@ -202,7 +202,7 @@ export default function ToolsListPage() {
                 </tr>
               ) : (
                 table.getRowModel().rows.map(row => (
-                  <tr key={row.id} className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                  <tr key={row.id} className="border-b border-slate-100 dark:border-stone-800/50 hover:bg-slate-50 dark:hover:bg-stone-800/30 transition-colors">
                     {row.getVisibleCells().map(cell => (
                       <td key={cell.id} className="px-6 py-4 align-middle">
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}

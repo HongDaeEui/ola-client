@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { APP_GUARD } from '@nestjs/core';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ToolsModule } from './tools/tools.module';
@@ -22,6 +22,7 @@ import { ModerationModule } from './moderation/moderation.module';
 import { TelegramModule } from './telegram/telegram.module';
 import { AuthModule } from './auth/auth.module';
 import { CrawlerModule } from './crawler/crawler.module';
+import { AdminBypassThrottlerGuard } from './common/admin-bypass-throttler.guard';
 
 @Module({
   imports: [
@@ -57,7 +58,7 @@ import { CrawlerModule } from './crawler/crawler.module';
     AppService,
     {
       provide: APP_GUARD,
-      useClass: ThrottlerGuard,
+      useClass: AdminBypassThrottlerGuard,
     },
   ],
 })

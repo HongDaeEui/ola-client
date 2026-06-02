@@ -31,6 +31,7 @@ const moderation_module_1 = require("./moderation/moderation.module");
 const telegram_module_1 = require("./telegram/telegram.module");
 const auth_module_1 = require("./auth/auth.module");
 const crawler_module_1 = require("./crawler/crawler.module");
+const admin_bypass_throttler_guard_1 = require("./common/admin-bypass-throttler.guard");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -69,7 +70,7 @@ exports.AppModule = AppModule = __decorate([
             app_service_1.AppService,
             {
                 provide: core_1.APP_GUARD,
-                useClass: throttler_1.ThrottlerGuard,
+                useClass: admin_bypass_throttler_guard_1.AdminBypassThrottlerGuard,
             },
         ],
     })
