@@ -112,3 +112,17 @@ html.dark input::placeholder, html.dark textarea::placeholder {
 /* Hover overrides */
 html.dark .hover\:bg-slate-50:hover  { background-color: #1e293b; }
 html.dark .hover\:bg-slate-100:hover { background-color: #334155; }
+
+/* ── Marquee (CSS animation) ── */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  display: flex;
+  animation: marquee 20s linear infinite;
+  width: max-content;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}

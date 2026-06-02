@@ -9,6 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
+const schedule_1 = require("@nestjs/schedule");
 const core_1 = require("@nestjs/core");
 const throttler_1 = require("@nestjs/throttler");
 const app_controller_1 = require("./app.controller");
@@ -28,6 +29,8 @@ const notifications_module_1 = require("./notifications/notifications.module");
 const users_module_1 = require("./users/users.module");
 const moderation_module_1 = require("./moderation/moderation.module");
 const telegram_module_1 = require("./telegram/telegram.module");
+const auth_module_1 = require("./auth/auth.module");
+const crawler_module_1 = require("./crawler/crawler.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -35,6 +38,7 @@ exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             config_1.ConfigModule.forRoot({ isGlobal: true }),
+            schedule_1.ScheduleModule.forRoot(),
             throttler_1.ThrottlerModule.forRoot([
                 {
                     name: 'default',
@@ -57,6 +61,8 @@ exports.AppModule = AppModule = __decorate([
             users_module_1.UsersModule,
             moderation_module_1.ModerationModule,
             telegram_module_1.TelegramModule,
+            crawler_module_1.CrawlerModule,
+            auth_module_1.AuthModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [

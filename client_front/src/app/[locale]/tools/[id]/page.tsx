@@ -154,7 +154,6 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
         {/* Gradient backdrop */}
         <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-slate-800 to-sky-900" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-sky-500/20 via-transparent to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-slate-50 to-transparent" />
 
         <div className="relative z-10 max-w-5xl mx-auto px-6">
 

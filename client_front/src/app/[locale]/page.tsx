@@ -30,7 +30,7 @@ async function getFeaturedTools(): Promise<Tool[]> {
 }
 async function getMarqueeTools(): Promise<{ name: string; iconUrl?: string }[]> {
   try {
-    const res = await fetchWithTimeout(`${API_BASE}/tools?limit=40`, { next: { revalidate: 3600 } });
+    const res = await fetchWithTimeout(`${API_BASE}/tools?limit=12`, { next: { revalidate: 3600 } });
     return res.ok ? res.json() : [];
   } catch { return []; }
 }

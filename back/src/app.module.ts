@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
@@ -19,10 +20,13 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { UsersModule } from './users/users.module';
 import { ModerationModule } from './moderation/moderation.module';
 import { TelegramModule } from './telegram/telegram.module';
+import { AuthModule } from './auth/auth.module';
+import { CrawlerModule } from './crawler/crawler.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    ScheduleModule.forRoot(),
     ThrottlerModule.forRoot([
       {
         name: 'default',
@@ -45,6 +49,8 @@ import { TelegramModule } from './telegram/telegram.module';
     UsersModule,
     ModerationModule,
     TelegramModule,
+    CrawlerModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [

@@ -24,6 +24,9 @@ let AdminGuard = AdminGuard_1 = class AdminGuard {
         const authorization = request.headers['authorization'];
         if (authorization?.toLowerCase().startsWith('bearer ')) {
             const token = authorization.slice(7).trim();
+            if (expected && token === expected) {
+                return true;
+            }
             try {
                 const { email } = await (0, supabase_auth_util_1.verifySupabaseJwt)(token);
                 if (email === ADMIN_EMAIL) {

@@ -5,42 +5,42 @@ export declare class SearchController {
     search(q: string): Promise<{
         tools: {
             id: string;
-            name: string;
-            shortDesc: string;
             category: string;
+            name: string;
             pricingModel: string | null;
+            shortDesc: string;
             iconUrl: string | null;
         }[];
         prompts: {
             id: string;
-            category: string;
-            likes: number;
             title: string;
+            likes: number;
+            category: string;
             toolName: string;
         }[];
         posts: {
             id: string;
-            category: string;
-            likes: number;
-            createdAt: Date;
             title: string;
+            likes: number;
+            category: string;
+            createdAt: Date;
             views: number;
         }[];
         labs: {
             id: string;
-            description: string;
-            category: string;
-            likes: number;
             title: string;
+            description: string;
             difficulty: string | null;
             emoji: string | null;
+            likes: number;
+            category: string;
         }[];
     }>;
     suggest(q: string): Promise<{
         tools: {
             id: string;
-            name: string;
             category: string;
+            name: string;
             iconUrl: string | null;
         }[];
         prompts: {
@@ -50,8 +50,8 @@ export declare class SearchController {
         }[];
         posts: {
             id: string;
-            category: string;
             title: string;
+            category: string;
         }[];
         labs: {
             id: string;

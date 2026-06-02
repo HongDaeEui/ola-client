@@ -5,23 +5,23 @@ export declare class PostsController {
     findAll(category?: string, userEmail?: string, page?: string, limit?: string, admin?: string): import("@prisma/client").Prisma.PrismaPromise<{
         id: string;
         title: string;
-        category: string;
         likes: number;
-        views: number;
+        category: string;
         createdAt: Date;
+        views: number;
     }[]>;
     findTopByViews(): import("@prisma/client").Prisma.PrismaPromise<{
         id: string;
         title: string;
-        category: string;
         likes: number;
-        views: number;
+        category: string;
         createdAt: Date;
         author: {
-            username: string;
             name: string | null;
+            username: string;
             avatarUrl: string | null;
         };
+        views: number;
     }[]>;
     getTagStats(): Promise<{
         category: string;
@@ -31,51 +31,51 @@ export declare class PostsController {
     }[]>;
     findOne(id: string): Promise<{
         author: {
+            name: string | null;
             email: string;
             username: string;
-            name: string | null;
             avatarUrl: string | null;
         };
     } & {
         id: string;
         title: string;
         content: string;
-        category: string;
-        imageUrl: string | null;
         authorId: string;
         likes: number;
-        views: number;
+        category: string;
         createdAt: Date;
         updatedAt: Date;
         isFlagged: boolean;
+        imageUrl: string | null;
+        views: number;
         flagReason: string | null;
     }>;
     remove(id: string): Promise<{
         id: string;
         title: string;
         content: string;
-        category: string;
-        imageUrl: string | null;
         authorId: string;
         likes: number;
-        views: number;
+        category: string;
         createdAt: Date;
         updatedAt: Date;
         isFlagged: boolean;
+        imageUrl: string | null;
+        views: number;
         flagReason: string | null;
     }>;
     removeByUser(id: string, authorization?: string): Promise<{
         id: string;
         title: string;
         content: string;
-        category: string;
-        imageUrl: string | null;
         authorId: string;
         likes: number;
-        views: number;
+        category: string;
         createdAt: Date;
         updatedAt: Date;
         isFlagged: boolean;
+        imageUrl: string | null;
+        views: number;
         flagReason: string | null;
     }>;
     update(id: string, body: {
@@ -87,14 +87,14 @@ export declare class PostsController {
         id: string;
         title: string;
         content: string;
-        category: string;
-        imageUrl: string | null;
         authorId: string;
         likes: number;
-        views: number;
+        category: string;
         createdAt: Date;
         updatedAt: Date;
         isFlagged: boolean;
+        imageUrl: string | null;
+        views: number;
         flagReason: string | null;
     }>;
     create(body: {
@@ -105,36 +105,36 @@ export declare class PostsController {
         userName: string;
     }, authorization?: string): Promise<{
         author: {
-            username: string;
             name: string | null;
+            username: string;
             avatarUrl: string | null;
         };
     } & {
         id: string;
         title: string;
         content: string;
-        category: string;
-        imageUrl: string | null;
         authorId: string;
         likes: number;
-        views: number;
+        category: string;
         createdAt: Date;
         updatedAt: Date;
         isFlagged: boolean;
+        imageUrl: string | null;
+        views: number;
         flagReason: string | null;
     }>;
     incrementViews(id: string): import("@prisma/client").Prisma.Prisma__PostClient<{
         id: string;
         title: string;
         content: string;
-        category: string;
-        imageUrl: string | null;
         authorId: string;
         likes: number;
-        views: number;
+        category: string;
         createdAt: Date;
         updatedAt: Date;
         isFlagged: boolean;
+        imageUrl: string | null;
+        views: number;
         flagReason: string | null;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     private extractUser;

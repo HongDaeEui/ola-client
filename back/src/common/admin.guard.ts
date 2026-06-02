@@ -37,10 +37,15 @@ export class AdminGuard implements CanActivate {
       return true;
     }
 
-    // 2) Bearer JWT 방식 — admin@olalab.kr 이메일 검증
+    // 2) Bearer 토큰 방식 — ADMIN_SECRET 직접 비교 또는 Supabase JWT 검증
     const authorization = request.headers['authorization'] as string | undefined;
     if (authorization?.toLowerCase().startsWith('bearer ')) {
       const token = authorization.slice(7).trim();
+
+      // 2-1) Bearer token === ADMIN_SECRET
+      if (expected && token === expected) {
+        return true;
+      }
       try {
         const { email } = await verifySupabaseJwt(token);
         if (email === ADMIN_EMAIL) {
