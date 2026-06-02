@@ -77,7 +77,7 @@ export default function UsersListPage() {
               {avatarUrl ? (
                 <img src={avatarUrl} alt="avatar" className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white text-sm font-bold">
+                <div className="w-full h-full bg-linear-to-br from-sky-400 to-indigo-500 flex items-center justify-center text-white text-sm font-bold">
                   {(name || info.getValue())?.[0]?.toUpperCase() || '?'}
                 </div>
               )}
@@ -99,7 +99,7 @@ export default function UsersListPage() {
             ? 'bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-400'
             : role === 'CREATOR'
             ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-400'
-            : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400';
+            : 'bg-slate-100 text-slate-600 dark:bg-stone-800 dark:text-stone-400';
         return <span className={`px-2 py-1 rounded-md text-xs font-bold ${color}`}>{role}</span>;
       }
     }),
@@ -135,7 +135,7 @@ export default function UsersListPage() {
                 updateRole({ id, role: e.target.value });
               }
             }}
-            className="px-2 py-1 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
+            className="px-2 py-1 text-sm bg-slate-50 dark:bg-stone-800 border border-slate-200 dark:border-stone-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
           >
             <option value="USER">USER</option>
             <option value="CREATOR">CREATOR</option>
@@ -156,19 +156,19 @@ export default function UsersListPage() {
     <div className="p-8 max-w-[1400px] mx-auto w-full">
       <div className="flex items-end justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-extrabold bg-gradient-to-r from-blue-500 to-cyan-600 bg-clip-text text-transparent pb-1">
+          <h1 className="text-3xl font-extrabold bg-linear-to-r from-blue-500 to-cyan-600 bg-clip-text text-transparent pb-1">
             사용자 관리
           </h1>
           <p className="text-slate-500 font-medium mt-1">플랫폼에 가입한 모든 사용자를 조회하고 역할별로 확인합니다.</p>
         </div>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+      <div className="bg-white dark:bg-stone-900 rounded-2xl border border-slate-200 dark:border-stone-800 overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id} className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
+                <tr key={headerGroup.id} className="border-b border-slate-200 dark:border-stone-800 bg-slate-50/50 dark:bg-stone-800/50">
                   {headerGroup.headers.map(header => (
                     <th key={header.id} className="px-6 py-4 text-sm font-bold text-slate-500 uppercase tracking-wider">
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -188,7 +188,7 @@ export default function UsersListPage() {
                 </tr>
               ) : (
                 table.getRowModel().rows.map(row => (
-                  <tr key={row.id} className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                  <tr key={row.id} className="border-b border-slate-100 dark:border-stone-800/50 hover:bg-slate-50 dark:hover:bg-stone-800/30 transition-colors">
                     {row.getVisibleCells().map(cell => (
                       <td key={cell.id} className="px-6 py-4 align-middle">
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
