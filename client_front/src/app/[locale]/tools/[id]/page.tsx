@@ -151,9 +151,12 @@ export default async function ToolDetailPage({ params }: { params: Promise<{ id:
 
       {/* ── Hero Section with gradient background ── */}
       <section className="relative pt-28 lg:pt-32 pb-16 overflow-hidden">
-        {/* Gradient backdrop */}
-        <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-slate-800 to-sky-900" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-sky-500/20 via-transparent to-transparent" />
+        {/* Premium Aurora Mesh Gradient backdrop */}
+        <div className="absolute inset-0 bg-slate-950" />
+        <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[80%] bg-sky-500/20 rounded-full blur-[100px] md:blur-[120px] mix-blend-screen" />
+        <div className="absolute top-[40%] -right-[10%] w-[50%] h-[80%] bg-indigo-500/20 rounded-full blur-[100px] md:blur-[120px] mix-blend-screen" />
+        <div className="absolute top-[10%] left-[30%] w-[40%] h-[50%] bg-violet-500/15 rounded-full blur-[80px] md:blur-[100px] mix-blend-screen" />
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay" />
 
         <div className="relative z-10 max-w-5xl mx-auto px-6">
 
