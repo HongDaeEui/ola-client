@@ -32,7 +32,7 @@ export default function LabsListPage() {
         const { emoji, description } = info.row.original;
         return (
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xl">
+            <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-stone-800 flex items-center justify-center text-xl">
               {emoji || '🔬'}
             </div>
             <div>
@@ -51,13 +51,13 @@ export default function LabsListPage() {
         const { stack } = info.row.original;
         return (
           <div>
-            <span className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-1 block">
+            <span className="text-sm font-medium text-slate-700 dark:text-stone-300 mb-1 block">
               {info.getValue()}
             </span>
             {stack && stack.length > 0 && (
               <div className="flex flex-wrap gap-1">
                 {stack.map((s, idx) => (
-                  <span key={idx} className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] rounded text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                  <span key={idx} className="px-1.5 py-0.5 bg-slate-100 dark:bg-stone-800 text-[10px] rounded text-slate-600 dark:text-stone-400 border border-slate-200 dark:border-stone-700">
                     {s}
                   </span>
                 ))}
@@ -105,7 +105,7 @@ export default function LabsListPage() {
           <div className="flex gap-2">
             <button
               onClick={() => setSelectedLab(row)}
-              className="px-3 py-1 text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 rounded-lg transition-colors"
+              className="px-3 py-1 text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700 rounded-lg transition-colors"
             >
               보기
             </button>
@@ -132,19 +132,19 @@ export default function LabsListPage() {
     <div className="p-8 max-w-[1400px] mx-auto w-full">
       <div className="flex items-end justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-extrabold bg-gradient-to-r from-emerald-500 to-teal-600 bg-clip-text text-transparent pb-1">
+          <h1 className="text-3xl font-extrabold bg-linear-to-r from-emerald-500 to-teal-600 bg-clip-text text-transparent pb-1">
             AI 실험실 관리
           </h1>
           <p className="text-slate-500 font-medium mt-1">전문가들이 운영하는 AI 실험실(Labs) 콘텐츠 리스트를 확인합니다.</p>
         </div>
       </div>
 
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+      <div className="bg-white dark:bg-stone-900 rounded-2xl border border-slate-200 dark:border-stone-800 overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id} className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
+                <tr key={headerGroup.id} className="border-b border-slate-200 dark:border-stone-800 bg-slate-50/50 dark:bg-stone-800/50">
                   {headerGroup.headers.map(header => (
                     <th key={header.id} className="px-6 py-4 text-sm font-bold text-slate-500 uppercase tracking-wider">
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -164,7 +164,7 @@ export default function LabsListPage() {
                 </tr>
               ) : (
                 table.getRowModel().rows.map(row => (
-                  <tr key={row.id} className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                  <tr key={row.id} className="border-b border-slate-100 dark:border-stone-800/50 hover:bg-slate-50 dark:hover:bg-stone-800/30 transition-colors">
                     {row.getVisibleCells().map(cell => (
                       <td key={cell.id} className="px-6 py-4 align-middle">
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
