@@ -17,7 +17,7 @@ export const API_PREFIX = {
 // Auth API
 export const AUTH_API = {
   LOGIN: `${API_PREFIX.AUTH}/sign-in`,
-  SELF: `/self`,
+  SELF: `${API_PREFIX.AUTH}/self`,
 } as const
 
 // Tools API

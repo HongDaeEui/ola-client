@@ -18,23 +18,24 @@ export default function LoginPage() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!loginId || !password) {
+    // Guard against duplicate/concurrent submissions.
+    if (loading || !loginId || !password) {
       return;
     }
 
-    const result = await logIn({ loginId, password});
+    const result = await logIn({ loginId, password });
 
     if (result.success) {
-      navigate("/");
+      navigate("/", { replace: true });
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="w-full max-w-md px-8 py-10 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl">
         {/* Logo */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-extrabold bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-extrabold bg-linear-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent mb-2">
             Ola
           </h1>
           <p className="text-slate-400 text-sm font-medium">관리자 로그인</p>
@@ -90,7 +91,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={!isFormValid || loading}
-            className="w-full h-11 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white font-bold rounded-xl transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-full h-11 bg-linear-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white font-bold rounded-xl transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {loading ? '로그인 중...' : '로그인'}
           </button>

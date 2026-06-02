@@ -83,24 +83,45 @@ export const useAuthStore = create<AuthState>()(
           const response = await apiService.post<{
             data: any;
             accessToken: string}>(AUTH_API.LOGIN, data)
-          if (response.status === 200) {
-            const tokens = {
-              access_token: response.data.data.accessToken,
-            }
-            // Save tokens
-            StorageService.setTokens(tokens.access_token)
 
-            // Call getSelf to fetch admin information
-            try {
-              const selfResult = await get().getSelf()
-              get().setAdmin(selfResult.data)
-              set({ loading: false })
-              return { success: true, tokens }
-            } catch (error) {
-              console.error('getSelf failed:', error)
-              set({ loading: false })
+          // Treat any 2xx (200 OK / 201 Created) as a successful sign-in.
+          if (response.status >= 200 && response.status < 300) {
+            const accessToken = response.data?.data?.accessToken
+            if (!accessToken) {
+              set({ loading: false, error: 'Login failed: no access token in response' })
               return { success: false }
             }
+
+            const tokens = { access_token: accessToken }
+            StorageService.setTokens(tokens.access_token)
+
+            // Set a baseline admin profile immediately so that ProtectedRoute
+            // passes and the user is logged in. getSelf must NOT block login:
+            // it is best-effort and runs in the background.
+            const baselineAdmin: Self = {
+              id: 0,
+              loginId: user.loginId,
+              name: 'Administrator',
+              email: '',
+              createdAt: new Date().toISOString(),
+            }
+            get().setAdmin(baselineAdmin)
+            set({ loading: false, error: null })
+
+            // Best-effort profile refresh — never fails the login and does
+            // NOT mutate global loading/error state (avoids re-rendering the
+            // login form / dashboard with a stale loading or error flag).
+            apiService
+              .get<{ data: Self }>(AUTH_API.SELF)
+              .then((res) => {
+                const adminData = res.data?.data
+                if (adminData) get().setAdmin(adminData)
+              })
+              .catch((error) => {
+                console.warn('getSelf refresh failed (login still succeeded):', error)
+              })
+
+            return { success: true, tokens }
           }
 
           set({ loading: false, error: 'Login failed' })
