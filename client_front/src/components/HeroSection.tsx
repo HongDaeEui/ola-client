@@ -24,7 +24,7 @@ export default function HeroSection({ tools }: { tools: { name: string; iconUrl?
       <motion.div variants={fadeUp} className="absolute top-6 left-4 right-4 sm:left-1/2 sm:-translate-x-1/2 sm:w-full sm:max-w-2xl z-10 bg-teal-500/95 hover:bg-teal-600 backdrop-blur-md text-white py-2.5 px-6 text-sm font-bold shadow-lg shadow-teal-500/20 rounded-full border border-teal-400/30 transition-colors">
         <Link href="/labs" className="flex items-center justify-center gap-2">
           <span className="material-symbols-outlined text-[16px]">campaign</span>
-          [공지] 26년 5월 오프라인 실험실(Labs) 모임 신청 안내 - 선착순 마감 주의! 👉 참여하기
+          [공지] 26년 6월 오프라인 실험실(Labs) 모임 신청 안내 - 선착순 마감 주의! 👉 참여하기
         </Link>
       </motion.div>
 
