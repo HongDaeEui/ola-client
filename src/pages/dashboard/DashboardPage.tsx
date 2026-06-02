@@ -8,7 +8,7 @@ function useDashboardStats() {
     queryKey: ['dashboard', 'tools'],
     queryFn: async () => {
       const res = await apiService.callWithErrorHandling(
-        () => apiService.get(TOOLS_API.PREFIX),
+        () => apiService.get(TOOLS_API.PREFIX, { limit: 100 }),
         ''
       );
       const data = (res as any).response?.data?.data || (res as any).response?.data || [];
@@ -20,7 +20,7 @@ function useDashboardStats() {
     queryKey: ['dashboard', 'prompts'],
     queryFn: async () => {
       const res = await apiService.callWithErrorHandling(
-        () => apiService.get(PROMPTS_API.PREFIX),
+        () => apiService.get(PROMPTS_API.PREFIX, { limit: 50 }),
         ''
       );
       const data = (res as any).response?.data?.data || (res as any).response?.data || [];
@@ -32,7 +32,7 @@ function useDashboardStats() {
     queryKey: ['dashboard', 'posts'],
     queryFn: async () => {
       const res = await apiService.callWithErrorHandling(
-        () => apiService.get(POSTS_API.PREFIX),
+        () => apiService.get(POSTS_API.PREFIX, { limit: 50 }),
         ''
       );
       const data = (res as any).response?.data?.data || (res as any).response?.data || [];
@@ -44,7 +44,7 @@ function useDashboardStats() {
     queryKey: ['dashboard', 'labs'],
     queryFn: async () => {
       const res = await apiService.callWithErrorHandling(
-        () => apiService.get(LABS_API.PREFIX),
+        () => apiService.get(LABS_API.PREFIX, { limit: 50 }),
         ''
       );
       const data = (res as any).response?.data?.data || (res as any).response?.data || [];
