@@ -1,14 +1,14 @@
 import { Metadata } from 'next';
-import { Fragment } from 'react';
 import { API_BASE, apiFetch } from '@/lib/api';
 import { Link } from '@/i18n/routing';
-import { getLogoUrl } from '@/lib/logo';
 import AdUnit from '@/components/AdUnit';
+import ToolsClientFilter from '@/components/ToolsClientFilter';
+import CategorySidebar from '@/components/CategorySidebar';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: 'AI 도구 탐색 | Ola',
-  description: '최신 AI 도구들을 평점, 카테고리별로 필터링하고 탐색하세요. 당신에게 꼭 맞는 AI 툴을 찾을 수 있습니다.',
+  description: '최신 AI 도구들을 평점, 카테고리별로 필터링하고 탐색하세요. 당당에게 꼭 맞는 AI 툴을 찾을 수 있습니다.',
 };
 
 interface Tool {
@@ -66,19 +66,16 @@ function buildMultiSelectHref(current: URLSearchParams, key: string, value: stri
   const p = new URLSearchParams(current);
   const existingStr = p.get(key);
   let existing = existingStr ? existingStr.split(',').filter(Boolean) : [];
-  
   if (existing.includes(value)) {
     existing = existing.filter(v => v !== value);
   } else {
     existing.push(value);
   }
-  
   if (existing.length > 0) {
     p.set(key, existing.join(','));
   } else {
     p.delete(key);
   }
-  
   const s = p.toString();
   return `/tools${s ? `?${s}` : ''}`;
 }
@@ -106,7 +103,6 @@ export default async function ToolsPage({
   if (filters.sort) currentParams.set('sort', filters.sort);
 
   const hasFilters = !!(filters.category || filters.pricing || filters.tags);
-  
   const activePricings = filters.pricing ? filters.pricing.split(',') : [];
   const activeCategories = filters.category ? filters.category.split(',') : [];
   const activeTags = filters.tags ? filters.tags.split(',') : [];
@@ -157,32 +153,12 @@ export default async function ToolsPage({
               </div>
             </div>
 
-            {/* Category */}
-            <div className="mb-6">
-              <p className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">카테고리</p>
-              <div className="space-y-1">
-                {categories.map(cat => {
-                  const isActive = activeCategories.includes(cat);
-                  return (
-                    <Link
-                      key={cat}
-                      prefetch={false}
-                      href={buildMultiSelectHref(currentParams, 'category', cat)}
-                      className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
-                        isActive
-                          ? 'bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-400 font-bold'
-                          : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
-                      }`}
-                    >
-                      <span className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 transition-all ${isActive ? 'border-sky-500 bg-sky-500' : 'border-slate-300'}`}>
-                        {isActive && <span className="material-symbols-outlined text-white text-[12px]">check</span>}
-                      </span>
-                      <span className="truncate">{cat}</span>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
+            {/* Category - 클라이언트 컴포넌트로 접기/펼치기 */}
+            <CategorySidebar
+              categories={categories}
+              activeCategories={activeCategories}
+              currentParams={currentParams.toString()}
+            />
 
             {/* Popular Tags */}
             <div>
@@ -217,7 +193,6 @@ export default async function ToolsPage({
                 <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
                   {activeCategories.length === 1 ? activeCategories[0] : activeCategories.length > 1 ? `${activeCategories.length}개 카테고리 복합 탐색` : '모든 AI 도구 탐색'}
                 </h2>
-                
                 <div className="flex flex-wrap items-center gap-2">
                   {activeCategories.map(c => (
                     <span key={c} className="inline-flex items-center gap-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold px-2 py-1 rounded-full border border-slate-200 dark:border-slate-700">
@@ -237,10 +212,6 @@ export default async function ToolsPage({
                       <Link href={buildMultiSelectHref(currentParams, 'tags', t)} prefetch={false} className="ml-0.5 hover:text-violet-900 dark:hover:text-violet-200">×</Link>
                     </span>
                   ))}
-                  
-                  <p className="text-slate-500 text-sm ml-1">
-                    총 <span className="font-bold text-slate-700 dark:text-slate-300">{toolsList.length}</span>개 도구
-                  </p>
                 </div>
               </div>
 
@@ -262,71 +233,8 @@ export default async function ToolsPage({
               </div>
             </div>
 
-            {/* Grid */}
-            {toolsList.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-                {toolsList.map((tool, idx) => (
-                  <Fragment key={tool.id}>
-                    <Link href={`/tools/${tool.id}`} prefetch={false}
-                      className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 hover:border-sky-300 hover:shadow-lg transition-all cursor-pointer group">
-                      <div className="flex gap-4 mb-4">
-                        <div className="w-14 h-14 rounded-xl bg-slate-100 shrink-0 flex items-center justify-center text-slate-500 font-bold text-lg uppercase tracking-tighter border border-slate-100 group-hover:bg-slate-900 group-hover:text-white transition-all duration-300 overflow-hidden">
-                          {getLogoUrl(tool.iconUrl)
-                            // eslint-disable-next-line @next/next/no-img-element
-                            ? <img src={getLogoUrl(tool.iconUrl)} alt={tool.name} width={56} height={56} className="w-full h-full object-contain p-1" />
-                            : tool.name.substring(0, 2)
-                          }
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between mb-1 gap-2">
-                            <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-sky-600 transition-colors truncate">{tool.name}</h3>
-                            {tool.isFeatured && (
-                              <span className="text-[10px] bg-sky-500 text-white px-1.5 py-0.5 rounded font-black uppercase shrink-0">Featured</span>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${PRICING_COLOR[tool.pricingModel] ?? 'bg-slate-100 text-slate-600'}`}>
-                              {tool.pricingModel ?? 'Free'}
-                            </span>
-                            <div className="flex items-center text-[11px] text-slate-500 font-bold">
-                              <span className="material-symbols-outlined text-[12px] text-amber-400 mr-0.5">star</span>
-                              {tool.rating?.toFixed(1) ?? '—'}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <p className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1 truncate">{tool.shortDesc}</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">{tool.description}</p>
-
-                      <div className="mt-4 flex flex-wrap gap-1.5 pt-4 border-t border-slate-50 dark:border-slate-700">
-                        <span className="text-[10px] font-medium text-sky-700 bg-sky-50 px-2 py-0.5 rounded">
-                          {tool.category}
-                        </span>
-                        {(tool.tags ?? []).slice(0, 2).map(t => (
-                          <span key={t} className="text-[10px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
-                            #{t}
-                          </span>
-                        ))}
-                      </div>
-                    </Link>
-                    {idx === 7 && (
-                      <div className="md:col-span-2 xl:col-span-3 my-4">
-                        <AdUnit slot="1234567890" />
-                      </div>
-                    )}
-                  </Fragment>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-20">
-                <span className="material-symbols-outlined text-6xl text-slate-200">search_off</span>
-                <p className="mt-4 text-slate-500 dark:text-slate-400 font-medium">해당 조건의 도구가 없어요</p>
-                <Link href="/tools" prefetch={false} className="mt-4 inline-block text-sky-600 font-bold text-sm hover:underline">
-                  필터 초기화 →
-                </Link>
-              </div>
-            )}
+            {/* 클라이언트 사이드 검색 + 그리드 */}
+            <ToolsClientFilter tools={toolsList} />
           </main>
         </div>
       </div>

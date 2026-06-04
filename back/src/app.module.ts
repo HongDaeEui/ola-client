@@ -32,7 +32,7 @@ import { AdminBypassThrottlerGuard } from './common/admin-bypass-throttler.guard
       {
         name: 'default',
         ttl: 60000,
-        limit: 60,
+        limit: 300,
       },
     ]),
     ToolsModule,
